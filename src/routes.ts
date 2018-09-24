@@ -1,3 +1,3 @@
-import * as Router from 'koa-router';
+import * as Router from "koa-router";
 
 export const routes = new Router();

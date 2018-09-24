@@ -1,21 +1,23 @@
-import * as Koa from 'koa';
-import * as logger from 'koa-logger';
-import { databaseInitializer } from 'initializers/database';
-import { graphqlInitializer } from 'initializers/graphql';
-import { routes } from 'routes';
+import * as Koa from "koa";
+import * as logger from "koa-logger";
+import { databaseInitializer } from "initializers/database";
+import { graphqlInitializer } from "initializers/graphql";
+import { routes } from "routes";
 
 const bootstrap = async () => {
-    await databaseInitializer();
+  await databaseInitializer();
 
-    const app = new Koa();
+  const app = new Koa();
 
-    app
-        .use(logger())
-        .use(routes.routes())
-        .use(routes.allowedMethods())
+  app
+    .use(logger())
+    .use(routes.routes())
+    .use(routes.allowedMethods());
 
-    graphqlInitializer(app);
-    app.listen(3000);
+  graphqlInitializer(app);
+  app.listen(3000);
 };
 
-bootstrap();
+bootstrap()
+  .then(console.log)
+  .catch(console.error);

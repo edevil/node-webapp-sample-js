@@ -2,8 +2,6 @@
 Experimental starter pack for Node.JS webapps
 
 ## TODO
-1. Add `prettier`
-1. Add eslint
 1. Add logger
 1. Redirect request log to logger
 1. Redirect all logs to logger (TypeORM, apollo, ...)
