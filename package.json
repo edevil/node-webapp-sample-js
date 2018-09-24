@@ -1,0 +1,30 @@
+{
+  "name": "sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.ts",
+  "scripts": {
+    "start": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andre Cruz",
+  "license": "ISC",
+  "dependencies": {
+    "@types/koa-router": "^7.0.32",
+    "@types/node": "^10.10.3",
+    "@types/uuid": "^3.4.4",
+    "apollo-server-koa": "^2.1.0",
+    "graphql": "^14.0.2",
+    "koa": "^2.5.3",
+    "koa-bodyparser": "^4.2.1",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
+    "nodemon": "^1.18.4",
+    "pg": "^7.4.3",
+    "reflect-metadata": "^0.1.12",
+    "ts-node": "^7.0.1",
+    "tsconfig-paths": "^3.6.0",
+    "typeorm": "^0.2.7",
+    "typescript": "^3.0.3"
+  }
+}
