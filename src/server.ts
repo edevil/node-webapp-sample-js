@@ -6,6 +6,7 @@ import { routes } from "routes";
 import { getKoaMiddleware } from "@emartech/cls-adapter";
 import { config } from "config";
 import { getRequestLogger } from "./middleware/request-logger";
+import * as helmet from 'koa-helmet';
 
 const bootstrap = async () => {
   await databaseInitializer();
@@ -15,6 +16,7 @@ const bootstrap = async () => {
   app
     .use(getKoaMiddleware())
     .use(getRequestLogger())
+    .use(helmet())
     .use(routes.routes())
     .use(routes.allowedMethods());
 

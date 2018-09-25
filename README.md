@@ -10,7 +10,7 @@ Experimental starter pack for Node.JS webapps
 1. File uploads
 1. i18n
 1. Tests
-1. security (CORS, CSRF, helmet)
+1. security (CORS, CSRF)
 1. Sessions
 1. Templates (pug?)
 1. https://github.com/godaddy/terminus
