@@ -3,6 +3,9 @@ import * as logger from "koa-logger";
 import { databaseInitializer } from "initializers/database";
 import { graphqlInitializer } from "initializers/graphql";
 import { routes } from "routes";
+import { getKoaMiddleware } from "@emartech/cls-adapter";
+import { config } from "config";
+import { getRequestLogger } from "./middleware/request-logger";
 
 const bootstrap = async () => {
   await databaseInitializer();
@@ -10,14 +13,13 @@ const bootstrap = async () => {
   const app = new Koa();
 
   app
-    .use(logger())
+    .use(getKoaMiddleware())
+    .use(getRequestLogger())
     .use(routes.routes())
     .use(routes.allowedMethods());
 
   graphqlInitializer(app);
-  app.listen(3000);
+  app.listen(config.port);
 };
 
-bootstrap()
-  .then(console.log)
-  .catch(console.error);
+bootstrap().catch(console.error);

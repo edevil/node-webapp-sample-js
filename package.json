@@ -10,10 +10,12 @@
   "author": "Andre Cruz",
   "license": "ISC",
   "dependencies": {
+    "@emartech/cls-adapter": "^1.1.2",
     "@types/koa-router": "^7.0.32",
     "@types/node": "^10.10.3",
     "@types/uuid": "^3.4.4",
     "apollo-server-koa": "^2.1.0",
+    "dotenv": "^6.0.0",
     "graphql": "^14.0.2",
     "koa": "^2.5.3",
     "koa-bodyparser": "^4.2.1",
@@ -25,7 +27,8 @@
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.6.0",
     "typeorm": "^0.2.7",
-    "typescript": "^3.0.3"
+    "typescript": "^3.0.3",
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "eslint": "^5.6.0",

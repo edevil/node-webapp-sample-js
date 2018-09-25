@@ -2,11 +2,6 @@
 Experimental starter pack for Node.JS webapps
 
 ## TODO
-1. Add logger
-1. Redirect request log to logger
-1. Redirect all logs to logger (TypeORM, apollo, ...)
-1. Add per-request context
-1. Add unique request id
 1. Add authentication
 1. Add parameter validation (Joi, class-transformer/validator)
 1. TypeORM migrations
@@ -22,3 +17,4 @@ Experimental starter pack for Node.JS webapps
 1. Dockerfile
 1. Helm package
 1. Dynamic configuration
+1. TSLint, tslint-config-prettier ?
