@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
+    "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "start": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

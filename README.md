@@ -4,7 +4,6 @@ Experimental starter pack for Node.JS webapps
 ## TODO
 1. Add authentication
 1. Add parameter validation (Joi, class-transformer/validator)
-1. TypeORM migrations
 1. Add Graphql sanity limits (DoS)
 1. Websockets
 1. File uploads
@@ -18,3 +17,12 @@ Experimental starter pack for Node.JS webapps
 1. Helm package
 1. Dynamic configuration
 1. TSLint, tslint-config-prettier ?
+
+# Migrations
+## Create migrations
+
+    npm run typeorm -- migration:generate -n Initial
+
+## Run migrations
+
+    npm run typeorm -- migration:run
