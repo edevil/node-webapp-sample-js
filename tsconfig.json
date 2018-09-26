@@ -1,21 +1,16 @@
 {
-    "compileOnSave": false,
-    "compilerOptions": {
-      "noImplicitAny": false,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "moduleResolution" : "node",
-      "lib": [
-        "es2017"
-      ],
-      "types": [
-        "node"
-      ],
-      "sourceMap": true,
-      "baseUrl": "./src"
-    },
-    "exclude": [
-      "node_modules",
-      "**/*.spec.ts"
-    ]
-  }
+  "compileOnSave": false,
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "noImplicitAny": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "lib": ["es2017"],
+    "types": ["node"],
+    "sourceMap": true,
+    "baseUrl": "./src"
+  },
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
