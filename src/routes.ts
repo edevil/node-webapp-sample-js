@@ -3,11 +3,12 @@ import { logger } from "logger";
 
 export const router = new Router();
 
-router.get("index", "/", (ctx, next) => {
+router.get("index", "/", async (ctx, next) => {
   if (ctx.isAuthenticated()) {
     logger.debug("Authenticated request");
   } else {
     logger.debug("No authentication");
   }
-  ctx.body = "Hello world";
+  await ctx.render('user')
+  // ctx.body = "Hello world";
 });

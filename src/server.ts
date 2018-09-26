@@ -9,6 +9,7 @@ import * as helmet from "koa-helmet";
 import * as cors from "@koa/cors";
 import * as session from "koa-session";
 import { authInitializer } from "./initializers/authentication";
+import { getTemplateEngine } from "./middleware/template-engine";
 
 const bootstrap = async () => {
   await databaseInitializer();
@@ -25,7 +26,10 @@ const bootstrap = async () => {
 
   authInitializer(app);
 
-  app.use(router.routes()).use(router.allowedMethods());
+  app
+    .use(getTemplateEngine())
+    .use(router.routes())
+    .use(router.allowedMethods());
 
   graphqlInitializer(app);
   app.listen(config.port);
