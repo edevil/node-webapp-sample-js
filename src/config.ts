@@ -9,6 +9,7 @@ interface IConfig {
   dbName: string;
   dbUser: string;
   dbPassword: string;
+  appKeys: string[];
 }
 
 const config: IConfig = {
@@ -18,6 +19,7 @@ const config: IConfig = {
   dbName: process.env.DB_NAME || "sample_db",
   dbUser: process.env.DB_USER || "postgres",
   dbPassword: process.env.DB_PASSWORD || "",
+  appKeys: process.env.APP_KEYS ? JSON.parse(process.env.APP_KEYS) : ["shhh, don't tell anyone"],
 };
 
 export { config };
