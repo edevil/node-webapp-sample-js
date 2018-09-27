@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import * as Koa from "koa";
 import { databaseInitializer } from "initializers/database";
 import { graphqlInitializer } from "initializers/graphql";
