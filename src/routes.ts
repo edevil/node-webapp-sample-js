@@ -2,10 +2,14 @@ import * as Router from "koa-router";
 import { logger } from "logger";
 import * as CSRF from "koa-csrf";
 import * as KoaBody from "koa-body";
+import { transformAndValidate } from "class-transformer-validator";
+import { CreateUser } from "dtos/create-user";
 
 export const router = new Router();
 
-router.use(KoaBody({ multipart: true })).use(
+router.use(KoaBody({ multipart: true }));
+
+router.use(
   new CSRF({
     invalidSessionSecretMessage: "Invalid session secret",
     invalidSessionSecretStatusCode: 403,
@@ -33,5 +37,20 @@ router.get("auth-register", "/auth/register", async (ctx, next) => {
 });
 
 router.post("auth-register-post", "/auth/register", async (ctx, next) => {
-  console.log("TEST");
+  let createReq: CreateUser;
+  try {
+    createReq = <CreateUser>await transformAndValidate(CreateUser, ctx.request.body);
+  } catch (error) {
+    logger.error(JSON.stringify(error));
+    // return error to user
+    // flash messages?
+    await ctx.render("register", {
+      register_url: router.url("auth-register-post"),
+      csrf: ctx.csrf,
+      error: error,
+    });
+    return;
+  }
+  logger.info(createReq.username);
+  ctx.redirect(router.url("auth-register"));
 });
