@@ -1,8 +1,16 @@
 import * as views from "koa-views";
 import * as path from "path";
+import * as appPath from "app-root-path";
+
+const viewsPath = path.join(appPath.toString(), "/views");
 
 export const getTemplateEngine = () =>
-  views(path.join(__dirname, "/views"), {
+  views(viewsPath, {
+    options: {
+      settings: {
+        views: viewsPath,
+      },
+    },
     map: {
       html: "nunjucks",
     },
