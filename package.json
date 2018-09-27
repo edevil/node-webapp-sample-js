@@ -1,8 +1,9 @@
 {
-  "name": "sample",
+  "name": "node-webapp-sample",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sample node.js webapp with the recommended modules for basic functionality.",
   "main": "src/server.ts",
+  "repository": "github:edevil/node-webapp-sample",
   "scripts": {
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "start": "nodemon",
@@ -24,7 +25,9 @@
     "dotenv": "^6.0.0",
     "graphql": "^14.0.2",
     "koa": "^2.5.3",
+    "koa-body": "^4.0.4",
     "koa-bodyparser": "^4.2.1",
+    "koa-csrf": "^3.0.6",
     "koa-helmet": "^4.0.0",
     "koa-logger": "^3.2.0",
     "koa-passport": "^4.1.1",
