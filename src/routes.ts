@@ -4,6 +4,9 @@ import * as CSRF from "koa-csrf";
 import * as KoaBody from "koa-body";
 import { transformAndValidate } from "class-transformer-validator";
 import { CreateUser } from "dtos/create-user";
+import { createUser } from "service";
+import { getRepository } from "typeorm";
+import { User } from "entities/user";
 
 export const router = new Router();
 
@@ -42,6 +45,7 @@ router.post("auth-register-post", "/auth/register", async (ctx, next) => {
     createReq = <CreateUser>await transformAndValidate(CreateUser, ctx.request.body);
   } catch (error) {
     logger.error(JSON.stringify(error));
+    // TODO
     // return error to user
     // flash messages?
     await ctx.render("register", {
@@ -52,5 +56,8 @@ router.post("auth-register-post", "/auth/register", async (ctx, next) => {
     return;
   }
   logger.info(createReq.username);
+  // TODO deal with QueryFailedError: duplicate key value violates unique constraint "UQ_78a916df40e02a9deb1c4b75edb"
+  const user = await createUser(createReq, getRepository(User));
+  logger.info("New user created", { userId: user.id });
   ctx.redirect(router.url("auth-register"));
 });

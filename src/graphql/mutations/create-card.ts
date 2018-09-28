@@ -10,7 +10,6 @@ export const createCardMutation = {
       id: uuid(),
       ...attrs,
     };
-    debugger;
     await repository.save(card);
     return card;
   },
