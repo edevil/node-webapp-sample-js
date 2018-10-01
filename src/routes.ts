@@ -59,5 +59,6 @@ router.post("auth-register-post", "/auth/register", async (ctx, next) => {
   // TODO deal with QueryFailedError: duplicate key value violates unique constraint "UQ_78a916df40e02a9deb1c4b75edb"
   const user = await createUser(createReq, getRepository(User));
   logger.info("New user created", { userId: user.id });
+  await ctx.login(user);
   ctx.redirect(router.url("auth-register"));
 });
