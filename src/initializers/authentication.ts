@@ -13,7 +13,7 @@ passport.deserializeUser((id: number, done) => {
     .findOne({ id })
     .then(user => {
       if (!user) {
-        logger.warning("User not found", { userId: id });
+        logger.warning("User not found", { user_id: id });
         done(null, false);
       } else {
         done(null, user);
@@ -29,10 +29,13 @@ passport.use(
       .findOne({ username })
       .then(user => {
         if (!user) {
+          logger.debug("User not found", {username: username});
           done(null, false);
         } else if (password !== user.password) {
+          logger.debug("Incorrect password", {username: username});
           done(null, false);
         } else {
+          logger.info("Successful auth", {username: username});
           done(null, user);
         }
       })

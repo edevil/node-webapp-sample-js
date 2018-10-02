@@ -8,6 +8,7 @@ import { createUser } from "service";
 import { getRepository, QueryFailedError } from "typeorm";
 import { User } from "entities/user";
 import { getLoggedINMid } from "./middleware/redirect-logged";
+import * as passport from "koa-passport";
 
 export const router = new Router();
 
@@ -35,6 +36,30 @@ router.get("index", "/", async (ctx, next) => {
   await ctx.render("index", { authenticated: ctx.isAuthenticated() });
 });
 
+router.get("auth-login", "/auth/login", redLoggedMW, async (ctx, next) => {
+  await ctx.render("login", {
+    login_url: router.url("auth-login-post"),
+    csrf: ctx.csrf,
+  });
+});
+
+router.post("auth-login-post", "/auth/login", redLoggedMW, async (ctx, next) => {
+  const authCallback = async (err, user, info, status) => {
+    if (user) {
+      ctx.login(user);
+      ctx.redirect(router.url("index"));
+    } else {
+      logger.info("Could not login user");
+      await ctx.render("login", {
+        login_url: router.url("auth-login-post"),
+        csrf: ctx.csrf,
+      });
+    }
+  };
+
+  return passport.authenticate('local', authCallback)(ctx, next);
+});
+
 router.get("auth-register", "/auth/register", redLoggedMW, async (ctx, next) => {
   await ctx.render("register", {
     register_url: router.url("auth-register-post"),
@@ -43,8 +68,6 @@ router.get("auth-register", "/auth/register", redLoggedMW, async (ctx, next) => 
 });
 
 router.post("auth-register-post", "/auth/register", redLoggedMW, async (ctx, next) => {
-  // TODO check if user is already authenticated
-
   let createReq: CreateUser;
   try {
     createReq = <CreateUser>await transformAndValidate(CreateUser, ctx.request.body);
