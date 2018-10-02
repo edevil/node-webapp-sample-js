@@ -3,6 +3,7 @@ import { User } from "entities/user";
 import { getRepository } from "typeorm";
 import { logger } from "logger";
 import { Strategy as LocalStrategy } from "passport-local";
+import { setOnContext } from "@emartech/cls-adapter";
 
 passport.serializeUser((user: User, done) => done(null, user.id));
 
@@ -40,5 +41,13 @@ passport.use(
 );
 
 export const authInitializer = app => {
-  app.use(passport.initialize()).use(passport.session());
+  app
+    .use(passport.initialize())
+    .use(passport.session())
+    .use(async (ctx, next) => {
+      if (ctx.isAuthenticated()) {
+        setOnContext("user_id", ctx.state.user.id);
+      }
+      await next();
+    });
 };
