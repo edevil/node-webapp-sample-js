@@ -36,6 +36,24 @@ router.get("index", "/", async (ctx, next) => {
   await ctx.render("index", { authenticated: ctx.isAuthenticated() });
 });
 
+router.get("auth-logout", "/auth/logout", async (ctx, next) => {
+  await ctx.render("logout", {
+    login_url: router.url("auth-logout-post"),
+    csrf: ctx.csrf,
+  });
+});
+
+router.post("auth-logout-post", "/auth/logout", async (ctx, next) => {
+  if (ctx.isAuthenticated()) {
+    logger.info("Logging out");
+    ctx.logout();
+  } else {
+    logger.debug("Logout with no auth");
+  }
+
+  ctx.redirect(router.url("index"));
+});
+
 router.get("auth-login", "/auth/login", redLoggedMW, async (ctx, next) => {
   await ctx.render("login", {
     login_url: router.url("auth-login-post"),
@@ -57,7 +75,7 @@ router.post("auth-login-post", "/auth/login", redLoggedMW, async (ctx, next) => 
     }
   };
 
-  return passport.authenticate('local', authCallback)(ctx, next);
+  return passport.authenticate("local", authCallback)(ctx, next);
 });
 
 router.get("auth-register", "/auth/register", redLoggedMW, async (ctx, next) => {
