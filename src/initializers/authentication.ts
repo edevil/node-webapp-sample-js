@@ -4,6 +4,11 @@ import { getRepository } from "typeorm";
 import { logger } from "logger";
 import { Strategy as LocalStrategy } from "passport-local";
 import { setOnContext } from "@emartech/cls-adapter";
+import { compareSync } from "bcryptjs";
+
+function comparePass(userPassword, databasePassword) {
+  return compareSync(userPassword, databasePassword);
+}
 
 passport.serializeUser((user: User, done) => done(null, user.id));
 
@@ -29,13 +34,13 @@ passport.use(
       .findOne({ username })
       .then(user => {
         if (!user) {
-          logger.debug("User not found", {username: username});
+          logger.debug("User not found", { username: username });
           done(null, false);
-        } else if (password !== user.password) {
-          logger.debug("Incorrect password", {username: username});
+        } else if (!comparePass(password, user.password)) {
+          logger.debug("Incorrect password", { username: username });
           done(null, false);
         } else {
-          logger.info("Successful auth", {username: username});
+          logger.info("Successful auth", { username: username });
           done(null, user);
         }
       })

@@ -2,9 +2,11 @@
 Experimental starter pack for Node.JS webapps
 
 ## TODO
-1. Add authentication
 1. Login needed decorator (returnUrl)
 1. Rate limit login
+1. Redis session store
+1. Add authentication to GraphQL
+1. Relations card -> user
 1. Add flash messages
 1. JWT
 1. Database seeds
