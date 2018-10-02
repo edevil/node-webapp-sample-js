@@ -7,8 +7,11 @@ import { CreateUser } from "dtos/create-user";
 import { createUser } from "service";
 import { getRepository, QueryFailedError } from "typeorm";
 import { User } from "entities/user";
+import { getLoggedINMid } from "./middleware/redirect-logged";
 
 export const router = new Router();
+
+const redLoggedMW = getLoggedINMid(router, "index");
 
 router.use(KoaBody({ multipart: true }));
 
@@ -29,17 +32,17 @@ router.get("index", "/", async (ctx, next) => {
   } else {
     logger.debug("No authentication");
   }
-  await ctx.render("user");
+  await ctx.render("index", { authenticated: ctx.isAuthenticated() });
 });
 
-router.get("auth-register", "/auth/register", async (ctx, next) => {
+router.get("auth-register", "/auth/register", redLoggedMW, async (ctx, next) => {
   await ctx.render("register", {
     register_url: router.url("auth-register-post"),
     csrf: ctx.csrf,
   });
 });
 
-router.post("auth-register-post", "/auth/register", async (ctx, next) => {
+router.post("auth-register-post", "/auth/register", redLoggedMW, async (ctx, next) => {
   // TODO check if user is already authenticated
 
   let createReq: CreateUser;

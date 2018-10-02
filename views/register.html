@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block header %}
 <h1>Register</h1>
+{% endblock %}
+
+{% block content %}
 <form action="{{ register_url }}" method="post">
     <input type="hidden" name="_csrf" value="{{ csrf }}" />
     <p><label>Username: <input type="text" name="username"/></label></p>
