@@ -7,9 +7,9 @@ import { CreateUser } from "dtos/create-user";
 import { createUser } from "service";
 import { getRepository, QueryFailedError } from "typeorm";
 import { User } from "entities/user";
-import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
+import { getLoggedInMW, getLoginReqMW } from "middleware/redirect-logged";
 import * as passport from "koa-passport";
-import { afterLogin } from "./utils";
+import { afterLogin } from "utils";
 
 export const router = new Router();
 
@@ -56,6 +56,23 @@ router.post("auth-logout-post", "/auth/logout", async (ctx, next) => {
   ctx.redirect(router.url("index"));
 });
 
+router.get("auth-login-google", "/auth/google", redLoggedMW, async (ctx, next) => {
+  return passport.authenticate("google", { scope: ["profile", "email"] })(ctx, next);
+});
+
+router.get("auth-login-google-callback", "/auth/google/callback", redLoggedMW, async (ctx, next) => {
+  const loginCallback = async (err, user, info, status) => {
+    if (user) {
+      await afterLogin(ctx, user, router);
+    } else {
+      logger.info("Could not login user", { err: JSON.stringify(err), info, status });
+      ctx.redirect(router.url("index"));
+    }
+  };
+
+  return passport.authenticate("google", loginCallback)(ctx, next);
+});
+
 router.get("auth-login", "/auth/login", redLoggedMW, async (ctx, next) => {
   await ctx.render("login", {
     login_url: router.url("auth-login-post"),
@@ -64,11 +81,11 @@ router.get("auth-login", "/auth/login", redLoggedMW, async (ctx, next) => {
 });
 
 router.post("auth-login-post", "/auth/login", redLoggedMW, async (ctx, next) => {
-  const authCallback = async (err, user, info, status) => {
+  const loginCallback = async (err, user, info, status) => {
     if (user) {
       await afterLogin(ctx, user, router);
     } else {
-      logger.info("Could not login user");
+      logger.info("Could not login user", { err, info, status });
       await ctx.render("login", {
         login_url: router.url("auth-login-post"),
         csrf: ctx.csrf,
@@ -76,7 +93,7 @@ router.post("auth-login-post", "/auth/login", redLoggedMW, async (ctx, next) => 
     }
   };
 
-  return passport.authenticate("local", authCallback)(ctx, next);
+  return passport.authenticate("local", loginCallback)(ctx, next);
 });
 
 router.get("auth-register", "/auth/register", redLoggedMW, async (ctx, next) => {
