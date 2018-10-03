@@ -7,7 +7,7 @@
   "scripts": {
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "start": "nodemon",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "Andre Cruz",
   "license": "ISC",
@@ -51,10 +51,14 @@
     "winston": "^3.1.0"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.2",
     "eslint": "^5.6.1",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-prettier": "^3.0.0",
-    "prettier": "1.14.3"
+    "jest": "^23.6.0",
+    "prettier": "1.14.3",
+    "supertest": "^3.3.0",
+    "ts-jest": "^23.10.3"
   },
   "prettier": {
     "trailingComma": "all",
@@ -63,6 +67,17 @@
   "eslintConfig": {
     "extends": [
       "plugin:prettier/recommended"
+    ]
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "**/__tests__/*.+(ts|tsx|js)"
     ]
   }
 }

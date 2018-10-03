@@ -8,7 +8,7 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "lib": ["es2017"],
-    "types": ["node"],
+    "types": ["node", "jest"],
     "sourceMap": true,
     "baseUrl": "./src"
   },

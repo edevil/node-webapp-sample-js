@@ -19,6 +19,7 @@ Experimental starter pack for Node.JS webapps
 1. i18n
 1. https://github.com/godaddy/terminus
 1. Dockerfile
+1. Production config (ts-node transpile-only mode, ...)
 1. Helm package
 1. TSLint, tslint-config-prettier ?
 1. Global error handler

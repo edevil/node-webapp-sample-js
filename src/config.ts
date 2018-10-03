@@ -13,6 +13,7 @@ interface IConfig {
   googleClientId: string;
   googleClientSecret: string;
   baseURL: string;
+  origin: string;
 }
 
 const config: IConfig = {
@@ -26,6 +27,7 @@ const config: IConfig = {
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   baseURL: process.env.BASE_URL || "http://example.com:3000",
+  origin: process.env.ORIGIN || "localhost",
 };
 
 export { config };
