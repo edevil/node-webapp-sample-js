@@ -5,6 +5,8 @@ import { logger } from "logger";
 import { Strategy as LocalStrategy } from "passport-local";
 import { setOnContext } from "@emartech/cls-adapter";
 import { compareSync } from "bcryptjs";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { config } from "config";
 
 function comparePass(userPassword, databasePassword) {
   return compareSync(userPassword, databasePassword);
@@ -26,6 +28,19 @@ passport.deserializeUser((id: number, done) => {
     })
     .catch(err => done(err, null));
 });
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: config.googleClientId,
+      clientSecret: config.googleClientSecret,
+      callbackURL: config.baseURL + "/auth/google/callback",
+    },
+    (accessToken, refreshToken, profile, done) => {
+      logger.debug("google strategy", { accessToken, refreshToken, profile: JSON.stringify(profile) });
+    },
+  ),
+);
 
 passport.use(
   new LocalStrategy({}, (username, password, done) => {

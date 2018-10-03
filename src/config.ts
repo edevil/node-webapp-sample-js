@@ -10,6 +10,9 @@ interface IConfig {
   dbUser: string;
   dbPassword: string;
   appKeys: string[];
+  googleClientId: string;
+  googleClientSecret: string;
+  baseURL: string;
 }
 
 const config: IConfig = {
@@ -20,6 +23,9 @@ const config: IConfig = {
   dbUser: process.env.DB_USER || "postgres",
   dbPassword: process.env.DB_PASSWORD || "",
   appKeys: process.env.APP_KEYS ? JSON.parse(process.env.APP_KEYS) : ["shhh, don't tell anyone"],
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  baseURL: process.env.BASE_URL || "http://example.com:3000",
 };
 
 export { config };
