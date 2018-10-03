@@ -7,12 +7,14 @@ import { CreateUser } from "dtos/create-user";
 import { createUser } from "service";
 import { getRepository, QueryFailedError } from "typeorm";
 import { User } from "entities/user";
-import { getLoggedINMid } from "./middleware/redirect-logged";
+import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
 import * as passport from "koa-passport";
+import { afterLogin } from "./utils";
 
 export const router = new Router();
 
-const redLoggedMW = getLoggedINMid(router, "index");
+const redLoggedMW = getLoggedInMW(router, "index");
+const redLoginReqMW = getLoginReqMW(router, "auth-login");
 
 router.use(KoaBody({ multipart: true }));
 
@@ -36,7 +38,7 @@ router.get("index", "/", async (ctx, next) => {
   await ctx.render("index", { authenticated: ctx.isAuthenticated() });
 });
 
-router.get("auth-logout", "/auth/logout", async (ctx, next) => {
+router.get("auth-logout", "/auth/logout", redLoginReqMW, async (ctx, next) => {
   await ctx.render("logout", {
     login_url: router.url("auth-logout-post"),
     csrf: ctx.csrf,
@@ -64,8 +66,7 @@ router.get("auth-login", "/auth/login", redLoggedMW, async (ctx, next) => {
 router.post("auth-login-post", "/auth/login", redLoggedMW, async (ctx, next) => {
   const authCallback = async (err, user, info, status) => {
     if (user) {
-      ctx.login(user);
-      ctx.redirect(router.url("index"));
+      await afterLogin(ctx, user, router);
     } else {
       logger.info("Could not login user");
       await ctx.render("login", {
@@ -117,6 +118,5 @@ router.post("auth-register-post", "/auth/register", redLoggedMW, async (ctx, nex
     }
   }
   logger.info("New user created", { userId: user.id });
-  await ctx.login(user);
-  ctx.redirect(router.url("auth-register"));
+  await afterLogin(ctx, user, router);
 });
