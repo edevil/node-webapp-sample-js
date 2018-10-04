@@ -1,6 +1,6 @@
-import { app } from "app";
-import { databaseInitializer } from "initializers/database";
-import { config } from "config";
+import { app } from "@app/app";
+import { databaseInitializer } from "@app/initializers/database";
+import { config } from "@app/config";
 
 const bootstrap = async () => {
   await databaseInitializer();

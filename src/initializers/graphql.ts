@@ -1,8 +1,8 @@
 import { ApolloServer, gql } from "apollo-server-koa";
-import { resolvers } from "graphql/resolvers";
-import { Query } from "graphql/types/query";
-import { types } from "graphql/types";
-import { Mutation } from "graphql/types/mutation";
+import { resolvers } from "@app/graphql/resolvers";
+import { Query } from "@app/graphql/types/query";
+import { types } from "@app/graphql/types";
+import { Mutation } from "@app/graphql/types/mutation";
 
 const path = "/graphql";
 

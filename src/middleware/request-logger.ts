@@ -1,5 +1,5 @@
 import * as koaLogger from "koa-logger";
-import { logger } from "logger";
+import { logger } from "@app/logger";
 
 
 export const getRequestLogger = () => {

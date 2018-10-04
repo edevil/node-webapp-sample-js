@@ -1,8 +1,8 @@
-import { User } from "entities/user";
-import { CreateUser } from "dtos/create-user";
+import { User } from "@app/entities/user";
+import { CreateUser } from "@app/dtos/create-user";
 import { Repository } from "typeorm";
 import { genSaltSync, hashSync } from "bcryptjs";
-import { CreateGoogleUser } from "dtos/create-google-user";
+import { CreateGoogleUser } from "@app/dtos/create-google-user";
 
 export async function createUser(createReq: CreateUser, repository: Repository<User>): Promise<User> {
   const salt = genSaltSync();

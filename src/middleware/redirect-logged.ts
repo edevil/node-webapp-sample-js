@@ -1,4 +1,4 @@
-import { logger } from "logger";
+import { logger } from "@app/logger";
 
 export const getLoggedInMW = (router, loggedRoute) => async (ctx, next) => {
   if (ctx.isAuthenticated()) {

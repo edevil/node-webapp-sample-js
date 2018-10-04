@@ -1,5 +1,5 @@
 import { IsAlphanumeric, IsString, MaxLength, MinLength } from "class-validator";
-import { IsEqualTo } from "custom_validators";
+import { IsEqualTo } from "@app/custom_validators";
 
 export class CreateUser {
   @IsString()

@@ -1,14 +1,14 @@
 import * as Koa from "koa";
-import { config } from "config";
+import { config } from "@app/config";
 import { getKoaMiddleware } from "@emartech/cls-adapter";
 import * as helmet from "koa-helmet";
-import { getRequestLogger } from "middleware/request-logger";
+import { getRequestLogger } from "@app/middleware/request-logger";
 import * as cors from "@koa/cors";
 import * as session from "koa-session";
-import { authInitializer } from "initializers/authentication";
-import { getTemplateEngine } from "middleware/template-engine";
-import { router } from "routes";
-import { graphqlInitializer } from "initializers/graphql";
+import { authInitializer } from "@app/initializers/authentication";
+import { getTemplateEngine } from "@app/middleware/template-engine";
+import { router } from "@app/routes";
+import { graphqlInitializer } from "@app/initializers/graphql";
 
 export const app = new Koa();
 app.keys = config.appKeys;

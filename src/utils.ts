@@ -1,4 +1,4 @@
-import { logger } from "logger";
+import { logger } from "@app/logger";
 
 export async function afterLogin(ctx, user, router) {
   await ctx.login(user);

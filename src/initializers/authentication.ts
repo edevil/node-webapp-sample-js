@@ -1,14 +1,14 @@
 import * as passport from "koa-passport";
-import { User } from "entities/user";
+import { User } from "@app/entities/user";
 import { getRepository } from "typeorm";
-import { logger } from "logger";
+import { logger } from "@app/logger";
 import { Strategy as LocalStrategy } from "passport-local";
 import { setOnContext } from "@emartech/cls-adapter";
 import { compareSync } from "bcryptjs";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { config } from "config";
-import { createUserFromGoogle } from "service";
-import { CreateGoogleUser } from "dtos/create-google-user";
+import { config } from "@app/config";
+import { createUserFromGoogle } from "@app/service";
+import { CreateGoogleUser } from "@app/dtos/create-google-user";
 
 function comparePass(userPassword, databasePassword) {
   return compareSync(userPassword, databasePassword);

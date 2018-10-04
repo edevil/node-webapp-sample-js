@@ -10,7 +10,10 @@
     "lib": ["es2017"],
     "types": ["node", "jest"],
     "sourceMap": true,
-    "baseUrl": "./src"
+    "paths": {
+      "@app/*": ["src/*"]
+    },
+    "baseUrl": "."
   },
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
