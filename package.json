@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.2",
+    "@types/supertest": "^2.0.6",
     "eslint": "^5.6.1",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-prettier": "^3.0.0",

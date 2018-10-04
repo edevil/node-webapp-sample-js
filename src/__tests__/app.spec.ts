@@ -3,8 +3,8 @@ import * as request from "supertest";
 
 describe("GET / - simple test", () => {
   it("Hello API request", async () => {
-    const result = await request(app).get("/");
-    expect(result.text).toEqual("teste");
-    expect(result.statusCode).toEqual(200);
+    const result = await request(app.callback()).get("/");
+    expect(result.text).toContain("Sample node app");
+    expect(result.status).toEqual(200);
   });
 });
