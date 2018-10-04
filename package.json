@@ -26,6 +26,7 @@
     "class-transformer": "^0.1.9",
     "class-transformer-validator": "^0.6.0",
     "class-validator": "^0.9.1",
+    "csrf": "^3.0.6",
     "dotenv": "^6.0.0",
     "graphql": "^14.0.2",
     "koa": "^2.5.3",
