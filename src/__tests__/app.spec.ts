@@ -2,6 +2,29 @@ import { app } from "@app/app";
 import * as request from "supertest";
 import { router } from "@app/routes";
 import * as CSRF from "csrf";
+import { Connection, createConnection, getConnectionOptions } from "typeorm";
+import { logger } from "@app/logger";
+
+let conn: Connection;
+beforeAll(async () => {
+  const connectionOptions = Object.assign(await getConnectionOptions(), {
+    database: "sample_db_test",
+    synchronize: true, // TODO is this needed with the conn.synchronize below?
+    dropSchema: true,
+  });
+  try {
+    conn = await createConnection(connectionOptions);
+  } catch (err) {
+    logger.error("Could not create connection", {error: err});
+    throw err;
+  }
+});
+
+afterAll(async () => await conn.close());
+
+beforeEach(async () => {
+  await conn.synchronize(true);
+});
 
 describe("GET / - simple test", () => {
   it("Hello API request", async () => {
@@ -27,8 +50,11 @@ describe("User registration tests", () => {
       .type("form")
       .send({ username: username, password: password, password_confirmation: password })
       .set("csrf-token", "test");
+
     expect(result.text).toContain("Sample node app");
     expect(result.status).toEqual(302);
     expect(result.header["location"]).toEqual(router.url("index"));
+
+    // TODO make sure user was created
   });
 });
