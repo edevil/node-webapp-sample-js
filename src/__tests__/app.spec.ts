@@ -2,8 +2,9 @@ import { app } from "@app/app";
 import * as request from "supertest";
 import { router } from "@app/routes";
 import * as CSRF from "csrf";
-import { Connection, createConnection, getConnectionOptions } from "typeorm";
+import { Connection, createConnection, getConnectionOptions, getRepository } from "typeorm";
 import { logger } from "@app/logger";
+import { User } from "@app/entities/user";
 
 let conn: Connection;
 beforeAll(async () => {
@@ -51,10 +52,11 @@ describe("User registration tests", () => {
       .send({ username: username, password: password, password_confirmation: password })
       .set("csrf-token", "test");
 
-    expect(result.text).toContain("Sample node app");
     expect(result.status).toEqual(302);
     expect(result.header["location"]).toEqual(router.url("index"));
 
-    // TODO make sure user was created
+    const repository = getRepository(User);
+    const user = await repository.findOne({ username });
+    expect(user).toBeDefined();
   });
 });
