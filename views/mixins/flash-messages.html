@@ -1,0 +1,16 @@
+{% macro flashMessages(messages) %}
+{% if messages %}
+<div id="flash-messages" class="container">
+    {% for message in messages %}
+        {{ flashMessage(message, message.level) }}
+    {% endfor %}
+</div>
+{% endif %}
+{% endmacro %}
+
+
+{% macro flashMessage(message, type) %}
+<div class="alert alert-{{ type }}">
+    <p>{{ message.message }}</p>
+</div>
+{% endmacro %}
