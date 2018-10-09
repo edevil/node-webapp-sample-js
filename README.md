@@ -3,7 +3,7 @@ Experimental starter pack for Node.JS webapps
 
 ## TODO
 1. Separate users (profile) from logins
-1. Relations card -> user, indexes, transactions, uniques
+1. Transactions
 1. Serve static content
 1. Rate limit login
 1. JWT

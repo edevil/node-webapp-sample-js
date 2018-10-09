@@ -1,6 +1,6 @@
 import * as passport from "koa-passport";
 import { User } from "@app/entities/user";
-import { getRepository } from "typeorm";
+import { getConnection, getRepository } from "typeorm";
 import { logger } from "@app/logger";
 import { Strategy as LocalStrategy } from "passport-local";
 import { setOnContext } from "@emartech/cls-adapter";
@@ -9,6 +9,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { config } from "@app/config";
 import { createUserFromGoogle } from "@app/service";
 import { CreateGoogleUser } from "@app/dtos/create-google-user";
+import { SocialLogin, SocialType } from "@app/entities/social-login";
 
 function comparePass(userPassword, databasePassword) {
   return compareSync(userPassword, databasePassword);
@@ -22,7 +23,7 @@ passport.deserializeUser((id: number, done) => {
     .findOne({ id })
     .then(user => {
       if (!user) {
-        logger.warning("User not found", { user_id: id });
+        logger.warn("User not found", { user_id: id });
         done(null, false);
       } else {
         done(null, user);
@@ -41,16 +42,16 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       const googleID = profile.id;
 
-      const repository = getRepository(User);
-      let user;
+      const repository = getRepository(SocialLogin);
+      let login;
       try {
-        user = await repository.findOne({ username: googleID });
+        login = await repository.findOne({ clientId: googleID, type: SocialType.Google });
       } catch (error) {
         done(error, null);
         return;
       }
 
-      if (!user) {
+      if (!login) {
         logger.debug("User google not found", { username: googleID });
         const createReq = new CreateGoogleUser();
         createReq.username = googleID;
@@ -59,16 +60,17 @@ passport.use(
         createReq.email = profile.emails.filter(e => e.type === "account")[0].value;
         logger.debug("google strategy", { createReq });
 
+        let user;
         try {
-          user = await createUserFromGoogle(createReq, getRepository(User));
+          user = await createUserFromGoogle(createReq, getConnection().manager);
         } catch (error) {
           done(error, null);
           return;
         }
         done(null, user);
       } else {
-        logger.info("Successful google auth", { username: googleID, user_id: user.id });
-        done(null, user);
+        logger.info("Successful google auth", { username: googleID, user_id: login.user.id });
+        done(null, login.user);
       }
     },
   ),

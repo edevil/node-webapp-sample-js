@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { SocialLogin } from "@app/entities/social-login";
 
 @Entity()
 export class User {
@@ -13,9 +14,23 @@ export class User {
 
   @Column("text", {
     unique: true,
+    nullable: true,
   })
   username: string;
 
-  @Column("text")
+  @Column("text", {
+    nullable: true,
+  })
   password: string;
+
+  @Column("text", {
+    unique: true,
+  })
+  email: string;
+
+  @OneToMany(type => SocialLogin, login => login.user, {
+    cascade: ["insert"],
+    onDelete: "CASCADE",
+  })
+  socialLogins: SocialLogin[];
 }

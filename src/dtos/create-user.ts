@@ -1,12 +1,9 @@
-import { IsAlphanumeric, IsString, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsString, MinLength } from "class-validator";
 import { IsEqualTo } from "@app/custom_validators";
 
 export class CreateUser {
-  @IsString()
-  @IsAlphanumeric()
-  @MinLength(3)
-  @MaxLength(20)
-  username: string;
+  @IsEmail()
+  email: string;
 
   @IsString()
   @MinLength(8)
