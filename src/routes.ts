@@ -10,6 +10,7 @@ import { User } from "@app/entities/user";
 import { getLoggedInMW, getLoginReqMW } from "@app/middleware/redirect-logged";
 import * as passport from "koa-passport";
 import { afterLogin } from "@app/utils";
+import { getMessagesMW } from "@app/middleware/fetch-messages";
 
 export const router = new Router();
 
@@ -28,6 +29,8 @@ router.use(
     disableQuery: false,
   }),
 );
+
+router.use(getMessagesMW());
 
 router.get("index", "/", async (ctx, next) => {
   if (ctx.isAuthenticated()) {

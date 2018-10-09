@@ -2,7 +2,6 @@
 Experimental starter pack for Node.JS webapps
 
 ## TODO
-1. Add flash messages
 1. Separate users (profile) from logins
 1. Relations card -> user, indexes, transactions, uniques
 1. Serve static content
