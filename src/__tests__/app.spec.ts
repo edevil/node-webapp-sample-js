@@ -74,7 +74,6 @@ describe("User login/logout tests", () => {
 
     // GET logout, ensure redirect
     const rLogoutRedir = await agent.get(router.url("auth-logout"));
-    console.log(`Set Cookie: ${JSON.stringify(rLogoutRedir.header["set-cookie"])}`);
     expect(rLogoutRedir.header["location"]).toEqual(router.url("auth-login"));
     expect(rLogoutRedir.status).toEqual(302);
 
@@ -102,7 +101,16 @@ describe("User login/logout tests", () => {
     expect(rLogout.status).toEqual(200);
 
     // POST logout
+    const rLogoutPost = await agent
+      .post(router.url("auth-logout-post"))
+      .set("csrf-token", "test");
+
+    expect(rLogoutPost.status).toEqual(302);
+    expect(rLogoutPost.header["location"]).toEqual(router.url("index"));
 
     // GET logout -> redir
+    const rLogoutRedir2 = await agent.get(router.url("auth-logout"));
+    expect(rLogoutRedir2.header["location"]).toEqual(router.url("auth-login"));
+    expect(rLogoutRedir2.status).toEqual(302);
   });
 });

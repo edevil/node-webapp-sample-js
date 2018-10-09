@@ -9,6 +9,10 @@
     "start": "nodemon",
     "test": "jest"
   },
+  "engines": {
+    "node": ">=10.11.0",
+    "npm": ">=6.4.0"
+  },
   "author": "Andre Cruz",
   "license": "ISC",
   "dependencies": {
