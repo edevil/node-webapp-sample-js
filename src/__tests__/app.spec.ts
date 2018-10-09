@@ -7,6 +7,9 @@ import { logger } from "@app/logger";
 import { User } from "@app/entities/user";
 import { CreateUser } from "@app/dtos/create-user";
 import { createUser } from "@app/service";
+import { cardsResolver } from "@app/graphql/resolvers/cards";
+import { Card } from "@app/entities/card";
+import * as uuid from "uuid/v4";
 
 let conn: Connection;
 beforeAll(async () => {
@@ -101,9 +104,7 @@ describe("User login/logout tests", () => {
     expect(rLogout.status).toEqual(200);
 
     // POST logout
-    const rLogoutPost = await agent
-      .post(router.url("auth-logout-post"))
-      .set("csrf-token", "test");
+    const rLogoutPost = await agent.post(router.url("auth-logout-post")).set("csrf-token", "test");
 
     expect(rLogoutPost.status).toEqual(302);
     expect(rLogoutPost.header["location"]).toEqual(router.url("index"));
@@ -112,5 +113,26 @@ describe("User login/logout tests", () => {
     const rLogoutRedir2 = await agent.get(router.url("auth-logout"));
     expect(rLogoutRedir2.header["location"]).toEqual(router.url("auth-login"));
     expect(rLogoutRedir2.status).toEqual(302);
+  });
+});
+
+describe("GraphQL resolvers tests", () => {
+  it("cards() resolver", async () => {
+    const noCards = await cardsResolver.cards();
+    expect(noCards).toBeInstanceOf(Array);
+    expect(noCards.length).toBe(0);
+
+    const repository = getRepository(Card);
+    const card = {
+      id: uuid(),
+      title: "title",
+      description: "description",
+    };
+    await repository.save(card);
+
+    const oneCard = await cardsResolver.cards();
+    expect(oneCard).toBeInstanceOf(Array);
+    expect(oneCard.length).toBe(1);
+    expect(oneCard[0].description).toBe(card.description);
   });
 });
