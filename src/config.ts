@@ -24,8 +24,8 @@ const config: IConfig = {
   dbUser: process.env.DB_USER || "postgres",
   dbPassword: process.env.DB_PASSWORD || "",
   appKeys: process.env.APP_KEYS ? JSON.parse(process.env.APP_KEYS) : ["shhh, don't tell anyone"],
-  googleClientId: process.env.GOOGLE_CLIENT_ID,
-  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  googleClientId: process.env.GOOGLE_CLIENT_ID || "googleid",
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "googlesecret",
   baseURL: process.env.BASE_URL || "http://example.com:3000",
   origin: process.env.ORIGIN || "localhost",
 };
