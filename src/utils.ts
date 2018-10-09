@@ -1,4 +1,5 @@
 import { logger } from "@app/logger";
+import { addSuccess } from "@app/messages";
 
 export async function afterLogin(ctx, user, router) {
   await ctx.login(user);
@@ -10,5 +11,6 @@ export async function afterLogin(ctx, user, router) {
     nextUrl = router.url("index");
   }
   logger.info("Login successful", { user_id: user.id, next_url: nextUrl });
+  addSuccess(ctx, "Login successful");
   ctx.redirect(nextUrl);
 }
