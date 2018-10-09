@@ -7,7 +7,8 @@
   "scripts": {
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "start": "nodemon",
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc -p tsconfig.build.json"
   },
   "engines": {
     "node": ">=10.11.0",
@@ -56,6 +57,7 @@
     "winston": "^3.1.0"
   },
   "devDependencies": {
+    "@types/graphql": "^14.0.2",
     "@types/jest": "^23.3.4",
     "@types/supertest": "^2.0.6",
     "eslint": "^5.6.1",
