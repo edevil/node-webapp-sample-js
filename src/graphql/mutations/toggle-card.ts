@@ -2,7 +2,7 @@ import { getRepository } from "typeorm";
 import { Card } from "@app/entities/card";
 
 export const toggleCardMutation = {
-  async toggleCard(_, { id }) {
+  async toggleCard(obj, { id }, context, info) {
     const repository = getRepository(Card);
     const card = await repository.findOneOrFail({ id });
     const done = !card.done;

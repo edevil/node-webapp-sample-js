@@ -14,6 +14,11 @@ const schemaDefinition = gql`
 `;
 
 export const graphqlInitializer = app => {
-  const server = new ApolloServer({ typeDefs: [schemaDefinition, ...types, Query, Mutation], resolvers });
+  const server = new ApolloServer({
+    typeDefs: [schemaDefinition, ...types, Query, Mutation],
+    resolvers,
+    context: ({ ctx }) => ({ ctx }),
+    playground: process.env.NODE_ENV !== "production",
+  });
   server.applyMiddleware({ app, path });
 };
