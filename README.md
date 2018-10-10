@@ -2,10 +2,10 @@
 Experimental starter pack for Node.JS webapps
 
 ## TODO
+1. Testing graphql resolvers with context
 1. Rate limit login
-1. https://github.com/godaddy/terminus
-1. Database seeds
 1. Redis session store / cache
+1. Database seeds
 1. Add Graphql sanity limits (DoS)
 1. File uploads
 1. Websockets

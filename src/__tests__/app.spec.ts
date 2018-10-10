@@ -118,7 +118,7 @@ describe("User login/logout tests", () => {
 
 describe("GraphQL resolvers tests", () => {
   it("cards() resolver", async () => {
-    const noCards = await cardsResolver.cards();
+    const noCards = await cardsResolver.cards(null, null, null, null);
     expect(noCards).toBeInstanceOf(Array);
     expect(noCards.length).toBe(0);
 
@@ -130,7 +130,7 @@ describe("GraphQL resolvers tests", () => {
     };
     await repository.save(card);
 
-    const oneCard = await cardsResolver.cards();
+    const oneCard = await cardsResolver.cards(null, null, null, null);
     expect(oneCard).toBeInstanceOf(Array);
     expect(oneCard.length).toBe(1);
     expect(oneCard[0].description).toBe(card.description);
