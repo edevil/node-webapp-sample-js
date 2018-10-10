@@ -21,8 +21,10 @@ export async function createUserFromGoogle(createReq: CreateGoogleUser, manager:
   const socialLogin = new SocialLogin();
   socialLogin.clientId = createReq.username;
   socialLogin.type = SocialType.Google;
-  user.socialLogins = [socialLogin];
-  debugger;
-  await manager.save(user);
+  socialLogin.user = user;
+  await manager.transaction(async transactionalEntityManager => {
+    await transactionalEntityManager.save(user);
+    await transactionalEntityManager.save(socialLogin);
+  });
   return user;
 }

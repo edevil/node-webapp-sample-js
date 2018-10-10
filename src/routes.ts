@@ -128,7 +128,7 @@ router.post("auth-register-post", "/auth/register", redLoggedMW, async (ctx, nex
     user = await createUser(createReq, getRepository(User));
   } catch (error) {
     if (error instanceof QueryFailedError) {
-      logger.debug("Username already exists", { username: createReq.username });
+      logger.debug("User already registered", { email: createReq.email });
       await ctx.render("register", {
         register_url: router.url("auth-register-post"),
         csrf: ctx.csrf,

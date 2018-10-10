@@ -47,19 +47,19 @@ describe("User registration tests", () => {
 
   it("POST successful user registration", async () => {
     CSRF.prototype.verify = jest.fn(() => true);
-    const username = "teste1";
+    const email = "teste1@example.com";
     const password = "teste12345";
     const result = await request(app.callback())
       .post(router.url("auth-register"))
       .type("form")
-      .send({ username: username, password: password, password_confirmation: password })
+      .send({ email: email, password: password, password_confirmation: password })
       .set("csrf-token", "test");
 
     expect(result.status).toEqual(302);
     expect(result.header["location"]).toEqual(router.url("index"));
 
     const repository = getRepository(User);
-    const user = await repository.findOne({ username });
+    const user = await repository.findOne({ email });
     expect(user).toBeDefined();
   });
 });
@@ -81,10 +81,10 @@ describe("User login/logout tests", () => {
     expect(rLogoutRedir.status).toEqual(302);
 
     // manually create user
-    const username = "teste1";
+    const email = "teste1@example.com";
     const password = "teste12345";
     let createReq: CreateUser = new CreateUser();
-    createReq.username = username;
+    createReq.email = email;
     createReq.password = password;
     const user = await createUser(createReq, getRepository(User));
 
@@ -92,7 +92,7 @@ describe("User login/logout tests", () => {
     const rLogin = await agent
       .post(router.url("auth-login"))
       .type("form")
-      .send({ username: username, password: password })
+      .send({ email: email, password: password })
       .set("csrf-token", "test");
 
     expect(rLogin.status).toEqual(302);

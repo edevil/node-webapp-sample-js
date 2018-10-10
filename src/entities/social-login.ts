@@ -15,7 +15,6 @@ export class SocialLogin {
   type: SocialType;
 
   @ManyToOne(type => User, user => user.socialLogins, {
-    cascade: ["insert"],
     primary: true,
   })
   user: User;

@@ -45,7 +45,7 @@ passport.use(
       const repository = getRepository(SocialLogin);
       let login;
       try {
-        login = await repository.findOne({ clientId: googleID, type: SocialType.Google });
+        login = await repository.findOne({ clientId: googleID, type: SocialType.Google }, { relations: ["user"] });
       } catch (error) {
         done(error, null);
         return;
@@ -77,24 +77,27 @@ passport.use(
 );
 
 passport.use(
-  new LocalStrategy({}, async (username, password, done) => {
+  new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
     const repository = getRepository(User);
     let user;
     try {
-      user = await repository.findOne({ username });
+      user = await repository.findOne({ email });
     } catch (error) {
       done(error, null);
       return;
     }
 
     if (!user) {
-      logger.debug("User not found", { username });
+      logger.debug("User not found", { email });
+      done(null, false);
+    } else if (!user.password) {
+      logger.debug("User does not have password", { email });
       done(null, false);
     } else if (!comparePass(password, user.password)) {
-      logger.debug("Incorrect password", { username });
+      logger.debug("Incorrect password", { email });
       done(null, false);
     } else {
-      logger.info("Successful auth", { username, user_id: user.id });
+      logger.info("Successful auth", { email, user_id: user.id });
       done(null, user);
     }
   }),

@@ -29,7 +29,6 @@ export class User {
   email: string;
 
   @OneToMany(type => SocialLogin, login => login.user, {
-    cascade: ["insert"],
     onDelete: "CASCADE",
   })
   socialLogins: SocialLogin[];

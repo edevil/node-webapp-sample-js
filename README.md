@@ -3,7 +3,8 @@ Experimental starter pack for Node.JS webapps
 
 ## TODO
 1. Separate users (profile) from logins
-1. Transactions
+1. Cascade deletes
+1. i18n
 1. Serve static content
 1. Rate limit login
 1. JWT
@@ -13,7 +14,6 @@ Experimental starter pack for Node.JS webapps
 1. Add Graphql sanity limits (DoS)
 1. File uploads
 1. Websockets
-1. i18n
 1. https://github.com/godaddy/terminus
 1. Dockerfile
 1. Production config (ts-node transpile-only mode, ...)
