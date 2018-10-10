@@ -10,6 +10,8 @@ import { getTemplateEngine } from "@app/middleware/template-engine";
 import { router } from "@app/routes";
 import { graphqlInitializer } from "@app/initializers/graphql";
 import { getBinderMW } from "@app/middleware/bind-emitters";
+import * as locale from "koa-locale";
+import { i18nInitializer } from "@app/initializers/i18n";
 
 export const app = new Koa();
 app.keys = config.appKeys;
@@ -22,6 +24,8 @@ app
   .use(cors({ origin: config.origin }))
   .use(session(app));
 
+locale(app);
+i18nInitializer(app);
 authInitializer(app);
 
 app

@@ -38,6 +38,12 @@ router.get("index", "/", async (ctx, next) => {
   } else {
     logger.debug("No authentication");
   }
+  logger.debug("Locale", {
+    cookie: ctx.getLocaleFromCookie(),
+    header: ctx.getLocaleFromHeader(),
+  });
+  logger.debug("Translate", { result: ctx.i18n.__("test key") });
+
   await ctx.render("index", { authenticated: ctx.isAuthenticated() });
 });
 
