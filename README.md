@@ -2,7 +2,6 @@
 Experimental starter pack for Node.JS webapps
 
 ## TODO
-1. Serve static content
 1. Rate limit login
 1. JWT
 1. Add authentication to GraphQL

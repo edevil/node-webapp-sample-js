@@ -12,6 +12,7 @@ import { graphqlInitializer } from "@app/initializers/graphql";
 import { getBinderMW } from "@app/middleware/bind-emitters";
 import * as locale from "koa-locale";
 import { i18nInitializer } from "@app/initializers/i18n";
+import { staticInitializer } from "@app/initializers/static-content";
 
 export const app = new Koa();
 app.keys = config.appKeys;
@@ -34,3 +35,4 @@ app
   .use(router.allowedMethods());
 
 graphqlInitializer(app);
+staticInitializer(app);
