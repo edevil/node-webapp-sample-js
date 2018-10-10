@@ -13,7 +13,7 @@ interface IConfig {
   googleClientId: string;
   googleClientSecret: string;
   baseURL: string;
-  origin: string;
+  origins: string[];
 }
 
 const config: IConfig = {
@@ -27,7 +27,7 @@ const config: IConfig = {
   googleClientId: process.env.GOOGLE_CLIENT_ID || "googleid",
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "googlesecret",
   baseURL: process.env.BASE_URL || "http://example.com:3000",
-  origin: process.env.ORIGIN || "localhost",
+  origins: process.env.ORIGINS ? JSON.parse(process.env.ORIGINS) : ["http://localhost:3000", "http://example.com:3000"],
 };
 
 export { config };

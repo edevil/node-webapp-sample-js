@@ -4,5 +4,6 @@ export const Query = gql`
   type Query {
     cards: [Card]
     card(id: String!): Card
+    userProfile: UserProfile
   }
 `;
