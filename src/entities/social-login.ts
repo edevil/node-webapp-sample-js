@@ -15,6 +15,7 @@ export class SocialLogin {
   type: SocialType;
 
   @ManyToOne(type => User, user => user.socialLogins, {
+    onDelete: "CASCADE",
     primary: true,
   })
   user: User;

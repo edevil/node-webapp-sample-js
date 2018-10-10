@@ -28,8 +28,6 @@ export class User {
   })
   email: string;
 
-  @OneToMany(type => SocialLogin, login => login.user, {
-    onDelete: "CASCADE",
-  })
+  @OneToMany(type => SocialLogin, login => login.user)
   socialLogins: SocialLogin[];
 }

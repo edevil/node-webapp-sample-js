@@ -2,8 +2,6 @@
 Experimental starter pack for Node.JS webapps
 
 ## TODO
-1. Separate users (profile) from logins
-1. Cascade deletes
 1. i18n
 1. Serve static content
 1. Rate limit login
