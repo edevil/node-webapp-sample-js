@@ -11,6 +11,7 @@ import * as passport from "koa-passport";
 import { afterLogin } from "./utils";
 import { getMessagesMW } from "./middleware/fetch-messages";
 import * as bodyParser from "koa-bodyparser";
+import { loginRLMW } from "./rate-limits";
 
 export const router = new Router();
 
@@ -89,7 +90,7 @@ router.get("auth-login", "/auth/login", redLoggedMW, async (ctx, next) => {
   });
 });
 
-router.post("auth-login-post", "/auth/login", redLoggedMW, async (ctx, next) => {
+router.post("auth-login-post", "/auth/login", loginRLMW, redLoggedMW, async (ctx, next) => {
   const loginCallback = async (err, user, info, status) => {
     if (user) {
       await afterLogin(ctx, user, router);
