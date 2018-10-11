@@ -5,7 +5,7 @@
   "main": "src/server.ts",
   "repository": "github:edevil/node-webapp-sample",
   "scripts": {
-    "typeorm": "node -r ts-node/register -r tsconfig-paths/register -r reflect-metadata ./node_modules/.bin/typeorm",
+    "typeorm": "node -r ts-node/register -r reflect-metadata ./node_modules/.bin/typeorm",
     "start": "nodemon",
     "test": "jest",
     "build": "tsc -p tsconfig.build.json"
@@ -69,7 +69,6 @@
     "ts-node": "^7.0.1",
     "typescript": "^3.1.2",
     "nodemon": "^1.18.4",
-    "tsconfig-paths": "^3.6.0",
     "ts-jest": "^23.10.4"
   },
   "prettier": {
