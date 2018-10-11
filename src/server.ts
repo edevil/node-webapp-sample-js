@@ -21,6 +21,7 @@ function healthCheck() {
 }
 
 function beforeShutdown() {
+  logger.debug("Will setup shutdown timer");
   return new Promise(resolve => {
     setTimeout(resolve, 5000);
   });
