@@ -10,6 +10,7 @@ import { config } from "../config";
 import { createUserFromGoogle } from "../service";
 import { CreateGoogleUser } from "../dtos/create-google-user";
 import { SocialLogin, SocialType } from "../entities/social-login";
+import * as compose from "koa-compose";
 
 function comparePass(userPassword, databasePassword) {
   return compareSync(userPassword, databasePassword);
@@ -103,14 +104,11 @@ passport.use(
   }),
 );
 
-export const authInitializer = app => {
-  app
-    .use(passport.initialize())
-    .use(passport.session())
-    .use(async (ctx, next) => {
-      if (ctx.isAuthenticated()) {
-        setOnContext("user_id", ctx.state.user.id);
-      }
-      await next();
-    });
-};
+async function setUseridCTX(ctx, next) {
+  if (ctx.isAuthenticated()) {
+    setOnContext("user_id", ctx.state.user.id);
+  }
+  await next();
+}
+
+export const getAuthMW = () => compose([passport.initialize(), passport.session(), setUseridCTX]);

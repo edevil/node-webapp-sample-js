@@ -4,7 +4,7 @@ import { getKoaMiddleware } from "@emartech/cls-adapter";
 import * as helmet from "koa-helmet";
 import { getRequestLogger } from "./middleware/request-logger";
 import * as session from "koa-session";
-import { authInitializer } from "./initializers/authentication";
+import { getAuthMW } from "./middleware/authentication";
 import { getTemplateEngine } from "./middleware/template-engine";
 import { router } from "./routes";
 import { graphqlInitializer } from "./initializers/graphql";
@@ -27,9 +27,9 @@ app
 
 locale(app);
 i18nInitializer(app);
-authInitializer(app);
 
 app
+  .use(getAuthMW())
   .use(getTemplateEngine())
   .use(router.routes())
   .use(router.allowedMethods());
