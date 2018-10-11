@@ -30,6 +30,7 @@
     "dotenv": "^6.1.0",
     "graphql": "^14.0.2",
     "graphql-depth-limit": "^1.1.0",
+    "graphql-input-number": "0.0.10",
     "ioredis": "^4.0.2",
     "koa": "^2.5.3",
     "koa-bodyparser": "^4.2.1",
