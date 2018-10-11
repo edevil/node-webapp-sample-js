@@ -2,7 +2,6 @@
 Experimental starter pack for Node.JS webapps
 
 ## TODO
-1. Move from koa-body -> koa-bodyparser. There can be only one.
 1. Rate limit login
 1. Redis session store / cache
 1. Database seeds

@@ -1,7 +1,6 @@
 import * as Router from "koa-router";
 import { logger } from "@app/logger";
 import * as CSRF from "koa-csrf";
-import * as KoaBody from "koa-body";
 import { transformAndValidate } from "class-transformer-validator";
 import { CreateUser } from "@app/dtos/create-user";
 import { createUser } from "@app/service";
@@ -11,13 +10,14 @@ import { getLoggedInMW, getLoginReqMW } from "@app/middleware/redirect-logged";
 import * as passport from "koa-passport";
 import { afterLogin } from "@app/utils";
 import { getMessagesMW } from "@app/middleware/fetch-messages";
+import * as bodyParser from "koa-bodyparser";
 
 export const router = new Router();
 
 const redLoggedMW = getLoggedInMW(router, "index");
 const redLoginReqMW = getLoginReqMW(router, "auth-login");
 
-router.use(KoaBody({ multipart: true }));
+router.use(bodyParser());
 
 router.use(
   new CSRF({
