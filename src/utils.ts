@@ -1,5 +1,6 @@
 import { logger } from "@app/logger";
 import { addSuccess } from "@app/messages";
+import { User } from "@app/entities/user";
 
 export async function afterLogin(ctx, user, router) {
   await ctx.login(user);
@@ -13,4 +14,27 @@ export async function afterLogin(ctx, user, router) {
   logger.info("Login successful", { user_id: user.id, next_url: nextUrl });
   addSuccess(ctx, "Login successful");
   ctx.redirect(nextUrl);
+}
+
+export function getGQLContext(user: User): { ctx: any } {
+  if (user) {
+    return {
+      ctx: {
+        isAuthenticated() {
+          return true;
+        },
+        state: {
+          user
+        }
+      },
+    };
+  } else {
+    return {
+      ctx: {
+        isAuthenticated() {
+          return false;
+        },
+      },
+    };
+  }
 }

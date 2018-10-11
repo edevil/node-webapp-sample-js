@@ -10,6 +10,9 @@ import { createUser } from "@app/service";
 import { cardsResolver } from "@app/graphql/resolvers/cards";
 import { Card } from "@app/entities/card";
 import * as uuid from "uuid/v4";
+import { userProfileResolver } from "@app/graphql/resolvers/user-profile";
+import { getGQLContext } from "@app/utils";
+import { AuthenticationError } from "apollo-server-koa";
 
 let conn: Connection;
 beforeAll(async () => {
@@ -118,7 +121,8 @@ describe("User login/logout tests", () => {
 
 describe("GraphQL resolvers tests", () => {
   it("cards() resolver", async () => {
-    const noCards = await cardsResolver.cards(null, null, null, null);
+    const context = getGQLContext(null);
+    const noCards = await cardsResolver.cards(null, null, context, null);
     expect(noCards).toBeInstanceOf(Array);
     expect(noCards.length).toBe(0);
 
@@ -130,9 +134,27 @@ describe("GraphQL resolvers tests", () => {
     };
     await repository.save(card);
 
-    const oneCard = await cardsResolver.cards(null, null, null, null);
+    const oneCard = await cardsResolver.cards(null, null, context, null);
     expect(oneCard).toBeInstanceOf(Array);
     expect(oneCard.length).toBe(1);
     expect(oneCard[0].description).toBe(card.description);
+  });
+
+  it("userProfile() resolver", async () => {
+    const noAuthContext = getGQLContext(null);
+    const noAuth = async () =>
+      await userProfileResolver.userProfile(null, null, noAuthContext, null);
+
+    await expect(noAuth()).rejects.toThrow(AuthenticationError);
+
+    const email = "teste1@example.com";
+    const password = "teste12345";
+    let createReq: CreateUser = new CreateUser();
+    createReq.email = email;
+    createReq.password = password;
+    const user = await createUser(createReq, getRepository(User));
+    const authContext = getGQLContext(user);
+    const profile = await userProfileResolver.userProfile(null, null, authContext, null);
+    expect(profile).toBe(user);
   });
 });
