@@ -1,6 +1,6 @@
-import { config } from "@app/config";
+import { config } from "./src/config";
 import { Logger, QueryRunner } from "typeorm";
-import { logger } from "@app/logger";
+import { logger } from "./src/logger";
 
 class MyCustomLogger implements Logger {
   log(level: "log" | "info" | "warn", message: any, queryRunner?: QueryRunner): any {}

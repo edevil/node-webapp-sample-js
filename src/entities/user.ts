@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
-import { SocialLogin } from "@app/entities/social-login";
+import { SocialLogin } from "./social-login";
 
 @Entity()
 export class User {

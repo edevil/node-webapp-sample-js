@@ -1,5 +1,5 @@
 import * as cors from "@koa/cors";
-import { config } from "@app/config";
+import { config } from "../config";
 
 function whitelistOrigin(ctx) {
   const requestOrigin = ctx.accept.headers.origin;

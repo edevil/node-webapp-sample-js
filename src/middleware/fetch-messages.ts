@@ -1,4 +1,4 @@
-import { getMessages } from "@app/messages";
+import { getMessages } from "../messages";
 
 export const getMessagesMW = () => async (ctx, next) => {
   ctx.state.messages = getMessages(ctx);

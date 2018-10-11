@@ -1,8 +1,8 @@
-import { app } from "@app/app";
-import { databaseInitializer } from "@app/initializers/database";
-import { config } from "@app/config";
+import { app } from "./app";
+import { databaseInitializer } from "./initializers/database";
+import { config } from "./config";
 import { createTerminus } from "@godaddy/terminus";
-import { logger } from "@app/logger";
+import { logger } from "./logger";
 import * as http from "http";
 import { getConnection } from "typeorm";
 

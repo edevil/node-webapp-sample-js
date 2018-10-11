@@ -1,6 +1,6 @@
-import { logger } from "@app/logger";
-import { addSuccess } from "@app/messages";
-import { User } from "@app/entities/user";
+import { logger } from "./logger";
+import { addSuccess } from "./messages";
+import { User } from "./entities/user";
 
 export async function afterLogin(ctx, user, router) {
   await ctx.login(user);

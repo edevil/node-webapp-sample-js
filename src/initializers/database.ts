@@ -1,5 +1,5 @@
 import { createConnection } from "typeorm";
-import { logger } from "@app/logger";
+import { logger } from "../logger";
 
 export const databaseInitializer = async () => {
   await createConnection();

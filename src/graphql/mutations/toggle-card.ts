@@ -1,5 +1,5 @@
 import { getRepository } from "typeorm";
-import { Card } from "@app/entities/card";
+import { Card } from "../../entities/card";
 
 export const toggleCardMutation = {
   async toggleCard(obj, { id }, context, info) {

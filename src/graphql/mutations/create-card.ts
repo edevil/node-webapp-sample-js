@@ -1,7 +1,7 @@
 import * as uuid from "uuid/v4";
 
 import { getRepository } from "typeorm";
-import { Card } from "@app/entities/card";
+import { Card } from "../../entities/card";
 
 export const createCardMutation = {
   async createCard(obj, { card: attrs }, context, info) {

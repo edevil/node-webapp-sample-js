@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, Index } from "typeorm";
-import { User } from "@app/entities/user";
+import { User } from "./user";
 
 export enum SocialType {
   Google,

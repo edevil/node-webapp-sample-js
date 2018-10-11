@@ -91,9 +91,6 @@
     },
     "testMatch": [
       "**/__tests__/*.+(ts|tsx|js)"
-    ],
-    "moduleNameMapper": {
-      "@app/(.*)": "<rootDir>/src/$1"
-    }
+    ]
   }
 }

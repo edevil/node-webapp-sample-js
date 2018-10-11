@@ -1,5 +1,5 @@
 import { IsEmail, IsString, MinLength } from "class-validator";
-import { IsEqualTo } from "@app/custom_validators";
+import { IsEqualTo } from "../custom_validators";
 
 export class CreateUser {
   @IsEmail()

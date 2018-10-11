@@ -1,15 +1,15 @@
 import * as Router from "koa-router";
-import { logger } from "@app/logger";
+import { logger } from "./logger";
 import * as CSRF from "koa-csrf";
 import { transformAndValidate } from "class-transformer-validator";
-import { CreateUser } from "@app/dtos/create-user";
-import { createUser } from "@app/service";
+import { CreateUser } from "./dtos/create-user";
+import { createUser } from "./service";
 import { getRepository, QueryFailedError } from "typeorm";
-import { User } from "@app/entities/user";
-import { getLoggedInMW, getLoginReqMW } from "@app/middleware/redirect-logged";
+import { User } from "./entities/user";
+import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
 import * as passport from "koa-passport";
-import { afterLogin } from "@app/utils";
-import { getMessagesMW } from "@app/middleware/fetch-messages";
+import { afterLogin } from "./utils";
+import { getMessagesMW } from "./middleware/fetch-messages";
 import * as bodyParser from "koa-bodyparser";
 
 export const router = new Router();

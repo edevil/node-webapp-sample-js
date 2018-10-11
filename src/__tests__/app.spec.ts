@@ -1,17 +1,17 @@
-import { app } from "@app/app";
+import { app } from "../app";
 import * as request from "supertest";
-import { router } from "@app/routes";
+import { router } from "../routes";
 import * as CSRF from "csrf";
 import { Connection, createConnection, getConnectionOptions, getRepository } from "typeorm";
-import { logger } from "@app/logger";
-import { User } from "@app/entities/user";
-import { CreateUser } from "@app/dtos/create-user";
-import { createUser } from "@app/service";
-import { cardsResolver } from "@app/graphql/resolvers/cards";
-import { Card } from "@app/entities/card";
+import { logger } from "../logger";
+import { User } from "../entities/user";
+import { CreateUser } from "../dtos/create-user";
+import { createUser } from "../service";
+import { cardsResolver } from "../graphql/resolvers/cards";
+import { Card } from "../entities/card";
 import * as uuid from "uuid/v4";
-import { userProfileResolver } from "@app/graphql/resolvers/user-profile";
-import { getGQLContext } from "@app/utils";
+import { userProfileResolver } from "../graphql/resolvers/user-profile";
+import { getGQLContext } from "../utils";
 import { AuthenticationError } from "apollo-server-koa";
 
 let conn: Connection;

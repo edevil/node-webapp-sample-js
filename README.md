@@ -2,6 +2,8 @@
 Experimental starter pack for Node.JS webapps
 
 ## TODO
+1. Initial migration
+1. Production config (ts-node transpile-only mode, NODE_ENV == 'production', ...)
 1. Rate limit login
 1. Redis session store / cache
 1. Database seeds
@@ -9,7 +11,6 @@ Experimental starter pack for Node.JS webapps
 1. File uploads
 1. Websockets
 1. Dockerfile
-1. Production config (ts-node transpile-only mode, NODE_ENV == 'production', ...)
 1. Helm package
 1. TSLint, tslint-config-prettier ?
 1. Global error handler

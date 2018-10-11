@@ -1,9 +1,9 @@
-import { cardResolver } from "@app/graphql/resolvers/card";
-import { cardsResolver } from "@app/graphql/resolvers/cards";
-import { toggleCardMutation } from "@app/graphql/mutations/toggle-card";
-import { updateCardMutation } from "@app/graphql/mutations/update-card";
-import { createCardMutation } from "@app/graphql/mutations/create-card";
-import { userProfileResolver } from "@app/graphql/resolvers/user-profile";
+import { cardResolver } from "./resolvers/card";
+import { cardsResolver } from "./resolvers/cards";
+import { toggleCardMutation } from "./mutations/toggle-card";
+import { updateCardMutation } from "./mutations/update-card";
+import { createCardMutation } from "./mutations/create-card";
+import { userProfileResolver } from "./resolvers/user-profile";
 
 export const resolvers = {
   Query: {

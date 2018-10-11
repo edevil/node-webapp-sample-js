@@ -1,6 +1,6 @@
 import { getRepository } from "typeorm";
-import { Card } from "@app/entities/card";
-import { logger } from "@app/logger";
+import { Card } from "../../entities/card";
+import { logger } from "../../logger";
 
 export const cardsResolver = {
   async cards(obj, args, context, info) {

@@ -1,6 +1,6 @@
-import { Card } from "@app/graphql/types/card";
-import { CardPatch } from "@app/graphql/types/card-patch";
-import { NewCardPatch } from "@app/graphql/types/new-card-patch";
-import { UserProfile } from "@app/graphql/types/user-profile";
+import { Card } from "./types/card";
+import { CardPatch } from "./types/card-patch";
+import { NewCardPatch } from "./types/new-card-patch";
+import { UserProfile } from "./types/user-profile";
 
 export const types = [Card, CardPatch, NewCardPatch, UserProfile];
