@@ -15,6 +15,7 @@ interface IConfig {
   baseURL: string;
   origins: string[];
   redisHost: string;
+  redisPrefix: string;
 }
 
 const config: IConfig = {
@@ -30,6 +31,7 @@ const config: IConfig = {
   baseURL: process.env.BASE_URL || "http://example.com:3000",
   origins: process.env.ORIGINS ? JSON.parse(process.env.ORIGINS) : ["http://localhost:3000", "http://example.com:3000"],
   redisHost: process.env.REDIS_HOST || "localhost",
+  redisPrefix: process.env.REDIS_PREFIX || "sample-node",
 };
 
 export { config };

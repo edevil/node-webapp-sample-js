@@ -6,6 +6,7 @@ let conn: Redis.Redis;
 export function initRedis(): void {
   conn = new Redis({
     host: config.redisHost,
+    keyPrefix: config.redisPrefix,
   });
 }
 
