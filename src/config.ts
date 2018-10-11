@@ -14,6 +14,7 @@ interface IConfig {
   googleClientSecret: string;
   baseURL: string;
   origins: string[];
+  redisHost: string;
 }
 
 const config: IConfig = {
@@ -28,6 +29,7 @@ const config: IConfig = {
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "googlesecret",
   baseURL: process.env.BASE_URL || "http://example.com:3000",
   origins: process.env.ORIGINS ? JSON.parse(process.env.ORIGINS) : ["http://localhost:3000", "http://example.com:3000"],
+  redisHost: process.env.REDIS_HOST || "localhost",
 };
 
 export { config };

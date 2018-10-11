@@ -5,10 +5,12 @@ import { createTerminus } from "@godaddy/terminus";
 import { logger } from "./logger";
 import * as http from "http";
 import { getConnection } from "typeorm";
+import { closeRedis, initRedis } from "./initializers/redis";
 
 function onSignal() {
   logger.info("server is starting cleanup");
-  return Promise.all([getConnection().close()]);
+
+  return Promise.all([getConnection().close(), Promise.resolve(closeRedis())]);
 }
 
 async function onShutdown() {
@@ -44,6 +46,7 @@ const options = {
 
 const bootstrap = async () => {
   await databaseInitializer();
+  initRedis();
 
   const server = http.createServer(app.callback());
   createTerminus(server, options);

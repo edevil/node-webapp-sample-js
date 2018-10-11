@@ -5,6 +5,4 @@ import * as mount from "koa-mount";
 
 const staticPath = path.join(appPath.toString(), "/static");
 
-export const staticInitializer = app => {
-  app.use(mount("/static", serve(staticPath)));
-};
+export const getStaticMW = () => mount("/static", serve(staticPath));

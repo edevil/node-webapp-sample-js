@@ -11,8 +11,8 @@ import { graphqlInitializer } from "./initializers/graphql";
 import { getBinderMW } from "./middleware/bind-emitters";
 import * as locale from "koa-locale";
 import { i18nInitializer } from "./initializers/i18n";
-import { staticInitializer } from "./initializers/static-content";
 import { getCORSMW } from "./middleware/cors-verifier";
+import { getStaticMW } from "./middleware/static-content";
 
 export const app = new Koa();
 app.keys = config.appKeys;
@@ -35,4 +35,5 @@ app
   .use(router.allowedMethods());
 
 graphqlInitializer(app);
-staticInitializer(app);
+
+app.use(getStaticMW());

@@ -13,6 +13,7 @@ import * as uuid from "uuid/v4";
 import { userProfileResolver } from "../graphql/resolvers/user-profile";
 import { getGQLContext } from "../utils";
 import { AuthenticationError } from "apollo-server-koa";
+import { closeRedis, initRedis } from "../initializers/redis";
 
 let conn: Connection;
 beforeAll(async () => {
@@ -25,9 +26,13 @@ beforeAll(async () => {
     logger.error("Could not create connection", { error: err });
     throw err;
   }
+  initRedis();
 });
 
-afterAll(async () => await conn.close());
+afterAll(async () => {
+  await conn.close();
+  closeRedis();
+});
 
 beforeEach(async () => {
   await conn.synchronize(true);
@@ -142,8 +147,7 @@ describe("GraphQL resolvers tests", () => {
 
   it("userProfile() resolver", async () => {
     const noAuthContext = getGQLContext(null);
-    const noAuth = async () =>
-      await userProfileResolver.userProfile(null, null, noAuthContext, null);
+    const noAuth = async () => await userProfileResolver.userProfile(null, null, noAuthContext, null);
 
     await expect(noAuth()).rejects.toThrow(AuthenticationError);
 
