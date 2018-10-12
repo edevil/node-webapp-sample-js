@@ -16,6 +16,8 @@ interface IConfig {
   origins: string[];
   redisHost: string;
   redisPrefix: string;
+  gqlDepthLimit: number;
+  gqlMaxPerPage: number;
 }
 
 const config: IConfig = {
@@ -32,6 +34,8 @@ const config: IConfig = {
   origins: process.env.ORIGINS ? JSON.parse(process.env.ORIGINS) : ["http://localhost:3000", "http://example.com:3000"],
   redisHost: process.env.REDIS_HOST || "localhost",
   redisPrefix: process.env.REDIS_PREFIX || "sample-node",
+  gqlDepthLimit: +process.env.GQL_DEPTH_LIMIT || 5,
+  gqlMaxPerPage: +process.env.GQL_MAX_PER_PAGE || 100,
 };
 
 export { config };

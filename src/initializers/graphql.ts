@@ -4,6 +4,7 @@ import { Query } from "../graphql/types/query";
 import { types } from "../graphql/types";
 import { Mutation } from "../graphql/types/mutation";
 import * as depthLimit from "graphql-depth-limit";
+import { config } from "../config";
 
 const path = "/graphql";
 
@@ -20,7 +21,7 @@ export const graphqlInitializer = app => {
     resolvers,
     context: ({ ctx }) => ({ ctx }),
     playground: process.env.NODE_ENV !== "production",
-    validationRules: [depthLimit(5)],
+    validationRules: [depthLimit(config.gqlDepthLimit)],
   });
   server.applyMiddleware({ app, path });
 };
