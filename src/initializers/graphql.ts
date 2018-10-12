@@ -23,5 +23,5 @@ export const graphqlInitializer = app => {
     playground: process.env.NODE_ENV !== "production",
     validationRules: [depthLimit(config.gqlDepthLimit)],
   });
-  server.applyMiddleware({ app, path });
+  server.applyMiddleware({ app, path, disableHealthCheck: true });
 };
