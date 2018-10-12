@@ -12,7 +12,7 @@ steps:
     - 'BRANCH_NAME=${BRANCH_NAME}'
   waitFor: ['docker-pull']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['run', '-d', '--name=databasetest', 'postgres']
+  args: ['run', '-d', '--name=databasetest', '-e', 'POSTGRES_DB=sample_db_test', 'postgres']
   waitFor: ['docker-pull']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['run', '-d', '--name=redistest', 'redis']
