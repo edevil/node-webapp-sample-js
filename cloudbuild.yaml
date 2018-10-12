@@ -22,10 +22,45 @@ steps:
   entrypoint: '/bin/bash'
   env:
     - 'BRANCH_NAME=${BRANCH_NAME}'
+  id: 'run-tests'
 - name: 'gcr.io/cloud-builders/docker'
   args: ['-c', 'docker push eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_base']
   entrypoint: '/bin/bash'
   env:
     - 'BRANCH_NAME=${BRANCH_NAME}'
+  waitFor: ['run-tests']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['-c', 'docker pull eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_latest || true']
+  entrypoint: '/bin/bash'
+  env:
+  - 'BRANCH_NAME=${BRANCH_NAME}'
+  waitFor: ['run-tests']
+  id: 'pull-latest'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['-c', 'docker build --cache-from eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_latest -t eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA} .']
+  entrypoint: '/bin/bash'
+  env:
+  - 'BRANCH_NAME=${BRANCH_NAME}'
+  waitFor: ['pull-latest']
+  id: 'build-latest'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['-c', 'docker tag eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA} eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_latest']
+  entrypoint: '/bin/bash'
+  env:
+  - 'BRANCH_NAME=${BRANCH_NAME}'
+  waitFor: ['build-latest']
+  id: 'tag-latest'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['-c', 'docker push eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA}']
+  entrypoint: '/bin/bash'
+  env:
+  - 'BRANCH_NAME=${BRANCH_NAME}'
+  waitFor: ['build-latest']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['-c', 'docker push eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_latest']
+  entrypoint: '/bin/bash'
+  env:
+  - 'BRANCH_NAME=${BRANCH_NAME}'
+  waitFor: ['tag-latest']
 
 timeout: 600s
