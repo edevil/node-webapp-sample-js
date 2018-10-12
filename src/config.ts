@@ -18,6 +18,7 @@ interface IConfig {
   redisPrefix: string;
   gqlDepthLimit: number;
   gqlMaxPerPage: number;
+  gqlPath: string;
 }
 
 const config: IConfig = {
@@ -36,6 +37,7 @@ const config: IConfig = {
   redisPrefix: process.env.REDIS_PREFIX || "sample-node",
   gqlDepthLimit: +process.env.GQL_DEPTH_LIMIT || 5,
   gqlMaxPerPage: +process.env.GQL_MAX_PER_PAGE || 100,
+  gqlPath: process.env.GQL_PATH || "/graphql",
 };
 
 export { config };

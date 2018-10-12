@@ -6,8 +6,6 @@ import { Mutation } from "../graphql/types/mutation";
 import * as depthLimit from "graphql-depth-limit";
 import { config } from "../config";
 
-const path = "/graphql";
-
 const schemaDefinition = gql`
   schema {
     query: Query
@@ -23,5 +21,5 @@ export const graphqlInitializer = app => {
     playground: process.env.NODE_ENV !== "production",
     validationRules: [depthLimit(config.gqlDepthLimit)],
   });
-  server.applyMiddleware({ app, path, disableHealthCheck: true });
+  server.applyMiddleware({ app, path: config.gqlPath, disableHealthCheck: true });
 };
