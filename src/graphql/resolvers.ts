@@ -3,12 +3,13 @@ import { cardsResolver } from "./resolvers/cards";
 import { toggleCardMutation } from "./mutations/toggle-card";
 import { updateCardMutation } from "./mutations/update-card";
 import { createCardMutation } from "./mutations/create-card";
-import { userProfileResolver } from "./resolvers/user-profile";
+import { extraUserProfileResolver, userProfileResolver } from "./resolvers/user-profile";
 import { customScalarsResolver } from "./resolvers/custom-scalars";
 import { examplesResolver } from "./resolvers/examples";
 
 export const resolvers = {
   ...customScalarsResolver,
+  ...extraUserProfileResolver,
   Query: {
     ...cardsResolver,
     ...cardResolver,

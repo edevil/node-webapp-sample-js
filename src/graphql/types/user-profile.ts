@@ -5,5 +5,6 @@ export const UserProfile = gql`
     email: String
     created_at: String
     updated_at: String
+    socialLogins: [SocialLogin]
   }
 `;
