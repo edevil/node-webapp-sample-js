@@ -1,0 +1,58 @@
+{{ if .Values.sqlproxy.enabled }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sqlproxy
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: sqlproxy
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: sqlproxy
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          name: cloudsql-proxy
+          command: ["/cloud_sql_proxy", "--dir=/cloudsql",
+                    "-instances={{ .Values.sqlproxy.instance }}=tcp:0.0.0.0:5432",
+                    "-credential_file=/secrets/cloudsql/credentials.json",
+                    "-verbose=false"]
+          volumeMounts:
+            - name: cloudsql-instance-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs
+            - name: cloudsql
+              mountPath: /cloudsql
+          ports:
+          - containerPort: 5432
+            name: database-port
+          livenessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+          readinessProbe:
+            tcpSocket:
+              port: 5432
+            timeoutSeconds: 1
+      volumes:
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: cloudsql-instance-credentials
+        - name: ssl-certs
+          hostPath:
+            path: /etc/ssl/certs
+        - name: cloudsql
+          emptyDir:
+{{ end }}
