@@ -1,0 +1,41 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['-c', 'docker pull eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_latest || true']
+  entrypoint: '/bin/bash'
+  env:
+    - 'BRANCH_NAME=${BRANCH_NAME}'
+  id: 'docker-pull'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['-c', 'docker build --cache-from eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_latest -t eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA} .']
+  entrypoint: '/bin/bash'
+  env:
+    - 'BRANCH_NAME=${BRANCH_NAME}'
+  waitFor: ['docker-pull']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['run', '-d', '--name=databasetest', 'postgres']
+  waitFor: ['docker-pull']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['run', '-d', '--name=redistest', 'redis']
+  waitFor: ['docker-pull']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['-c', 'docker run --name buildcont -e REDIS_HOST=redistest -e DB_HOST=databasetest --link=databasetest --link=redistest -t eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA} sh -c "npm test"']
+  entrypoint: '/bin/bash'
+  env:
+    - 'BRANCH_NAME=${BRANCH_NAME}'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['-c', 'docker tag eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA} eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_latest']
+  entrypoint: '/bin/bash'
+  env:
+    - 'BRANCH_NAME=${BRANCH_NAME}'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['-c', 'docker push eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA}']
+  entrypoint: '/bin/bash'
+  env:
+    - 'BRANCH_NAME=${BRANCH_NAME}'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['-c', 'docker push eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_latest']
+  entrypoint: '/bin/bash'
+  env:
+    - 'BRANCH_NAME=${BRANCH_NAME}'
+
+timeout: 600s
