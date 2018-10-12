@@ -1,12 +1,12 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['-c', 'docker pull eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_latest || true']
+  args: ['-c', 'docker pull eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_base || true']
   entrypoint: '/bin/bash'
   env:
     - 'BRANCH_NAME=${BRANCH_NAME}'
   id: 'docker-pull'
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['-c', 'docker build --cache-from eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_latest -t eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA} .']
+  args: ['-c', 'docker build --target base --cache-from eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_base -t eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_base .']
   entrypoint: '/bin/bash'
   env:
     - 'BRANCH_NAME=${BRANCH_NAME}'
@@ -18,22 +18,12 @@ steps:
   args: ['run', '-d', '--name=redistest', 'redis']
   waitFor: ['docker-pull']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['-c', 'docker run --name buildcont -e REDIS_HOST=redistest -e DB_HOST=databasetest --link=databasetest --link=redistest -t eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA} sh -c "npm test"']
+  args: ['-c', 'docker run --name buildcont -e REDIS_HOST=redistest -e DB_HOST=databasetest --link=databasetest --link=redistest -t eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_base sh -c "npm test"']
   entrypoint: '/bin/bash'
   env:
     - 'BRANCH_NAME=${BRANCH_NAME}'
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['-c', 'docker tag eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA} eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_latest']
-  entrypoint: '/bin/bash'
-  env:
-    - 'BRANCH_NAME=${BRANCH_NAME}'
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['-c', 'docker push eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA}']
-  entrypoint: '/bin/bash'
-  env:
-    - 'BRANCH_NAME=${BRANCH_NAME}'
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['-c', 'docker push eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_latest']
+  args: ['-c', 'docker push eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_base']
   entrypoint: '/bin/bash'
   env:
     - 'BRANCH_NAME=${BRANCH_NAME}'
