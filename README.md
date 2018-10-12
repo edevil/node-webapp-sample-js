@@ -2,7 +2,6 @@
 Experimental starter pack for Node.JS webapps
 
 ## TODO
-1. CI Cloud Build script
 1. Helm package
 1. CD Cloud Build script
 1. File uploads
