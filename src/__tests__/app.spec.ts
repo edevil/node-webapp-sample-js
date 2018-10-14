@@ -35,7 +35,8 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  await conn.synchronize(true);
+  await conn.dropDatabase();
+  await conn.runMigrations({ transaction: true });
 });
 
 describe("GET / - simple test", () => {
