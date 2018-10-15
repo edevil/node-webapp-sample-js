@@ -10,7 +10,7 @@ export function initRedis(): void {
     keyPrefix: config.redisPrefix,
     maxRetriesPerRequest: 3,
   });
-  conn.on("error", err => logger.error("Problems using redis", { err }))
+  conn.on("error", err => logger.error("Problems using redis", { err }));
 }
 
 export function closeRedis(): void {

@@ -116,7 +116,7 @@ router.get("auth-register", "/auth/register", redLoggedMW, async (ctx, next) => 
 router.post("auth-register-post", "/auth/register", redLoggedMW, async (ctx, next) => {
   let createReq: CreateUser;
   try {
-    createReq = await transformAndValidate(CreateUser, ctx.request.body) as CreateUser;
+    createReq = (await transformAndValidate(CreateUser, ctx.request.body)) as CreateUser;
   } catch (error) {
     logger.error(JSON.stringify(error));
     // TODO

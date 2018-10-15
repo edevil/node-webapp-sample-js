@@ -1,4 +1,3 @@
-
 export class CreateGoogleUser {
   public username: string;
   public email: string;

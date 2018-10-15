@@ -18,7 +18,7 @@ steps:
   args: ['run', '-d', '--name=redistest', 'redis']
   waitFor: ['docker-pull']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['-c', 'docker run --name buildcont -e REDIS_HOST=redistest -e DB_HOST=databasetest --link=databasetest --link=redistest -t eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_base sh -c "npm lint && npm test"']
+  args: ['-c', 'docker run --name buildcont -e REDIS_HOST=redistest -e DB_HOST=databasetest --link=databasetest --link=redistest -t eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_base sh -c "npm run pretty && npm run lint && npm test"']
   entrypoint: '/bin/bash'
   env:
     - 'BRANCH_NAME=${BRANCH_NAME}'

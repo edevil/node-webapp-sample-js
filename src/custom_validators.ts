@@ -12,7 +12,7 @@ export function IsEqualTo(property: string, validationOptions?: ValidationOption
         validate(value: any, args: ValidationArguments) {
           const [relatedPropertyName] = args.constraints;
           const relatedValue = (args.object as any)[relatedPropertyName];
-          return typeof value === "string" && typeof relatedValue === "string" && value === relatedValue
+          return typeof value === "string" && typeof relatedValue === "string" && value === relatedValue;
         },
       },
     });
