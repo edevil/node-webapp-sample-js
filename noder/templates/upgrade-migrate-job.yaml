@@ -1,0 +1,63 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "noder.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "noder.name" . }}
+    helm.sh/chart: {{ include "noder.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    metadata:
+      name: {{ include "noder.fullname" . }}-migration
+      labels:
+        app.kubernetes.io/name: {{ include "noder.name" . }}
+        helm.sh/chart: {{ include "noder.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: migrator
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["node", "-r", "reflect-metadata", "./node_modules/.bin/typeorm", "migration:run"]
+        env:
+        - name: BASE_URL
+          value: "https://noder.labs.brpx.com"
+        - name: LOG_SQL
+          value: "false"
+        - name: ORIGINS
+          value: '["https://noder.labs.brpx.com"]'
+        - name: DB_NAME
+          value: "noder-develop"
+        - name: DB_USER
+          value: "noder-develop"
+        - name: DB_HOST
+          value: "sqlproxy-service.sharedsvc"
+        - name: REDIS_HOST
+          value: "10.0.0.4"
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "noder.name" . }}-secret
+              key: google-client-secret
+        - name: GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "noder.name" . }}-secret
+              key: google-client-id
+        - name: APP_KEYS
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "noder.name" . }}-secret
+              key: app-keys
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "noder.name" . }}-secret
+              key: db-password
