@@ -30,6 +30,8 @@ spec:
           env:
             - name: BASE_URL
               value: "https://noder.labs.brpx.com"
+            - name: LOG_SQL
+              value: "false"
             - name: ORIGINS
               value: '["https://noder.labs.brpx.com"]'
             - name: DB_NAME

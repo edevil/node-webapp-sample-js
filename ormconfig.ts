@@ -8,9 +8,11 @@ class MyCustomLogger implements Logger {
   logMigration(message: string, queryRunner?: QueryRunner): any {}
 
   logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): any {
-    const sql =
-      query + (parameters && parameters.length ? " -- PARAMETERS: " + MyCustomLogger.stringifyParams(parameters) : "");
-    logger.debug("SQL", { query: sql });
+    if (config.logSQL) {
+      const sql =
+        query + (parameters && parameters.length ? " -- PARAMETERS: " + MyCustomLogger.stringifyParams(parameters) : "");
+      logger.debug("SQL", { query: sql });
+    }
   }
 
   logQueryError(error: string, query: string, parameters?: any[], queryRunner?: QueryRunner): any {

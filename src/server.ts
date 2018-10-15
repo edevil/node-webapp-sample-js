@@ -18,7 +18,6 @@ async function onShutdown() {
 }
 
 function healthCheck() {
-  logger.debug("healthcheck");
   return Promise.resolve(getConnection().manager.query("SELECT 1 AS OK"));
 }
 

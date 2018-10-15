@@ -4,6 +4,7 @@ import { format } from "winston";
 
 const addContextFormat = format((info, opts) => {
   const allInfo = Object.assign(info, getContextStorage());
+  allInfo.severity = allInfo.level.toUpperCase();
   return allInfo;
 });
 
