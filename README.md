@@ -5,7 +5,6 @@ Experimental starter pack for Node.JS webapps
 ## TODO
 
 1. CD Cloud Build script `helm upgrade noder --namespace noder-develop noder --timeout 60 --set image.tag=master_64043b960381a66740d9199ebf81c649d40e0797`
-1. Include linter in CI
 1. Redo request logger
 1. Show ip in request logs
 1. Accept X- headers (app.proxy = true)
