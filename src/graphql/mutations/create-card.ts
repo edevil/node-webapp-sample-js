@@ -1,4 +1,4 @@
-import * as uuid from "uuid/v4";
+import { v4 as uuid } from "uuid";
 
 import { getRepository } from "typeorm";
 import { Card } from "../../entities/card";

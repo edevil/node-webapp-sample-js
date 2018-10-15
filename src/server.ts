@@ -52,4 +52,9 @@ const bootstrap = async () => {
   server.listen(config.port);
 };
 
-bootstrap().catch(console.error);
+bootstrap().catch(err => {
+  logger.error("Error on server", {
+    exception_message: err.message,
+    exception_stack: err.stack,
+  });
+});

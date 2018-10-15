@@ -1,8 +1,7 @@
 import { getContextStorage } from "@emartech/cls-adapter";
 import * as winston from "winston";
-import { format } from "winston";
 
-const addContextFormat = format((info, opts) => {
+const addContextFormat = winston.format((info, opts) => {
   const allInfo = {...info, ...getContextStorage()};
   allInfo.severity = allInfo.level.toUpperCase();
   return allInfo;
@@ -18,11 +17,11 @@ const myFormat = winston.format.printf(info => {
 });
 
 export const logger = winston.createLogger({
-  level: "debug",
   format: winston.format.combine(
     winston.format.timestamp(),
     addContextFormat(),
     process.env.NODE_ENV !== "production" ? myFormat : winston.format.json(),
   ),
+  level: "debug",
   transports: [new winston.transports.Console({ silent: process.env.NODE_ENV === "test" })],
 });
