@@ -13,6 +13,7 @@ import * as locale from "koa-locale";
 import { i18nInitializer } from "./initializers/i18n";
 import { getCORSMW } from "./middleware/cors-verifier";
 import { getStaticMW } from "./middleware/static-content";
+import { logger } from "./logger";
 
 export const app = new Koa();
 app.keys = config.appKeys;
@@ -37,3 +38,11 @@ app
 graphqlInitializer(app);
 
 app.use(getStaticMW());
+
+app.on("error", (err, ctx) => {
+  logger.error("Error processing request", {
+    requestId: ctx.state.requestId,
+    exception_stack: err.stack,
+    exception_message: err.message,
+  });
+});
