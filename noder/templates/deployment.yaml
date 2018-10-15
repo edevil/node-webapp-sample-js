@@ -36,13 +36,10 @@ spec:
               value: "noder-develop"
             - name: DB_USER
               value: "noder-develop"
+            - name: DB_HOST
+              value: "sqlproxy-service.sharedsvc"
             - name: REDIS_HOST
-              value: "noder-develop"
-            - name: REDIS_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "noder.name" . }}-secret
-                  key: redis-host
+              value: "10.0.0.4"
             - name: GOOGLE_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
@@ -63,11 +60,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "noder.name" . }}-secret
                   key: db-password
-            - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "noder.name" . }}-secret
-                  key: db-host
           ports:
             - name: http
               containerPort: 3000
