@@ -7,10 +7,10 @@ export class User {
   public id: number;
 
   @CreateDateColumn()
-  public created_at: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn()
-  public updated_at: Date;
+  public updatedAt: Date;
 
   @Column("text", {
     nullable: true,

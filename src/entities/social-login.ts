@@ -21,10 +21,10 @@ export class SocialLogin {
   public user: User;
 
   @CreateDateColumn()
-  public created_at: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn()
-  public updated_at: Date;
+  public updatedAt: Date;
 
   @Column("text")
   public clientId: string;

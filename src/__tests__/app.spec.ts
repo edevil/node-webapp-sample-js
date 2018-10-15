@@ -61,7 +61,7 @@ describe("User registration tests", () => {
     const result = await request(app.callback())
       .post(router.url("auth-register"))
       .type("form")
-      .send({ email, password, password_confirmation: password })
+      .send({ email, password, passwordConfirmation: password })
       .set("csrf-token", "test");
 
     expect(result.status).toEqual(302);

@@ -9,8 +9,8 @@ export const SocialLogin = gql`
   type SocialLogin {
     clientId: String
     type: SocialNetwork
-    created_at: String
-    updated_at: String
+    createdAt: String
+    updatedAt: String
     user: UserProfile
   }
 `;

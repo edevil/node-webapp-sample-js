@@ -12,5 +12,5 @@ export class CreateUser {
   @IsEqualTo("password", {
     message: "Password confirmation must equal password",
   })
-  public password_confirmation: string;
+  public passwordConfirmation: string;
 }
