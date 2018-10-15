@@ -1,10 +1,10 @@
 import { ApolloServer, gql } from "apollo-server-koa";
-import { resolvers } from "../graphql/resolvers";
-import { Query } from "../graphql/types/query";
-import { types } from "../graphql/types";
-import { Mutation } from "../graphql/types/mutation";
 import * as depthLimit from "graphql-depth-limit";
 import { config } from "../config";
+import { resolvers } from "../graphql/resolvers";
+import { types } from "../graphql/types";
+import { Mutation } from "../graphql/types/mutation";
+import { Query } from "../graphql/types/query";
 
 const schemaDefinition = gql`
   schema {

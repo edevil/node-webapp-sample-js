@@ -12,14 +12,14 @@ const redisProxy = new Proxy(
 
 export const loginRLMW = ratelimit({
   db: redisProxy,
+  disableHeader: false,
   duration: 10000,
   errorMessage: "Slow down",
-  id: ctx => ctx.ip,
   headers: {
     remaining: "Rate-Limit-Remaining",
     reset: "Rate-Limit-Reset",
     total: "Rate-Limit-Total",
   },
+  id: ctx => ctx.ip,
   max: 10,
-  disableHeader: false,
 });

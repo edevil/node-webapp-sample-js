@@ -1,11 +1,11 @@
-import { app } from "./app";
-import { databaseInitializer } from "./initializers/database";
-import { config } from "./config";
 import { createTerminus } from "@godaddy/terminus";
-import { logger } from "./logger";
 import * as http from "http";
 import { getConnection } from "typeorm";
+import { app } from "./app";
+import { config } from "./config";
+import { databaseInitializer } from "./initializers/database";
 import { closeRedis, initRedis } from "./initializers/redis";
+import { logger } from "./logger";
 
 function onSignal() {
   logger.info("server is starting cleanup");
@@ -33,14 +33,14 @@ function doLog(msg: string, err: Error): void {
 }
 
 const options = {
+  beforeShutdown,
+  doLog,
   healthChecks: {
     "/healthcheck": healthCheck,
   },
-  timeout: 1000,
-  onSignal,
   onShutdown,
-  doLog,
-  beforeShutdown,
+  onSignal,
+  timeout: 1000,
 };
 
 const bootstrap = async () => {

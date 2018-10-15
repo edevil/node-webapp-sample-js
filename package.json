@@ -8,7 +8,9 @@
     "typeorm": "node -r ts-node/register -r reflect-metadata ./node_modules/.bin/typeorm",
     "start": "nodemon",
     "test": "jest",
-    "build": "tsc -p tsconfig.build.json"
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "tslint 'src/**/*.ts'",
+    "tslint-check": "tslint-config-prettier-check ./tslint.json"
   },
   "engines": {
     "node": ">=10.11.0",
@@ -53,6 +55,7 @@
     "pg": "^7.5.0",
     "reflect-metadata": "^0.1.12",
     "typeorm": "^0.2.7",
+    "uuid": "^3.3.2",
     "winston": "^3.1.0"
   },
   "devDependencies": {
@@ -66,25 +69,19 @@
     "@types/passport-local": "^1.0.33",
     "@types/supertest": "^2.0.6",
     "@types/uuid": "^3.4.4",
-    "eslint": "^5.6.1",
-    "eslint-config-prettier": "^3.1.0",
-    "eslint-plugin-prettier": "^3.0.0",
     "jest": "^23.6.0",
     "nodemon": "^1.18.4",
     "prettier": "1.14.3",
     "supertest": "^3.3.0",
     "ts-jest": "^23.10.4",
     "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
     "typescript": "^3.1.2"
   },
   "prettier": {
     "trailingComma": "all",
     "printWidth": 120
-  },
-  "eslintConfig": {
-    "extends": [
-      "plugin:prettier/recommended"
-    ]
   },
   "jest": {
     "rootDir": ".",
@@ -98,6 +95,8 @@
       "**/__tests__/*.+(ts|tsx|js)"
     ],
     "collectCoverage": true,
-    "coverageReporters": ["text-summary"]
+    "coverageReporters": [
+      "text-summary"
+    ]
   }
 }

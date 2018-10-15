@@ -9,7 +9,7 @@ enum Level {
 
 function addMessage(level: Level, ctx: Context, message: string): void {
   ctx.session.messages = ctx.session.messages || [];
-  ctx.session.messages.push({ level: level, message: message });
+  ctx.session.messages.push({ level, message });
 }
 
 export const addInfo = addMessage.bind(null, Level.Info);

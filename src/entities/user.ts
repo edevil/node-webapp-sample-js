@@ -1,33 +1,33 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { SocialLogin } from "./social-login";
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  public id: number;
 
   @CreateDateColumn()
-  created_at: Date;
+  public created_at: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
-
-  @Column("text", {
-    unique: true,
-    nullable: true,
-  })
-  username: string;
+  public updated_at: Date;
 
   @Column("text", {
     nullable: true,
+    unique: true,
   })
-  password: string;
+  public username: string;
+
+  @Column("text", {
+    nullable: true,
+  })
+  public password: string;
 
   @Column("text", {
     unique: true,
   })
-  email: string;
+  public email: string;
 
   @OneToMany(type => SocialLogin, login => login.user)
-  socialLogins: SocialLogin[];
+  public socialLogins: SocialLogin[];
 }

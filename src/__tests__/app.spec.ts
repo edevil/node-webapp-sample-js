@@ -1,19 +1,19 @@
-import { app } from "../app";
-import * as request from "supertest";
-import { router } from "../routes";
-import * as CSRF from "csrf";
-import { Connection, createConnection, getConnectionOptions, getRepository } from "typeorm";
-import { logger } from "../logger";
-import { User } from "../entities/user";
-import { CreateUser } from "../dtos/create-user";
-import { createUser } from "../service";
-import { cardsResolver } from "../graphql/resolvers/cards";
-import { Card } from "../entities/card";
-import * as uuid from "uuid/v4";
-import { userProfileResolver } from "../graphql/resolvers/user-profile";
-import { getGQLContext } from "../utils";
 import { AuthenticationError } from "apollo-server-koa";
+import * as CSRF from "csrf";
+import * as request from "supertest";
+import { Connection, createConnection, getConnectionOptions, getRepository } from "typeorm";
+import * as uuid from "uuid/v4";
+import { app } from "../app";
+import { CreateUser } from "../dtos/create-user";
+import { Card } from "../entities/card";
+import { User } from "../entities/user";
+import { cardsResolver } from "../graphql/resolvers/cards";
+import { userProfileResolver } from "../graphql/resolvers/user-profile";
 import { closeRedis, initRedis } from "../initializers/redis";
+import { logger } from "../logger";
+import { router } from "../routes";
+import { createUser } from "../service";
+import { getGQLContext } from "../utils";
 
 let conn: Connection;
 beforeAll(async () => {
@@ -61,11 +61,11 @@ describe("User registration tests", () => {
     const result = await request(app.callback())
       .post(router.url("auth-register"))
       .type("form")
-      .send({ email: email, password: password, password_confirmation: password })
+      .send({ email, password, password_confirmation: password })
       .set("csrf-token", "test");
 
     expect(result.status).toEqual(302);
-    expect(result.header["location"]).toEqual(router.url("index"));
+    expect(result.header.location).toEqual(router.url("index"));
 
     const repository = getRepository(User);
     const user = await repository.findOne({ email });
@@ -86,13 +86,13 @@ describe("User login/logout tests", () => {
 
     // GET logout, ensure redirect
     const rLogoutRedir = await agent.get(router.url("auth-logout"));
-    expect(rLogoutRedir.header["location"]).toEqual(router.url("auth-login"));
+    expect(rLogoutRedir.header.location).toEqual(router.url("auth-login"));
     expect(rLogoutRedir.status).toEqual(302);
 
     // manually create user
     const email = "teste1@example.com";
     const password = "teste12345";
-    let createReq: CreateUser = new CreateUser();
+    const createReq: CreateUser = new CreateUser();
     createReq.email = email;
     createReq.password = password;
     const user = await createUser(createReq, getRepository(User));
@@ -101,11 +101,11 @@ describe("User login/logout tests", () => {
     const rLogin = await agent
       .post(router.url("auth-login"))
       .type("form")
-      .send({ email: email, password: password })
+      .send({ email, password })
       .set("csrf-token", "test");
 
     expect(rLogin.status).toEqual(302);
-    expect(rLogin.header["location"]).toEqual(router.url("auth-logout"));
+    expect(rLogin.header.location).toEqual(router.url("auth-logout"));
 
     // ensure GET logout is successful
     const rLogout = await agent.get(router.url("auth-logout"));
@@ -116,11 +116,11 @@ describe("User login/logout tests", () => {
     const rLogoutPost = await agent.post(router.url("auth-logout-post")).set("csrf-token", "test");
 
     expect(rLogoutPost.status).toEqual(302);
-    expect(rLogoutPost.header["location"]).toEqual(router.url("index"));
+    expect(rLogoutPost.header.location).toEqual(router.url("index"));
 
     // GET logout -> redir
     const rLogoutRedir2 = await agent.get(router.url("auth-logout"));
-    expect(rLogoutRedir2.header["location"]).toEqual(router.url("auth-login"));
+    expect(rLogoutRedir2.header.location).toEqual(router.url("auth-login"));
     expect(rLogoutRedir2.status).toEqual(302);
   });
 });
@@ -134,9 +134,9 @@ describe("GraphQL resolvers tests", () => {
 
     const repository = getRepository(Card);
     const card = {
+      description: "description",
       id: uuid(),
       title: "title",
-      description: "description",
     };
     await repository.save(card);
 
@@ -148,13 +148,13 @@ describe("GraphQL resolvers tests", () => {
 
   it("userProfile() resolver", async () => {
     const noAuthContext = getGQLContext(null);
-    const noAuth = async () => await userProfileResolver.userProfile(null, null, noAuthContext, null);
+    const noAuth = async () => userProfileResolver.userProfile(null, null, noAuthContext, null);
 
     await expect(noAuth()).rejects.toThrow(AuthenticationError);
 
     const email = "teste1@example.com";
     const password = "teste12345";
-    let createReq: CreateUser = new CreateUser();
+    const createReq: CreateUser = new CreateUser();
     createReq.email = email;
     createReq.password = password;
     const user = await createUser(createReq, getRepository(User));

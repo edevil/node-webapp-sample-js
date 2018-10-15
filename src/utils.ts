@@ -1,6 +1,6 @@
+import { User } from "./entities/user";
 import { logger } from "./logger";
 import { addSuccess } from "./messages";
-import { User } from "./entities/user";
 
 export async function afterLogin(ctx, user, router) {
   await ctx.login(user);
@@ -24,8 +24,8 @@ export function getGQLContext(user: User): { ctx: any } {
           return true;
         },
         state: {
-          user
-        }
+          user,
+        },
       },
     };
   } else {

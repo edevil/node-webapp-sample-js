@@ -1,7 +1,7 @@
 
 export class CreateGoogleUser {
-  username: string;
-  email: string;
-  photoUrl: string;
-  name: string;
+  public username: string;
+  public email: string;
+  public photoUrl: string;
+  public name: string;
 }

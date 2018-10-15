@@ -1,16 +1,16 @@
-import * as passport from "koa-passport";
-import { User } from "../entities/user";
-import { getConnection, getRepository } from "typeorm";
-import { logger } from "../logger";
-import { Strategy as LocalStrategy } from "passport-local";
 import { setOnContext } from "@emartech/cls-adapter";
 import { compareSync } from "bcryptjs";
+import * as compose from "koa-compose";
+import * as passport from "koa-passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as LocalStrategy } from "passport-local";
+import { getConnection, getRepository } from "typeorm";
 import { config } from "../config";
-import { createUserFromGoogle } from "../service";
 import { CreateGoogleUser } from "../dtos/create-google-user";
 import { SocialLogin, SocialType } from "../entities/social-login";
-import * as compose from "koa-compose";
+import { User } from "../entities/user";
+import { logger } from "../logger";
+import { createUserFromGoogle } from "../service";
 
 function comparePass(userPassword, databasePassword) {
   return compareSync(userPassword, databasePassword);
@@ -36,9 +36,9 @@ passport.deserializeUser((id: number, done) => {
 passport.use(
   new GoogleStrategy(
     {
+      callbackURL: config.baseURL + "/auth/google/callback",
       clientID: config.googleClientId,
       clientSecret: config.googleClientSecret,
-      callbackURL: config.baseURL + "/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       const googleID = profile.id;

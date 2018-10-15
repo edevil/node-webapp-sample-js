@@ -1,9 +1,9 @@
-import * as winston from "winston";
 import { getContextStorage } from "@emartech/cls-adapter";
+import * as winston from "winston";
 import { format } from "winston";
 
 const addContextFormat = format((info, opts) => {
-  const allInfo = Object.assign(info, getContextStorage());
+  const allInfo = {...info, ...getContextStorage()};
   allInfo.severity = allInfo.level.toUpperCase();
   return allInfo;
 });

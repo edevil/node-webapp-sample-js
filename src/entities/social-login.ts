@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, Index } from "typeorm";
+import { Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./user";
 
 export enum SocialType {
@@ -12,20 +12,20 @@ export class SocialLogin {
   @PrimaryColumn("enum", {
     enum: SocialType,
   })
-  type: SocialType;
+  public type: SocialType;
 
   @ManyToOne(type => User, user => user.socialLogins, {
     onDelete: "CASCADE",
     primary: true,
   })
-  user: User;
+  public user: User;
 
   @CreateDateColumn()
-  created_at: Date;
+  public created_at: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
+  public updated_at: Date;
 
   @Column("text")
-  clientId: string;
+  public clientId: string;
 }

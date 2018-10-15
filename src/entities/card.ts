@@ -1,26 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Card {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  public id: string;
 
   @CreateDateColumn()
-  created_at: Date;
+  public created_at: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
+  public updated_at: Date;
 
   @Column("text")
-  title: string;
+  public title: string;
 
   @Column("text", {
     nullable: true,
   })
-  description: string;
+  public description: string;
 
   @Column("boolean", {
     default: false,
   })
-  done: boolean;
+  public done: boolean;
 }

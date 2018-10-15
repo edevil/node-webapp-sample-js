@@ -1,17 +1,17 @@
-import * as Router from "koa-router";
-import { logger } from "./logger";
-import * as CSRF from "koa-csrf";
 import { transformAndValidate } from "class-transformer-validator";
-import { CreateUser } from "./dtos/create-user";
-import { createUser } from "./service";
-import { getRepository, QueryFailedError } from "typeorm";
-import { User } from "./entities/user";
-import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
-import * as passport from "koa-passport";
-import { afterLogin } from "./utils";
-import { getMessagesMW } from "./middleware/fetch-messages";
 import * as bodyParser from "koa-bodyparser";
+import * as CSRF from "koa-csrf";
+import * as passport from "koa-passport";
+import * as Router from "koa-router";
+import { getRepository, QueryFailedError } from "typeorm";
+import { CreateUser } from "./dtos/create-user";
+import { User } from "./entities/user";
+import { logger } from "./logger";
+import { getMessagesMW } from "./middleware/fetch-messages";
+import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
 import { loginRLMW } from "./rate-limits";
+import { createUser } from "./service";
+import { afterLogin } from "./utils";
 
 export const router = new Router();
 
@@ -22,12 +22,12 @@ router.use(bodyParser());
 
 router.use(
   new CSRF({
+    disableQuery: false,
+    excludedMethods: ["GET", "HEAD", "OPTIONS"],
     invalidSessionSecretMessage: "Invalid session secret",
     invalidSessionSecretStatusCode: 403,
     invalidTokenMessage: "Invalid CSRF token",
     invalidTokenStatusCode: 403,
-    excludedMethods: ["GET", "HEAD", "OPTIONS"],
-    disableQuery: false,
   }),
 );
 
@@ -50,8 +50,8 @@ router.get("index", "/", async (ctx, next) => {
 
 router.get("auth-logout", "/auth/logout", redLoginReqMW, async (ctx, next) => {
   await ctx.render("logout", {
-    login_url: router.url("auth-logout-post"),
     csrf: ctx.csrf,
+    login_url: router.url("auth-logout-post"),
   });
 });
 
@@ -85,8 +85,8 @@ router.get("auth-login-google-callback", "/auth/google/callback", redLoggedMW, a
 
 router.get("auth-login", "/auth/login", redLoggedMW, async (ctx, next) => {
   await ctx.render("login", {
-    login_url: router.url("auth-login-post"),
     csrf: ctx.csrf,
+    login_url: router.url("auth-login-post"),
   });
 });
 
@@ -97,8 +97,8 @@ router.post("auth-login-post", "/auth/login", loginRLMW, redLoggedMW, async (ctx
     } else {
       logger.info("Could not login user", { err, info, status });
       await ctx.render("login", {
-        login_url: router.url("auth-login-post"),
         csrf: ctx.csrf,
+        login_url: router.url("auth-login-post"),
       });
     }
   };
@@ -108,24 +108,24 @@ router.post("auth-login-post", "/auth/login", loginRLMW, redLoggedMW, async (ctx
 
 router.get("auth-register", "/auth/register", redLoggedMW, async (ctx, next) => {
   await ctx.render("register", {
-    register_url: router.url("auth-register-post"),
     csrf: ctx.csrf,
+    register_url: router.url("auth-register-post"),
   });
 });
 
 router.post("auth-register-post", "/auth/register", redLoggedMW, async (ctx, next) => {
   let createReq: CreateUser;
   try {
-    createReq = <CreateUser>await transformAndValidate(CreateUser, ctx.request.body);
+    createReq = await transformAndValidate(CreateUser, ctx.request.body) as CreateUser;
   } catch (error) {
     logger.error(JSON.stringify(error));
     // TODO
     // return error to user
     // flash messages?
     await ctx.render("register", {
-      register_url: router.url("auth-register-post"),
       csrf: ctx.csrf,
-      error: error,
+      error,
+      register_url: router.url("auth-register-post"),
     });
     return;
   }
@@ -137,9 +137,9 @@ router.post("auth-register-post", "/auth/register", redLoggedMW, async (ctx, nex
     if (error instanceof QueryFailedError) {
       logger.debug("User already registered", { email: createReq.email });
       await ctx.render("register", {
-        register_url: router.url("auth-register-post"),
         csrf: ctx.csrf,
-        error: error,
+        error,
+        register_url: router.url("auth-register-post"),
       });
       return;
     }

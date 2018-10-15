@@ -22,22 +22,22 @@ interface IConfig {
 }
 
 const config: IConfig = {
-  port: +process.env.PORT || 3000,
-  logSQL: process.env.LOG_SQL ? process.env.LOG_SQL.toLowerCase() === "true" : true,
+  appKeys: process.env.APP_KEYS ? JSON.parse(process.env.APP_KEYS) : ["shhh, don't tell anyone"],
+  baseURL: process.env.BASE_URL || "http://example.com:3000",
   dbHost: process.env.DB_HOST || "localhost",
   dbName: process.env.DB_NAME || "sample_db",
-  dbUser: process.env.DB_USER || "postgres",
   dbPassword: process.env.DB_PASSWORD || "",
-  appKeys: process.env.APP_KEYS ? JSON.parse(process.env.APP_KEYS) : ["shhh, don't tell anyone"],
+  dbUser: process.env.DB_USER || "postgres",
   googleClientId: process.env.GOOGLE_CLIENT_ID || "googleid",
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "googlesecret",
-  baseURL: process.env.BASE_URL || "http://example.com:3000",
-  origins: process.env.ORIGINS ? JSON.parse(process.env.ORIGINS) : ["http://localhost:3000", "http://example.com:3000"],
-  redisHost: process.env.REDIS_HOST || "localhost",
-  redisPrefix: process.env.REDIS_PREFIX || "sample-node",
   gqlDepthLimit: +process.env.GQL_DEPTH_LIMIT || 5,
   gqlMaxPerPage: +process.env.GQL_MAX_PER_PAGE || 100,
   gqlPath: process.env.GQL_PATH || "/graphql",
+  logSQL: process.env.LOG_SQL ? process.env.LOG_SQL.toLowerCase() === "true" : true,
+  origins: process.env.ORIGINS ? JSON.parse(process.env.ORIGINS) : ["http://localhost:3000", "http://example.com:3000"],
+  port: +process.env.PORT || 3000,
+  redisHost: process.env.REDIS_HOST || "localhost",
+  redisPrefix: process.env.REDIS_PREFIX || "sample-node",
 };
 
 export { config };

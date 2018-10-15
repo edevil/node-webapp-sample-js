@@ -1,7 +1,7 @@
 import { AuthenticationError } from "apollo-server-koa";
-import { logger } from "../../logger";
 import { getRepository } from "typeorm";
 import { SocialLogin, SocialType } from "../../entities/social-login";
+import { logger } from "../../logger";
 
 export const userProfileResolver = {
   async userProfile(obj, args, { ctx }, info) {
@@ -13,13 +13,6 @@ export const userProfileResolver = {
 };
 
 export const extraUserProfileResolver = {
-  UserProfile: {
-    async socialLogins(obj, args, { ctx }, info) {
-      logger.debug("Will fetch social logins");
-      const repository = getRepository(SocialLogin);
-      return await repository.find({ relations: ["user"], where: { user: obj } });
-    },
-  },
   SocialLogin: {
     type(obj, args, { ctx }, info) {
       const sType: SocialType = obj.type;
@@ -29,6 +22,13 @@ export const extraUserProfileResolver = {
         case SocialType.Twitter:
           return "TWITTER";
       }
+    },
+  },
+  UserProfile: {
+    async socialLogins(obj, args, { ctx }, info) {
+      logger.debug("Will fetch social logins");
+      const repository = getRepository(SocialLogin);
+      return repository.find({ relations: ["user"], where: { user: obj } });
     },
   },
 };

@@ -1,7 +1,7 @@
-import * as path from "path";
 import * as appPath from "app-root-path";
-import * as serve from "koa-static";
 import * as mount from "koa-mount";
+import * as serve from "koa-static";
+import * as path from "path";
 
 const staticPath = path.join(appPath.toString(), "/static");
 
