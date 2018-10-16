@@ -6,7 +6,6 @@ Experimental starter pack for Node.JS webapps
 
 1. File uploads
 1. Websockets
-1. Global error handler (Sentry)
 1. OAuth provider
 
 # Migrations
