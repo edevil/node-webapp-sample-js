@@ -62,5 +62,11 @@ steps:
   env:
   - 'BRANCH_NAME=${BRANCH_NAME}'
   waitFor: ['tag-latest']
+- name: 'gcr.io/labs-198515/helm'
+  args: ['upgrade', 'noder', '--namespace', 'noder-develop', 'noder', '--timeout', '60', '--set', 'image.tag=${BRANCH_NAME/\//_}_${COMMIT_SHA}']
+  env:
+  - 'BRANCH_NAME=${BRANCH_NAME}'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=brpx-labs-gke'
+  - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-b'
 
 timeout: 600s
