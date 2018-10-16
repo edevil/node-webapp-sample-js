@@ -4,7 +4,6 @@ Experimental starter pack for Node.JS webapps
 
 ## TODO
 
-1. stackdriver-friendly http context in request logs
 1. Accept X- headers (app.proxy = true)
 1. File uploads
 1. Websockets

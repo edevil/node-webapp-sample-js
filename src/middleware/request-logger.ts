@@ -59,6 +59,16 @@ function log(ctx, start, len, err, event) {
 
   logger.info("Request finished", {
     event: event || "-",
+    httpRequest: {
+      latency,
+      protocol: ctx.protocol,
+      remoteIp: ctx.ip,
+      requestMethod: ctx.method,
+      requestUrl: ctx.originalUrl,
+      responseSize: len,
+      status,
+      userAgent: ctx.request.header["user-agent"],
+    },
     ip: ctx.ip,
     latency,
     length,

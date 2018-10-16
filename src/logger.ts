@@ -10,7 +10,7 @@ const addContextFormat = winston.format((info, opts) => {
 const myFormat = winston.format.printf(info => {
   const message = `${info.timestamp} ${info.level}: ${info.message.trim()}`;
   const extra = Object.keys(info)
-    .filter(kname => !["message", "level", "timestamp"].includes(kname))
+    .filter(kname => !["message", "level", "timestamp", "httpRequest"].includes(kname))
     .map(kname => `[${kname}: ${info[kname]}]`)
     .join(" ");
   return `${message} ${extra}`;
