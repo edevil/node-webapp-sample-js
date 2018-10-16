@@ -17,6 +17,7 @@ import { router } from "./routes";
 
 export const app = new Koa();
 app.keys = config.appKeys;
+app.proxy = config.trustXHeaders;
 
 app
   .use(getKoaMiddleware())

@@ -19,6 +19,7 @@ interface IConfig {
   gqlDepthLimit: number;
   gqlMaxPerPage: number;
   gqlPath: string;
+  trustXHeaders: boolean;
 }
 
 const config: IConfig = {
@@ -38,6 +39,7 @@ const config: IConfig = {
   port: +process.env.PORT || 3000,
   redisHost: process.env.REDIS_HOST || "localhost",
   redisPrefix: process.env.REDIS_PREFIX || "sample-node",
+  trustXHeaders: process.env.TRUST_X_HEADERS ? process.env.TRUST_X_HEADERS.toLowerCase() === "true" : false,
 };
 
 export { config };
