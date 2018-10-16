@@ -34,7 +34,7 @@ router.use(
 router.use(getMessagesMW());
 
 router.get("index", "/", async (ctx, next) => {
-  throw new Error('Broke!');
+  throw new Error("Broke!");
   if (ctx.isAuthenticated()) {
     logger.debug("Authenticated request");
   } else {
