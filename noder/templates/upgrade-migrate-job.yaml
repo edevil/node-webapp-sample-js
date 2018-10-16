@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "noder.fullname" . }}
+  name: {{ include "noder.fullname" . }}-migration
   labels:
     app.kubernetes.io/name: {{ include "noder.name" . }}
     helm.sh/chart: {{ include "noder.chart" . }}
