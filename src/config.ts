@@ -20,6 +20,7 @@ interface IConfig {
   gqlMaxPerPage: number;
   gqlPath: string;
   trustXHeaders: boolean;
+  ravenDSN: string;
 }
 
 const config: IConfig = {
@@ -37,6 +38,7 @@ const config: IConfig = {
   logSQL: process.env.LOG_SQL ? process.env.LOG_SQL.toLowerCase() === "true" : true,
   origins: process.env.ORIGINS ? JSON.parse(process.env.ORIGINS) : ["http://localhost:3000", "http://example.com:3000"],
   port: +process.env.PORT || 3000,
+  ravenDSN: process.env.RAVEN_DSN || "",
   redisHost: process.env.REDIS_HOST || "localhost",
   redisPrefix: process.env.REDIS_PREFIX || "sample-node",
   trustXHeaders: process.env.TRUST_X_HEADERS ? process.env.TRUST_X_HEADERS.toLowerCase() === "true" : false,

@@ -1,4 +1,5 @@
 import { getKoaMiddleware } from "@emartech/cls-adapter";
+import * as Sentry from "@sentry/node";
 import * as Koa from "koa";
 import * as helmet from "koa-helmet";
 import * as locale from "koa-locale";
@@ -14,6 +15,8 @@ import { requestLoggerMW } from "./middleware/request-logger";
 import { getStaticMW } from "./middleware/static-content";
 import { getTemplateEngine } from "./middleware/template-engine";
 import { router } from "./routes";
+
+Sentry.init({ dsn: config.ravenDSN });
 
 export const app = new Koa();
 app.keys = config.appKeys;
@@ -39,6 +42,10 @@ app
 graphqlInitializer(app);
 
 app.use(getStaticMW());
+
+app.on("error", err => {
+  Sentry.captureException(err);
+});
 
 app.on("error", (err, ctx) => {
   logger.error("Error processing request", {
