@@ -63,7 +63,8 @@ steps:
   - 'BRANCH_NAME=${BRANCH_NAME}'
   waitFor: ['tag-latest']
 - name: 'gcr.io/labs-198515/helm'
-  args: ['upgrade', 'noder', '--namespace', 'noder-develop', 'noder', '--timeout', '60', '--set', 'image.tag=${BRANCH_NAME/\//_}_${COMMIT_SHA}']
+  args: ['-c', 'helm upgrade noder --namespace noder-develop noder --timeout 60 --set image.tag=${BRANCH_NAME/\//_}_${COMMIT_SHA}']
+  entrypoint: '/bin/bash'
   env:
   - 'BRANCH_NAME=${BRANCH_NAME}'
   - 'CLOUDSDK_CONTAINER_CLUSTER=brpx-labs-gke'
