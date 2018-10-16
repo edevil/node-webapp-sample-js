@@ -10,7 +10,7 @@ import { logger } from "./logger";
 import { getAuthMW } from "./middleware/authentication";
 import { getBinderMW } from "./middleware/bind-emitters";
 import { getCORSMW } from "./middleware/cors-verifier";
-import { getRequestLogger, requestLoggerMW } from "./middleware/request-logger";
+import { requestLoggerMW } from "./middleware/request-logger";
 import { getStaticMW } from "./middleware/static-content";
 import { getTemplateEngine } from "./middleware/template-engine";
 import { router } from "./routes";
