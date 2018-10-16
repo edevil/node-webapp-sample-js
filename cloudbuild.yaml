@@ -37,7 +37,7 @@ steps:
   waitFor: ['run-tests']
   id: 'pull-latest'
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['-c', 'docker build --cache-from eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_latest -t eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA} .']
+  args: ['-c', 'docker build --cache-from eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_base --cache-from eu.gcr.io/$PROJECT_ID/${REPO_NAME}:${BRANCH_NAME/\//_}_latest -t eu.gcr.io/${PROJECT_ID}/${REPO_NAME}:${BRANCH_NAME/\//_}_${COMMIT_SHA} .']
   entrypoint: '/bin/bash'
   env:
   - 'BRANCH_NAME=${BRANCH_NAME}'
@@ -63,7 +63,7 @@ steps:
   - 'BRANCH_NAME=${BRANCH_NAME}'
   waitFor: ['tag-latest']
 - name: 'gcr.io/labs-198515/helm'
-  args: ['-c', 'helm upgrade noder --namespace noder-develop noder --timeout 60 --set image.tag=${BRANCH_NAME/\//_}_${COMMIT_SHA}']
+  args: ['-c', '/builder/helm.bash upgrade noder --namespace noder-develop noder --timeout 60 --set image.tag=${BRANCH_NAME/\//_}_${COMMIT_SHA}']
   entrypoint: '/bin/bash'
   env:
   - 'BRANCH_NAME=${BRANCH_NAME}'
