@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { OAuthAccessToken } from "./oauth-access-token";
+import { OAuthAuthorizationCode } from "./oauth-auth-code";
 import { OAuthClient } from "./oauth-client";
 import { OAuthRefreshToken } from "./oauth-refresh-token";
 import { SocialLogin } from "./social-login";
@@ -42,4 +43,7 @@ export class User {
 
   @OneToMany(type => OAuthRefreshToken, token => token.user)
   public oauthRefreshTokens: OAuthRefreshToken[];
+
+  @OneToMany(type => OAuthAuthorizationCode, code => code.user)
+  public oauthAuthorizationCodes: OAuthAuthorizationCode[];
 }

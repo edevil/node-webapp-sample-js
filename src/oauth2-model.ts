@@ -1,6 +1,7 @@
 import * as OAuth2Server from "oauth2-server";
 import { getConnection, getRepository } from "typeorm";
 import { OAuthAccessToken } from "./entities/oauth-access-token";
+import { OAuthAuthorizationCode } from "./entities/oauth-auth-code";
 import { OAuthClient } from "./entities/oauth-client";
 import { OAuthRefreshToken } from "./entities/oauth-refresh-token";
 import { User } from "./entities/user";
@@ -50,6 +51,29 @@ const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenMode
       user,
     };
   },
+  async saveAuthorizationCode(code, client, user) {
+    const authCode = new OAuthAuthorizationCode();
+    authCode.authorizationCode = code.authorizationCode;
+    authCode.expiresAt = code.expiresAt;
+    authCode.redirectUri = code.redirectUri;
+    authCode.scope = code.scope as string;
+    authCode.client = client as OAuthClient;
+    authCode.user = user as User;
+
+    const repository = getRepository(OAuthAuthorizationCode);
+    await repository.save(authCode);
+
+    return authCode;
+  },
+  async getAuthorizationCode(authorizationCode) {
+    const repository = getRepository(OAuthAuthorizationCode);
+    return repository.findOne(authorizationCode);
+  },
+  async revokeAuthorizationCode(code) {
+    const repository = getRepository(OAuthAuthorizationCode);
+    const result = await repository.delete();
+    result.
+  }
 };
 
 const options: OAuth2Server.ServerOptions = {

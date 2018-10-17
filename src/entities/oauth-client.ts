@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { OAuthAccessToken } from "./oauth-access-token";
+import { OAuthAuthorizationCode } from "./oauth-auth-code";
 import { OAuthRefreshToken } from "./oauth-refresh-token";
 import { User } from "./user";
 
@@ -29,6 +30,9 @@ export class OAuthClient {
 
   @OneToMany(type => OAuthRefreshToken, token => token.user)
   public oauthRefreshTokens: OAuthRefreshToken[];
+
+  @OneToMany(type => OAuthAuthorizationCode, code => code.user)
+  public oauthAuthorizationCodes: OAuthAuthorizationCode[];
 
   @Column("text", {
     array: true,
