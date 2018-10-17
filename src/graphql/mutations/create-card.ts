@@ -10,7 +10,7 @@ export const createCardMutation = {
       id: uuid(),
       ...attrs,
     };
-    await repository.save(card);
+    await repository.insert(card);
     return card;
   },
 };

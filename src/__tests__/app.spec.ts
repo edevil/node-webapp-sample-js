@@ -138,7 +138,7 @@ describe("GraphQL resolvers tests", () => {
       id: uuid(),
       title: "title",
     };
-    await repository.save(card);
+    await repository.insert(card);
 
     const oneCard = await cardsResolver.cards(null, null, context, null);
     expect(oneCard).toBeInstanceOf(Array);
