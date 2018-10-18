@@ -107,6 +107,26 @@ router.post("oauth-authorize-post", "/oauth/authorize", redLoginReqMW, async (ct
   ctx.body = oauthResponse.body;
 });
 
+router.post("oauth-token-post", "/oauth/token", async (ctx, next) => {
+  const oauthRequest = new Request(ctx.request);
+  const oauthResponse = new Response(ctx.response);
+
+  try {
+    await oauth.token(oauthRequest, oauthResponse);
+  } catch (err) {
+    ctx.set(oauthResponse.headers);
+    ctx.status = err.code;
+    if (err! instanceof UnauthorizedRequestError) {
+      ctx.body = { error: err.name, error_description: err.message };
+    }
+    return;
+  }
+
+  ctx.set(oauthResponse.headers);
+  ctx.status = oauthResponse.status;
+  ctx.body = oauthResponse.body;
+});
+
 router.get("auth-logout", "/auth/logout", redLoginReqMW, async (ctx, next) => {
   await ctx.render("logout", {
     csrf: ctx.csrf,
