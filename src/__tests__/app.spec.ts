@@ -2,7 +2,7 @@ import { AuthenticationError } from "apollo-server-koa";
 import * as CSRF from "csrf";
 import * as request from "supertest";
 import { Connection, createConnection, getConnectionOptions, getRepository } from "typeorm";
-import * as uuid from "uuid/v4";
+import { v4 as uuid } from "uuid";
 import { app } from "../app";
 import { CreateUser } from "../dtos/create-user";
 import { Card } from "../entities/card";

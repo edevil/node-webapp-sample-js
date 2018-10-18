@@ -71,9 +71,14 @@ const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenMode
   },
   async revokeAuthorizationCode(code) {
     const repository = getRepository(OAuthAuthorizationCode);
-    const result = await repository.delete();
-    result.
-  }
+    const result = await repository
+      .createQueryBuilder()
+      .delete()
+      .where("id = :id", { id: code.id })
+      .returning("*")
+      .execute();
+    return !!result.raw;
+  },
 };
 
 const options: OAuth2Server.ServerOptions = {
