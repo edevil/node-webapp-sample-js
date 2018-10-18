@@ -3,7 +3,7 @@ import * as bodyParser from "koa-bodyparser";
 import * as CSRF from "koa-csrf";
 import * as passport from "koa-passport";
 import * as Router from "koa-router";
-import { Request, Response, UnauthorizedRequestError } from "oauth2-server";
+import { AccessDeniedError, Request, Response, UnauthorizedRequestError } from "oauth2-server";
 import { getRepository, QueryFailedError } from "typeorm";
 import { CreateUser } from "./dtos/create-user";
 import { OAuthClient } from "./entities/oauth-client";
@@ -64,7 +64,7 @@ router.get("oauth-authorize", "/oauth/authorize", redLoginReqMW, async (ctx, nex
 
   const allowedQParams = new Set(["scope", "redirect_uri", "response_type", "client_id", "access_type"]);
   const filteredEntries = Object.entries(ctx.request.query).filter(([key, val]) => allowedQParams.has(key));
-  const paramMap = new Map(filteredEntries as [string, string | string[]][]);
+  const paramMap = new Map(filteredEntries as Array<[string, string | string[]]>);
   const authorizeUrl = addParamsToURL(router.url("oauth-authorize-post"), paramMap);
 
   await ctx.render("oauth-authorize", {
@@ -82,13 +82,18 @@ router.post("oauth-authorize-post", "/oauth/authorize", redLoginReqMW, async (ct
   // https://github.com/oauthjs/node-oauth2-server/pull/532
   oauthRequest.query.allowed = ctx.request.body.allowed;
 
-  let code;
   try {
-    code = await oauth.authorize(oauthRequest, oauthResponse, {
+    await oauth.authorize(oauthRequest, oauthResponse, {
       allowEmptyState: true,
       authenticateHandler: { handle: (req, resp) => ctx.state.user },
     });
   } catch (err) {
+    if (err instanceof AccessDeniedError) {
+      addWarning(ctx, ctx.i18n.__("oauth_error_no_client_authorization"));
+      ctx.redirect(router.url("index"));
+      return;
+    }
+
     ctx.set(oauthResponse.headers);
     ctx.status = err.code;
     if (err! instanceof UnauthorizedRequestError) {
