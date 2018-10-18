@@ -44,6 +44,11 @@ export class OAuthClient {
   })
   public grants: string[];
 
+  @Column("text", {
+    array: true,
+  })
+  public scopes: string[];
+
   @CreateDateColumn()
   public createdAt: Date;
 
