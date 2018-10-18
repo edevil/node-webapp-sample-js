@@ -1,4 +1,4 @@
-import { CreateDateColumn, Entity, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { OAuthClient } from "./oauth-client";
 import { User } from "./user";
 
@@ -17,8 +17,10 @@ export class OAuthAccessToken {
   })
   public client: OAuthClient;
 
+  @Column("text")
   public scope: string;
 
+  @Column("date")
   public accessTokenExpiresAt: Date;
 
   @CreateDateColumn()

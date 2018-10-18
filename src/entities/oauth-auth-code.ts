@@ -1,4 +1,4 @@
-import { CreateDateColumn, Entity, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { OAuthClient } from "./oauth-client";
 import { User } from "./user";
 
@@ -7,10 +7,13 @@ export class OAuthAuthorizationCode {
   @PrimaryColumn()
   public authorizationCode: string;
 
+  @Column("date")
   public expiresAt: Date;
 
+  @Column("text")
   public redirectUri: string;
 
+  @Column("text")
   public scope: string;
 
   @ManyToOne(type => User, user => user.oauthAuthorizationCodes, {

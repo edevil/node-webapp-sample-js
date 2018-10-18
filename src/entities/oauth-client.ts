@@ -17,6 +17,7 @@ export class OAuthClient {
   @PrimaryGeneratedColumn("uuid")
   public id: string;
 
+  @Column("text")
   public secret: string;
 
   @ManyToOne(type => User, user => user.oauthClients, {

@@ -21,19 +21,16 @@ export const router = new Router();
 
 const redLoggedMW = getLoggedInMW(router, "index");
 const redLoginReqMW = getLoginReqMW(router, "auth-login");
+const CSRFMW = new CSRF({
+  disableQuery: false,
+  excludedMethods: ["GET", "HEAD", "OPTIONS"],
+  invalidSessionSecretMessage: "Invalid session secret",
+  invalidSessionSecretStatusCode: 403,
+  invalidTokenMessage: "Invalid CSRF token",
+  invalidTokenStatusCode: 403,
+});
 
 router.use(bodyParser());
-
-router.use(
-  new CSRF({
-    disableQuery: false,
-    excludedMethods: ["GET", "HEAD", "OPTIONS"],
-    invalidSessionSecretMessage: "Invalid session secret",
-    invalidSessionSecretStatusCode: 403,
-    invalidTokenMessage: "Invalid CSRF token",
-    invalidTokenStatusCode: 403,
-  }),
-);
 
 router.use(getMessagesMW());
 
@@ -52,7 +49,7 @@ router.get("index", "/", async (ctx, next) => {
   await ctx.render("index", { authenticated: ctx.isAuthenticated() });
 });
 
-router.get("oauth-authorize", "/oauth/authorize", redLoginReqMW, async (ctx, next) => {
+router.get("oauth-authorize", "/oauth/authorize", CSRFMW, redLoginReqMW, async (ctx, next) => {
   const repository = getRepository(OAuthClient);
   const clientId = ctx.request.query.client_id;
   const client: OAuthClient = clientId ? await repository.findOne({ id: clientId }) : null;
@@ -74,7 +71,7 @@ router.get("oauth-authorize", "/oauth/authorize", redLoginReqMW, async (ctx, nex
   });
 });
 
-router.post("oauth-authorize-post", "/oauth/authorize", redLoginReqMW, async (ctx, next) => {
+router.post("oauth-authorize-post", "/oauth/authorize", CSRFMW, redLoginReqMW, async (ctx, next) => {
   const oauthRequest = new Request(ctx.request);
   const oauthResponse = new Response(ctx.response);
 
@@ -88,6 +85,7 @@ router.post("oauth-authorize-post", "/oauth/authorize", redLoginReqMW, async (ct
       authenticateHandler: { handle: (req, resp) => ctx.state.user },
     });
   } catch (err) {
+    logger.warn(`Could not authorize OAuth`, {err});
     if (err instanceof AccessDeniedError) {
       addWarning(ctx, ctx.i18n.__("oauth_error_no_client_authorization"));
       ctx.redirect(router.url("index"));
@@ -114,6 +112,7 @@ router.post("oauth-token-post", "/oauth/token", async (ctx, next) => {
   try {
     await oauth.token(oauthRequest, oauthResponse);
   } catch (err) {
+    logger.warn(`Could not validate token`, {err});
     ctx.set(oauthResponse.headers);
     ctx.status = err.code;
     if (err! instanceof UnauthorizedRequestError) {
@@ -127,14 +126,14 @@ router.post("oauth-token-post", "/oauth/token", async (ctx, next) => {
   ctx.body = oauthResponse.body;
 });
 
-router.get("auth-logout", "/auth/logout", redLoginReqMW, async (ctx, next) => {
+router.get("auth-logout", "/auth/logout", CSRFMW, redLoginReqMW, async (ctx, next) => {
   await ctx.render("logout", {
     csrf: ctx.csrf,
     logoutUrl: router.url("auth-logout-post"),
   });
 });
 
-router.post("auth-logout-post", "/auth/logout", async (ctx, next) => {
+router.post("auth-logout-post", "/auth/logout", CSRFMW, async (ctx, next) => {
   if (ctx.isAuthenticated()) {
     logger.info("Logging out");
     ctx.logout();
@@ -162,14 +161,14 @@ router.get("auth-login-google-callback", "/auth/google/callback", redLoggedMW, a
   return passport.authenticate("google", loginCallback)(ctx, next);
 });
 
-router.get("auth-login", "/auth/login", redLoggedMW, async (ctx, next) => {
+router.get("auth-login", "/auth/login", CSRFMW, redLoggedMW, async (ctx, next) => {
   await ctx.render("login", {
     csrf: ctx.csrf,
     loginUrl: router.url("auth-login-post"),
   });
 });
 
-router.post("auth-login-post", "/auth/login", loginRLMW, redLoggedMW, async (ctx, next) => {
+router.post("auth-login-post", "/auth/login", CSRFMW, loginRLMW, redLoggedMW, async (ctx, next) => {
   const loginCallback = async (err, user, info, status) => {
     if (user) {
       await afterLogin(ctx, user, router);
@@ -185,14 +184,14 @@ router.post("auth-login-post", "/auth/login", loginRLMW, redLoggedMW, async (ctx
   return passport.authenticate("local", loginCallback)(ctx, next);
 });
 
-router.get("auth-register", "/auth/register", redLoggedMW, async (ctx, next) => {
+router.get("auth-register", "/auth/register", CSRFMW, redLoggedMW, async (ctx, next) => {
   await ctx.render("register", {
     csrf: ctx.csrf,
     registerUrl: router.url("auth-register-post"),
   });
 });
 
-router.post("auth-register-post", "/auth/register", redLoggedMW, async (ctx, next) => {
+router.post("auth-register-post", "/auth/register", CSRFMW, redLoggedMW, async (ctx, next) => {
   let createReq: CreateUser;
   try {
     createReq = (await transformAndValidate(CreateUser, ctx.request.body)) as CreateUser;

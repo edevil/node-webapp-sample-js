@@ -1,12 +1,12 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class oauth1539857080883 implements MigrationInterface {
+export class oauth1539889879008 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.query(`CREATE TABLE "o_auth_refresh_token" ("refreshToken" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userId" integer, "clientId" uuid, CONSTRAINT "PK_9c28879e57249cd37a166d16475" PRIMARY KEY ("refreshToken"))`);
-        await queryRunner.query(`CREATE TABLE "o_auth_authorization_code" ("authorizationCode" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userId" integer, "clientId" uuid, CONSTRAINT "PK_96aa4de267872e7ce1cd019f41d" PRIMARY KEY ("authorizationCode"))`);
-        await queryRunner.query(`CREATE TABLE "o_auth_client" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "redirectUris" text array NOT NULL, "grants" text array NOT NULL, "scopes" text array NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userId" integer, CONSTRAINT "PK_bb5360d8a267cd78c52e205311b" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "o_auth_access_token" ("accessToken" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userId" integer, "clientId" uuid, CONSTRAINT "PK_92b142fe013a181064be1ebab6f" PRIMARY KEY ("accessToken"))`);
+        await queryRunner.query(`CREATE TABLE "o_auth_refresh_token" ("refreshToken" character varying NOT NULL, "scope" text NOT NULL, "refreshTokenExpiresAt" date NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userId" integer, "clientId" uuid, CONSTRAINT "PK_9c28879e57249cd37a166d16475" PRIMARY KEY ("refreshToken"))`);
+        await queryRunner.query(`CREATE TABLE "o_auth_authorization_code" ("authorizationCode" character varying NOT NULL, "expiresAt" date NOT NULL, "redirectUri" text NOT NULL, "scope" text NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userId" integer, "clientId" uuid, CONSTRAINT "PK_96aa4de267872e7ce1cd019f41d" PRIMARY KEY ("authorizationCode"))`);
+        await queryRunner.query(`CREATE TABLE "o_auth_client" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "secret" text NOT NULL, "redirectUris" text array NOT NULL, "grants" text array NOT NULL, "scopes" text array NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userId" integer, CONSTRAINT "PK_bb5360d8a267cd78c52e205311b" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "o_auth_access_token" ("accessToken" character varying NOT NULL, "scope" text NOT NULL, "accessTokenExpiresAt" date NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userId" integer, "clientId" uuid, CONSTRAINT "PK_92b142fe013a181064be1ebab6f" PRIMARY KEY ("accessToken"))`);
         await queryRunner.query(`DROP INDEX "IDX_02e8e506a27b04322a98dc893a"`);
         await queryRunner.query(`ALTER TYPE "social_login_type_enum" RENAME TO "social_login_type_enum_old"`);
         await queryRunner.query(`CREATE TYPE "social_login_type_enum" AS ENUM('Google', 'Twitter', '0', '1')`);
