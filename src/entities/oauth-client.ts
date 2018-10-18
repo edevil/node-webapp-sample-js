@@ -21,7 +21,6 @@ export class OAuthClient {
 
   @ManyToOne(type => User, user => user.oauthClients, {
     onDelete: "CASCADE",
-    primary: true,
   })
   public user: User;
 

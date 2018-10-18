@@ -1,6 +1,7 @@
 import { User } from "./entities/user";
 import { logger } from "./logger";
 import { addSuccess } from "./messages";
+import { config } from "./config";
 
 export async function afterLogin(ctx, user, router) {
   await ctx.login(user);
@@ -37,4 +38,21 @@ export function getGQLContext(user: User): { ctx: any } {
       },
     };
   }
+}
+
+export function addParamsToURL(url: string, params: Map<string, string | string[]>): string {
+  const isRelative: boolean = url.startsWith("/");
+  const base = isRelative ? config.baseURL : null;
+
+  const reducer = (tempUrl, [key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach(val => tempUrl.searchParams.append(key, val));
+    } else {
+      tempUrl.searchParams.append(key, value);
+    }
+    return tempUrl;
+  };
+
+  const newUrl = [...params.entries()].reduce(reducer, new URL(url, base));
+  return isRelative ? newUrl.pathname + newUrl.search : newUrl.href;
 }

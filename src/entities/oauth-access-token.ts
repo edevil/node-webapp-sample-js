@@ -9,13 +9,11 @@ export class OAuthAccessToken {
 
   @ManyToOne(type => User, user => user.oauthAccessTokens, {
     onDelete: "CASCADE",
-    primary: true,
   })
   public user: User;
 
   @ManyToOne(type => OAuthClient, client => client.oauthAccessTokens, {
     onDelete: "CASCADE",
-    primary: true,
   })
   public client: OAuthClient;
 

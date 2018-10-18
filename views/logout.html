@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<form action="{{ logout_url }}" method="post">
+<form action="{{ logoutUrl }}" method="post">
     <input type="hidden" name="_csrf" value="{{ csrf }}" />
     <p><button type="submit">Logout</button></p>
 </form>

@@ -1,4 +1,5 @@
 {
 	"test key": "translated english key",
-	"hello index": "Welcome to the site"
+	"hello index": "Welcome to the site",
+	"oauth_error_no_client": "oauth_error_no_client"
 }

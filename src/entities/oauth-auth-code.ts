@@ -15,13 +15,11 @@ export class OAuthAuthorizationCode {
 
   @ManyToOne(type => User, user => user.oauthAuthorizationCodes, {
     onDelete: "CASCADE",
-    primary: true,
   })
   public user: User;
 
   @ManyToOne(type => OAuthClient, client => client.oauthAuthorizationCodes, {
     onDelete: "CASCADE",
-    primary: true,
   })
   public client: OAuthClient;
 

@@ -5,13 +5,15 @@ import * as passport from "koa-passport";
 import * as Router from "koa-router";
 import { getRepository, QueryFailedError } from "typeorm";
 import { CreateUser } from "./dtos/create-user";
+import { OAuthClient } from "./entities/oauth-client";
 import { User } from "./entities/user";
 import { logger } from "./logger";
+import { addWarning } from "./messages";
 import { getMessagesMW } from "./middleware/fetch-messages";
 import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
 import { loginRLMW } from "./rate-limits";
 import { createUser } from "./service";
-import { afterLogin } from "./utils";
+import { addParamsToURL, afterLogin } from "./utils";
 
 export const router = new Router();
 
@@ -48,10 +50,38 @@ router.get("index", "/", async (ctx, next) => {
   await ctx.render("index", { authenticated: ctx.isAuthenticated() });
 });
 
+router.get("oauth-authorize", "/oauth/authorize", redLoginReqMW, async (ctx, next) => {
+  const repository = getRepository(OAuthClient);
+  const clientId = ctx.request.query.client_id;
+  const client: OAuthClient = clientId ? await repository.findOne({ id: clientId }) : null;
+  if (!client) {
+    addWarning(ctx, ctx.i18n.__("oauth_error_no_client"));
+    ctx.redirect(router.url("index"));
+    return;
+  }
+
+  const authorizeUrl = addParamsToURL(router.url("oauth-authorize-post"), new Map(Object.entries(ctx.request.query)));
+
+  await ctx.render("oauth-authorize", {
+    authorizeUrl,
+    client,
+    csrf: ctx.csrf,
+  });
+});
+
+router.post("oauth-authorize-post", "/oauth/authorize", redLoginReqMW, async (ctx, next) => {
+  console.log(`AUTHORIZE POST QUERY ${JSON.stringify(ctx.request.query)}`);
+  console.log(`AUTHORIZE POST BODY ${JSON.stringify(ctx.request.body)}`);
+  await ctx.render("logout", {
+    csrf: ctx.csrf,
+    loginUrl: router.url("auth-logout-post"),
+  });
+});
+
 router.get("auth-logout", "/auth/logout", redLoginReqMW, async (ctx, next) => {
   await ctx.render("logout", {
     csrf: ctx.csrf,
-    login_url: router.url("auth-logout-post"),
+    logoutUrl: router.url("auth-logout-post"),
   });
 });
 
@@ -86,7 +116,7 @@ router.get("auth-login-google-callback", "/auth/google/callback", redLoggedMW, a
 router.get("auth-login", "/auth/login", redLoggedMW, async (ctx, next) => {
   await ctx.render("login", {
     csrf: ctx.csrf,
-    login_url: router.url("auth-login-post"),
+    loginUrl: router.url("auth-login-post"),
   });
 });
 
@@ -98,7 +128,7 @@ router.post("auth-login-post", "/auth/login", loginRLMW, redLoggedMW, async (ctx
       logger.info("Could not login user", { err, info, status });
       await ctx.render("login", {
         csrf: ctx.csrf,
-        login_url: router.url("auth-login-post"),
+        loginUrl: router.url("auth-login-post"),
       });
     }
   };
@@ -109,7 +139,7 @@ router.post("auth-login-post", "/auth/login", loginRLMW, redLoggedMW, async (ctx
 router.get("auth-register", "/auth/register", redLoggedMW, async (ctx, next) => {
   await ctx.render("register", {
     csrf: ctx.csrf,
-    register_url: router.url("auth-register-post"),
+    registerUrl: router.url("auth-register-post"),
   });
 });
 
@@ -125,7 +155,7 @@ router.post("auth-register-post", "/auth/register", redLoggedMW, async (ctx, nex
     await ctx.render("register", {
       csrf: ctx.csrf,
       error,
-      register_url: router.url("auth-register-post"),
+      registerUrl: router.url("auth-register-post"),
     });
     return;
   }
@@ -139,7 +169,7 @@ router.post("auth-register-post", "/auth/register", redLoggedMW, async (ctx, nex
       await ctx.render("register", {
         csrf: ctx.csrf,
         error,
-        register_url: router.url("auth-register-post"),
+        registerUrl: router.url("auth-register-post"),
       });
       return;
     }
