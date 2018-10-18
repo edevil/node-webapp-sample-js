@@ -3,7 +3,7 @@ import * as bodyParser from "koa-bodyparser";
 import * as CSRF from "koa-csrf";
 import * as passport from "koa-passport";
 import * as Router from "koa-router";
-import { Request, Response } from "oauth2-server";
+import { Request, Response, UnauthorizedRequestError } from "oauth2-server";
 import { getRepository, QueryFailedError } from "typeorm";
 import { CreateUser } from "./dtos/create-user";
 import { OAuthClient } from "./entities/oauth-client";
@@ -62,7 +62,10 @@ router.get("oauth-authorize", "/oauth/authorize", redLoginReqMW, async (ctx, nex
     return;
   }
 
-  const authorizeUrl = addParamsToURL(router.url("oauth-authorize-post"), new Map(Object.entries(ctx.request.query)));
+  const allowedQParams = new Set(["scope", "redirect_uri", "response_type", "client_id", "access_type"]);
+  const filteredEntries = Object.entries(ctx.request.query).filter(([key, val]) => allowedQParams.has(key));
+  const paramMap = new Map(filteredEntries as [string, string | string[]][]);
+  const authorizeUrl = addParamsToURL(router.url("oauth-authorize-post"), paramMap);
 
   await ctx.render("oauth-authorize", {
     authorizeUrl,
@@ -75,18 +78,28 @@ router.post("oauth-authorize-post", "/oauth/authorize", redLoginReqMW, async (ct
   const oauthRequest = new Request(ctx.request);
   const oauthResponse = new Response(ctx.response);
 
-  const result = await oauth.authorize(oauthRequest, oauthResponse, {
-    allowEmptyState: true,
-    authenticateHandler: { handle: (req, resp) => ctx.state.user },
-  });
-  console.log(`OAUTH result: ${JSON.stringify(result)}`);
+  // ugly hack because the oauth module only fetches this from the query
+  // https://github.com/oauthjs/node-oauth2-server/pull/532
+  oauthRequest.query.allowed = ctx.request.body.allowed;
 
-  console.log(`AUTHORIZE POST QUERY ${JSON.stringify(ctx.request.query)}`);
-  console.log(`AUTHORIZE POST BODY ${JSON.stringify(ctx.request.body)}`);
-  await ctx.render("logout", {
-    csrf: ctx.csrf,
-    loginUrl: router.url("auth-logout-post"),
-  });
+  let code;
+  try {
+    code = await oauth.authorize(oauthRequest, oauthResponse, {
+      allowEmptyState: true,
+      authenticateHandler: { handle: (req, resp) => ctx.state.user },
+    });
+  } catch (err) {
+    ctx.set(oauthResponse.headers);
+    ctx.status = err.code;
+    if (err! instanceof UnauthorizedRequestError) {
+      ctx.body = { error: err.name, error_description: err.message };
+    }
+    return;
+  }
+
+  ctx.set(oauthResponse.headers);
+  ctx.status = oauthResponse.status;
+  ctx.body = oauthResponse.body;
 });
 
 router.get("auth-logout", "/auth/logout", redLoginReqMW, async (ctx, next) => {
