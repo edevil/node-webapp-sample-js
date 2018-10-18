@@ -3,6 +3,7 @@ import * as bodyParser from "koa-bodyparser";
 import * as CSRF from "koa-csrf";
 import * as passport from "koa-passport";
 import * as Router from "koa-router";
+import { Request, Response } from "oauth2-server";
 import { getRepository, QueryFailedError } from "typeorm";
 import { CreateUser } from "./dtos/create-user";
 import { OAuthClient } from "./entities/oauth-client";
@@ -14,6 +15,7 @@ import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
 import { loginRLMW } from "./rate-limits";
 import { createUser } from "./service";
 import { addParamsToURL, afterLogin } from "./utils";
+import { oauth } from "./oauth2-model";
 
 export const router = new Router();
 
@@ -70,6 +72,15 @@ router.get("oauth-authorize", "/oauth/authorize", redLoginReqMW, async (ctx, nex
 });
 
 router.post("oauth-authorize-post", "/oauth/authorize", redLoginReqMW, async (ctx, next) => {
+  const oauthRequest = new Request(ctx.request);
+  const oauthResponse = new Response(ctx.response);
+
+  const result = await oauth.authorize(oauthRequest, oauthResponse, {
+    allowEmptyState: true,
+    authenticateHandler: { handle: (req, resp) => ctx.state.user },
+  });
+  console.log(`OAUTH result: ${JSON.stringify(result)}`);
+
   console.log(`AUTHORIZE POST QUERY ${JSON.stringify(ctx.request.query)}`);
   console.log(`AUTHORIZE POST BODY ${JSON.stringify(ctx.request.body)}`);
   await ctx.render("logout", {
