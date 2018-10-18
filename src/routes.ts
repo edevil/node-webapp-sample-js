@@ -12,10 +12,10 @@ import { logger } from "./logger";
 import { addWarning } from "./messages";
 import { getMessagesMW } from "./middleware/fetch-messages";
 import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
+import { oauth } from "./oauth2-model";
 import { loginRLMW } from "./rate-limits";
 import { createUser } from "./service";
 import { addParamsToURL, afterLogin } from "./utils";
-import { oauth } from "./oauth2-model";
 
 export const router = new Router();
 
