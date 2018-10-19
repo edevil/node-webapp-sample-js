@@ -1,6 +1,5 @@
 import * as socketio from "socket.io";
 import * as redisAdapter from "socket.io-redis";
-import { config } from "../config";
 import { logger } from "../logger";
 import { getNewRedis } from "./redis";
 
@@ -12,7 +11,6 @@ export const initWebsocket = (server, app) => {
       pubClient: getNewRedis(),
       subClient: getNewRedis(),
     }),
-    origins: config.origins,
   });
 
   io.on("connection", socket => {
