@@ -1,9 +1,18 @@
-import { config } from "./src/config";
 import { Logger, QueryRunner } from "typeorm";
+import { config } from "./src/config";
 import { logger } from "./src/logger";
 
 class MyCustomLogger implements Logger {
-  log(level: "log" | "info" | "warn", message: any, queryRunner?: QueryRunner): any {
+
+  protected static stringifyParams(parameters: any[]) {
+    try {
+      return JSON.stringify(parameters);
+    } catch (error) {
+      logger.warn("Could not convert parameters", { error });
+      return parameters;
+    }
+  }
+  public log(level: "log" | "info" | "warn", message: any, queryRunner?: QueryRunner): any {
     let logFunc;
     if (level === "log") {
       logFunc = logger.debug;
@@ -15,11 +24,11 @@ class MyCustomLogger implements Logger {
     logFunc("TypeORM log", { typeorm_message: message });
   }
 
-  logMigration(message: string, queryRunner?: QueryRunner): any {
+  public logMigration(message: string, queryRunner?: QueryRunner): any {
     logger.info("TypeORM migration", { typeorm_message: message });
   }
 
-  logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+  public logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): any {
     if (config.logSQL) {
       const sql =
         query +
@@ -28,48 +37,39 @@ class MyCustomLogger implements Logger {
     }
   }
 
-  logQueryError(error: string, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+  public logQueryError(error: string, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
     const sql =
       query + (parameters && parameters.length ? " -- PARAMETERS: " + MyCustomLogger.stringifyParams(parameters) : "");
-    logger.error("SQL ERROR", { query: sql, error: error });
+    logger.error("SQL ERROR", { query: sql, error });
   }
 
-  logQuerySlow(time: number, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+  public logQuerySlow(time: number, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
     const sql =
       query + (parameters && parameters.length ? " -- PARAMETERS: " + MyCustomLogger.stringifyParams(parameters) : "");
-    logger.warning("SQL SLOW", { query: sql, duration: time });
+    logger.warn("SQL SLOW", { query: sql, duration: time });
   }
 
-  logSchemaBuild(message: string, queryRunner?: QueryRunner): any {
+  public logSchemaBuild(message: string, queryRunner?: QueryRunner): any {
     logger.info("TypeORM schema build", { typeorm_message: message });
-  }
-
-  protected static stringifyParams(parameters: any[]) {
-    try {
-      return JSON.stringify(parameters);
-    } catch (error) {
-      logger.warning("Could not convert parameters", { error: error });
-      return parameters;
-    }
   }
 }
 
 export = [
   {
-    name: "default",
-    type: "postgres",
-    host: config.dbHost,
-    port: 5432,
-    username: config.dbUser,
-    password: config.dbPassword,
-    database: config.dbName,
-    logger: new MyCustomLogger(),
-    maxQueryExecutionTime: 1000,
-    entities: ["src/entities/*{.ts,.js}"],
-    migrations: ["src/migrations/*{.ts,.js}"],
     cli: {
       entitiesDir: "src/entities",
       migrationsDir: "src/migrations",
     },
+    database: config.dbName,
+    entities: ["src/entities/*{.ts,.js}"],
+    host: config.dbHost,
+    logger: new MyCustomLogger(),
+    maxQueryExecutionTime: 1000,
+    migrations: ["src/migrations/*{.ts,.js}"],
+    name: "default",
+    password: config.dbPassword,
+    port: 5432,
+    type: "postgres",
+    username: config.dbUser,
   },
 ];
