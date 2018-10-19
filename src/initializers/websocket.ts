@@ -1,15 +1,16 @@
 import * as socketio from "socket.io";
 import * as redisAdapter from "socket.io-redis";
 import { logger } from "../logger";
-import { getRedis } from "./redis";
+import { getNewRedis } from "./redis";
+
+let io: socketio.Server;
 
 export const initWebsocket = server => {
-  const io = socketio(server);
-  const redis = getRedis();
+  io = socketio(server);
   io.adapter(
     redisAdapter({
-      pubClient: redis,
-      subClient: redis,
+      pubClient: getNewRedis(),
+      subClient: getNewRedis(),
     }),
   );
 
@@ -21,4 +22,9 @@ export const initWebsocket = server => {
       io.emit("chat message", msg);
     });
   });
+};
+
+export const closeWebsocket = () => {
+  io.close();
+  io = null;
 };

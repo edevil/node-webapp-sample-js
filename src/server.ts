@@ -5,13 +5,13 @@ import { app } from "./app";
 import { config } from "./config";
 import { databaseInitializer } from "./initializers/database";
 import { closeRedis, initRedis } from "./initializers/redis";
-import { initWebsocket } from "./initializers/websocket";
+import { closeWebsocket, initWebsocket } from "./initializers/websocket";
 import { logger } from "./logger";
 
 function onSignal() {
   logger.info("server is starting cleanup");
 
-  return Promise.all([getConnection().close(), Promise.resolve(closeRedis())]);
+  return Promise.all([getConnection().close(), Promise.resolve(closeRedis()), Promise.resolve(closeWebsocket())]);
 }
 
 async function onShutdown() {
