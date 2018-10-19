@@ -5,6 +5,7 @@ import { app } from "./app";
 import { config } from "./config";
 import { databaseInitializer } from "./initializers/database";
 import { closeRedis, initRedis } from "./initializers/redis";
+import { initWebsocket } from "./initializers/websocket";
 import { logger } from "./logger";
 
 function onSignal() {
@@ -49,6 +50,7 @@ const bootstrap = async () => {
 
   const server = http.createServer(app.callback());
   createTerminus(server, options);
+  initWebsocket(server);
   server.listen(config.port);
 };
 

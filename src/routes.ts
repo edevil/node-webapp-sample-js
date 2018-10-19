@@ -49,6 +49,10 @@ router.get("index", "/", async (ctx, next) => {
   await ctx.render("index", { authenticated: ctx.isAuthenticated() });
 });
 
+router.get("chat", "/chat", async (ctx, next) => {
+  await ctx.render("chat", { authenticated: ctx.isAuthenticated() });
+});
+
 router.get("oauth-authorize", "/oauth/authorize", CSRFMW, redLoginReqMW, async (ctx, next) => {
   const repository = getRepository(OAuthClient);
   const clientId = ctx.request.query.client_id;
