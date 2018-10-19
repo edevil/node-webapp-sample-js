@@ -7,6 +7,7 @@ Experimental starter pack for Node.JS webapps
 1. File uploads (GraphQL and not)
 1. GraphQL subscriptions
 1. Full text search
+1. socket.io auth (https://github.com/jfromaniello/passport.socketio)
 
 # Migrations
 
@@ -46,6 +47,7 @@ Experimental starter pack for Node.JS webapps
 - Rate limiting [Link](https://github.com/koajs/ratelimit)
 - Security: [CSRF](https://github.com/koajs/csrf), [CORS](https://github.com/koajs/cors), etc
 - Linting: [TSLint](https://palantir.github.io/tslint/), [prettier](https://prettier.io/)
+- Websockets: socket.io [Link](https://socket.io/)
 - Flash messages
 - Production deployment config suited for Kubernetes
 - Dockerfile
