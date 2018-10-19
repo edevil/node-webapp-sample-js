@@ -28,6 +28,7 @@ export const initWebsocket = (server, app) => {
       const ctx = app.createContext(socket.request, socket.request.res);
       socket.request.session = ctx.session;
     } catch (err) {
+      logger.warn("Could not create context", { err });
       error = err;
     }
     return next(error);
