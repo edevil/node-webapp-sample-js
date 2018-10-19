@@ -9,7 +9,7 @@ import { CreateUser } from "./dtos/create-user";
 import { OAuthClient } from "./entities/oauth-client";
 import { User } from "./entities/user";
 import { logger } from "./logger";
-import { addWarning } from "./messages";
+import { addError, addWarning } from "./messages";
 import { getMessagesMW } from "./middleware/fetch-messages";
 import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
 import { oauth } from "./oauth2-model";
@@ -85,7 +85,7 @@ router.post("oauth-authorize-post", "/oauth/authorize", CSRFMW, redLoginReqMW, a
       authenticateHandler: { handle: (req, resp) => ctx.state.user },
     });
   } catch (err) {
-    logger.warn(`Could not authorize OAuth`, {err});
+    logger.warn(`Could not authorize OAuth`, { err });
     if (err instanceof AccessDeniedError) {
       addWarning(ctx, ctx.i18n.__("oauth_error_no_client_authorization"));
       ctx.redirect(router.url("index"));
@@ -112,7 +112,7 @@ router.post("oauth-token-post", "/oauth/token", async (ctx, next) => {
   try {
     await oauth.token(oauthRequest, oauthResponse);
   } catch (err) {
-    logger.warn(`Could not validate token`, {err});
+    logger.warn(`Could not validate token`, { err });
     ctx.set(oauthResponse.headers);
     ctx.status = err.code;
     if (err! instanceof UnauthorizedRequestError) {
@@ -124,6 +124,22 @@ router.post("oauth-token-post", "/oauth/token", async (ctx, next) => {
   ctx.set(oauthResponse.headers);
   ctx.status = oauthResponse.status;
   ctx.body = oauthResponse.body;
+});
+
+router.get("oauth-request-test", "/oauthtest", async (ctx, next) => {
+  const oauthRequest = new Request(ctx.request);
+  const oauthResponse = new Response(ctx.response);
+
+  let token;
+  try {
+    token = await oauth.authenticate(oauthRequest, oauthResponse);
+  } catch (err) {
+    logger.warn(`Could not authenticate OAuth`, { err });
+    ctx.set(oauthResponse.headers);
+    ctx.status = err.code;
+    return;
+  }
+  ctx.body = { user: token.user.id };
 });
 
 router.get("auth-logout", "/auth/logout", CSRFMW, redLoginReqMW, async (ctx, next) => {
@@ -197,9 +213,7 @@ router.post("auth-register-post", "/auth/register", CSRFMW, redLoggedMW, async (
     createReq = (await transformAndValidate(CreateUser, ctx.request.body)) as CreateUser;
   } catch (error) {
     logger.error(JSON.stringify(error));
-    // TODO
-    // return error to user
-    // flash messages?
+    addError(ctx, ctx.i18n.__("error-create-user"));
     await ctx.render("register", {
       csrf: ctx.csrf,
       error,
