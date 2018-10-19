@@ -7,7 +7,7 @@ export class OAuthAuthorizationCode {
   @PrimaryColumn()
   public authorizationCode: string;
 
-  @Column("date")
+  @Column("timestamp")
   public expiresAt: Date;
 
   @Column("text")

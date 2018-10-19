@@ -20,7 +20,7 @@ export class OAuthRefreshToken {
   @Column("text")
   public scope: string;
 
-  @Column("date")
+  @Column("timestamp")
   public refreshTokenExpiresAt: Date;
 
   @CreateDateColumn()

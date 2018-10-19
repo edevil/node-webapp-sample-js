@@ -13,8 +13,8 @@ const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenMode
     if (!token.scope) {
       return false;
     }
-    const requestedScopes = (scope as string).split(' ');
-    const authorizedScopes = (token.scope as string).split(' ');
+    const requestedScopes = (scope as string).split(" ");
+    const authorizedScopes = (token.scope as string).split(" ");
     return requestedScopes.every(s => authorizedScopes.includes(s));
   },
   async validateScope(user, client, scope) {
@@ -98,7 +98,7 @@ const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenMode
     const result = await repository
       .createQueryBuilder()
       .delete()
-      .where("id = :id", { id: code.id })
+      .where("authorizationCode = :authorizationCode", { authorizationCode: code.authorizationCode })
       .returning("*")
       .execute();
     return !!result.raw;

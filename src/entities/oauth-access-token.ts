@@ -20,7 +20,7 @@ export class OAuthAccessToken {
   @Column("text")
   public scope: string;
 
-  @Column("date")
+  @Column("timestamp")
   public accessTokenExpiresAt: Date;
 
   @CreateDateColumn()
