@@ -50,7 +50,7 @@ const bootstrap = async () => {
 
   const server = http.createServer(app.callback());
   createTerminus(server, options);
-  initWebsocket(server);
+  initWebsocket(server, app);
   server.listen(config.port);
 };
 
