@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block header %}
+<h1>OAuth authorize</h1>
+{% endblock %}
+
+{% block content %}
+<p>Client ID: {{ client.id }}</p>
+<p>Redirect URLs: {{ client.redirectUris }}</p>
+<p>Scopes: {{ client.scopes }}</p>
+
+<form action="{{ authorizeUrl }}" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrf }}" />
+    <p><button type="submit" name="allowed" value="true">Accept</button></p>
+    <p><button type="submit" name="allowed" value="false">Deny</button></p>
+</form>
+{% endblock %}

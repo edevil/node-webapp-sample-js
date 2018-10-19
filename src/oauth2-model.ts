@@ -9,6 +9,20 @@ import { User } from "./entities/user";
 const ALLOWED_GRANTS = ["authorization_code", "refresh_token"];
 
 const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenModel = {
+  async verifyScope(token, scope) {
+    if (!token.scope) {
+      return false;
+    }
+    const requestedScopes = (scope as string).split(' ');
+    const authorizedScopes = (token.scope as string).split(' ');
+    return requestedScopes.every(s => authorizedScopes.includes(s));
+  },
+  async validateScope(user, client, scope) {
+    if (!(scope as string).split(" ").every(s => client.scopes.includes(s))) {
+      return false;
+    }
+    return scope;
+  },
   async getClient(clientId, clientSecret) {
     const repository = getRepository(OAuthClient);
     const client = await repository.findOne(clientId);
@@ -67,13 +81,36 @@ const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenMode
   },
   async getAuthorizationCode(authorizationCode) {
     const repository = getRepository(OAuthAuthorizationCode);
-    return repository.findOne(authorizationCode);
+    return repository.findOne(authorizationCode, { relations: ["user", "client"] });
+  },
+  async revokeToken(token) {
+    const repository = getRepository(OAuthRefreshToken);
+    const result = await repository
+      .createQueryBuilder()
+      .delete()
+      .where("id = :id", { id: token.id })
+      .returning("*")
+      .execute();
+    return !!result.raw;
   },
   async revokeAuthorizationCode(code) {
     const repository = getRepository(OAuthAuthorizationCode);
-    const result = await repository.delete();
-    result.
-  }
+    const result = await repository
+      .createQueryBuilder()
+      .delete()
+      .where("id = :id", { id: code.id })
+      .returning("*")
+      .execute();
+    return !!result.raw;
+  },
+  async getAccessToken(accessToken) {
+    const repository = getRepository(OAuthAccessToken);
+    return repository.findOne(accessToken, { relations: ["user", "client"] });
+  },
+  async getRefreshToken(refreshToken) {
+    const repository = getRepository(OAuthRefreshToken);
+    return repository.findOne(refreshToken, { relations: ["user", "client"] });
+  },
 };
 
 const options: OAuth2Server.ServerOptions = {

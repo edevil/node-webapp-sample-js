@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<form action="{{ register_url }}" method="post">
+<form action="{{ registerUrl }}" method="post">
     <input type="hidden" name="_csrf" value="{{ csrf }}" />
     <p><label>Email: <input type="text" name="email"/></label></p>
     <p><label>Password: <input type="password" name="password"/></label></p>

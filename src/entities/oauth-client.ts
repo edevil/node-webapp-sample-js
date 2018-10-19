@@ -17,11 +17,11 @@ export class OAuthClient {
   @PrimaryGeneratedColumn("uuid")
   public id: string;
 
+  @Column("text")
   public secret: string;
 
   @ManyToOne(type => User, user => user.oauthClients, {
     onDelete: "CASCADE",
-    primary: true,
   })
   public user: User;
 
@@ -43,6 +43,11 @@ export class OAuthClient {
     array: true,
   })
   public grants: string[];
+
+  @Column("text", {
+    array: true,
+  })
+  public scopes: string[];
 
   @CreateDateColumn()
   public createdAt: Date;
