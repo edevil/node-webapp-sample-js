@@ -8,6 +8,7 @@ Experimental starter pack for Node.JS webapps
 1. GraphQL subscriptions
 1. Full text search
 1. socket.io auth (https://github.com/jfromaniello/passport.socketio)
+1. TS Decorator for GraphQL resolver rate limit (https://github.com/microlinkhq/async-ratelimiter)
 
 # Migrations
 
