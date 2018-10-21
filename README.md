@@ -59,3 +59,28 @@ Experimental starter pack for Node.JS webapps
 
 - [Postgres](https://www.postgresql.org/)
 - [Redis](https://redis.io/)
+
+# Full text search WIP
+
+*Field type*: django.contrib.postgres.search.SearchVectorField, tsvector
+
+*Index type*: django.contrib.postgres.indexes.GinIndex
+
+*Update vector*: search_vector = SearchVector('title', weight='A', config='pt') + SearchVector('description', weight='B', config='pt')
+
+*trigger*: Use a trigger to update search vector
+
+Example: https://mathisonian.com/writing/postgres-full-text-search-with-sequelizejs
+
+## Migration
+
++UnaccentExtension
+
+### UP
+    CREATE TEXT SEARCH CONFIGURATION pt ( COPY = portuguese );
+    ALTER TEXT SEARCH CONFIGURATION pt
+            ALTER MAPPING FOR hword, hword_part, word
+            WITH unaccent, portuguese_stem;
+
+### DOWN
+    DROP TEXT SEARCH CONFIGURATION pt;
