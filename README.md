@@ -4,10 +4,10 @@ Experimental starter pack for Node.JS webapps
 
 ## TODO
 
+1. Full text search
 1. File uploads (GraphQL and not)
 1. GraphQL subscriptions
-1. Full text search
-1. socket.io auth (https://github.com/jfromaniello/passport.socketio)
+1. socket.io auth (https://github.com/auth0/node-jsonwebtoken)
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
 1. GraphQL shield (https://github.com/maticzav/graphql-shield)
 
