@@ -1,4 +1,6 @@
+import * as asyncBusboy from "async-busboy";
 import { transformAndValidate } from "class-transformer-validator";
+import * as fs from "fs";
 import * as bodyParser from "koa-bodyparser";
 import * as CSRF from "koa-csrf";
 import * as passport from "koa-passport";
@@ -242,4 +244,31 @@ router.post("auth-register-post", "/auth/register", CSRFMW, redLoggedMW, async (
   }
   logger.info("New user created", { userId: user.id });
   await afterLogin(ctx, user, router);
+});
+
+router.post("upload-test", "/upload", async (ctx, next) => {
+  // Upload experiment. In real scenarios stream to a cloud storage solution
+  const { files, fields } = await asyncBusboy(ctx.req, { limits: { files: 1, fileSize: 1000000 } });
+  logger.debug(`Fields: ${JSON.stringify(fields)}, files: ${JSON.stringify(files)}`);
+  if (files[0]) {
+    logger.debug("Will save file", { path: files[0].path });
+    const myFile = fs.createWriteStream("output");
+    const promise = new Promise((resolve, reject) => {
+      files[0]
+        .on("error", err => {
+          logger.info("Could not read file", { err });
+          myFile.close();
+          reject(err);
+        })
+        .on("end", () => {
+          logger.debug("Only finished now");
+          resolve();
+        })
+        .pipe(myFile);
+      fs.unlinkSync(files[0].path);
+    });
+    await promise;
+  }
+
+  ctx.body = "all done";
 });

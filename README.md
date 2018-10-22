@@ -4,7 +4,6 @@ Experimental starter pack for Node.JS webapps
 
 ## TODO
 
-1. Multipart uploads (https://github.com/expressjs/multer) (https://github.com/koajs/convert)
 1. GraphQL uploads
 1. GraphQL subscriptions
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
@@ -49,6 +48,7 @@ Experimental starter pack for Node.JS webapps
 - Security: [CSRF](https://github.com/koajs/csrf), [CORS](https://github.com/koajs/cors), etc
 - Linting: [TSLint](https://palantir.github.io/tslint/), [prettier](https://prettier.io/)
 - Websockets: socket.io [Link](https://socket.io/)
+- Multipart uploads: async-busboy [Link](https://github.com/m4nuC/async-busboy)
 - Full text search
 - Flash messages
 - Production deployment config suited for Kubernetes
