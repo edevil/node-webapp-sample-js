@@ -24,7 +24,11 @@
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
   $(function () {
-    var socket = io();
+    var socket = io({
+      query: {
+        token: 'test token'
+      }
+    });
     $('form').submit(function(){
       socket.emit('chat message', $('#m').val());
       $('#m').val('');
