@@ -23,4 +23,9 @@ export class Card {
     default: false,
   })
   public done: boolean;
+
+  @Column("tsvector", {
+    nullable: true,
+  })
+  public searchVector: string;
 }

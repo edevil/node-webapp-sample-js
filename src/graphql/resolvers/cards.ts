@@ -15,4 +15,13 @@ export const cardsResolver = {
     }
     return cardList;
   },
+  async searchCards(obj, { searchTerm }, context, info) {
+    logger.debug("Will search for cards", { searchTerm });
+    const repository = getRepository(Card);
+    const cardList = await repository
+      .createQueryBuilder()
+      .where("Card.searchVector @@ plainto_tsquery('public.pt', :searchTerm)", { searchTerm })
+      .getMany();
+    return cardList;
+  },
 };
