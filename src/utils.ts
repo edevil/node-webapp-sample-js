@@ -1,3 +1,4 @@
+import * as jwt from "jsonwebtoken";
 import { config } from "./config";
 import { User } from "./entities/user";
 import { logger } from "./logger";
@@ -55,4 +56,8 @@ export function addParamsToURL(url: string, params: Map<string, string | string[
 
   const newUrl = [...params.entries()].reduce(reducer, new URL(url, base));
   return isRelative ? newUrl.pathname + newUrl.search : newUrl.href;
+}
+
+export function generateUserToken(user: User): string {
+  return jwt.sign({ userId: user.id }, config.appKeys[0], { expiresIn: config.tokenLifetime });
 }

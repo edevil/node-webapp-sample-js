@@ -16,6 +16,7 @@ interface IConfig {
   origins: string[];
   redisHost: string;
   redisPrefix: string;
+  tokenLifetime: number;
   gqlDepthLimit: number;
   gqlMaxPerPage: number;
   gqlPath: string;
@@ -41,6 +42,7 @@ const config: IConfig = {
   ravenDSN: process.env.RAVEN_DSN || "",
   redisHost: process.env.REDIS_HOST || "localhost",
   redisPrefix: process.env.REDIS_PREFIX || "sample-node",
+  tokenLifetime: 60,
   trustXHeaders: process.env.TRUST_X_HEADERS ? process.env.TRUST_X_HEADERS.toLowerCase() === "true" : false,
 };
 

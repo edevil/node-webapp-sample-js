@@ -9,7 +9,7 @@ Experimental starter pack for Node.JS webapps
 1. GraphQL subscriptions
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
 1. GraphQL shield (https://github.com/maticzav/graphql-shield)
-1. socket.io auth (https://github.com/auth0/node-jsonwebtoken)
+1. socket.io auth (verify JWT)
 
 # Migrations
 
