@@ -1,5 +1,4 @@
 import { AuthenticationError } from "apollo-server-koa";
-import { sign } from "jsonwebtoken";
 import { logger } from "../../logger";
 import { generateUserToken } from "../../utils";
 
