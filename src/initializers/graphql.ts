@@ -16,6 +16,7 @@ const schemaDefinition = gql`
 export const graphqlInitializer = app => {
   const server = new ApolloServer({
     context: ({ ctx }) => ({ ctx }),
+    introspection: config.showPlayground,
     playground: config.showPlayground,
     resolvers,
     typeDefs: [schemaDefinition, ...types, Query, Mutation],
