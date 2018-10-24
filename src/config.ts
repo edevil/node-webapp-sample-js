@@ -18,6 +18,8 @@ interface IConfig {
   redisPrefix: string;
   tokenLifetime: number;
   gqlDepthLimit: number;
+  gqlMaxFileSize: number;
+  gqlMaxFiles: number;
   gqlMaxPerPage: number;
   gqlPath: string;
   showPlayground: boolean;
@@ -35,6 +37,8 @@ const config: IConfig = {
   googleClientId: process.env.GOOGLE_CLIENT_ID || "googleid",
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "googlesecret",
   gqlDepthLimit: +process.env.GQL_DEPTH_LIMIT || 5,
+  gqlMaxFileSize: 10000000,
+  gqlMaxFiles: 2,
   gqlMaxPerPage: +process.env.GQL_MAX_PER_PAGE || 100,
   gqlPath: process.env.GQL_PATH || "/graphql",
   logSQL: process.env.LOG_SQL ? process.env.LOG_SQL.toLowerCase() === "true" : true,

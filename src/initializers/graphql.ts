@@ -1,5 +1,7 @@
 import { ApolloServer, gql } from "apollo-server-koa";
 import * as depthLimit from "graphql-depth-limit";
+import { graphqlUploadKoa } from "graphql-upload";
+import * as mount from "koa-mount";
 import { config } from "../config";
 import { resolvers } from "../graphql/resolvers";
 import { types } from "../graphql/types";
@@ -20,7 +22,11 @@ export const graphqlInitializer = app => {
     playground: config.showPlayground,
     resolvers,
     typeDefs: [schemaDefinition, ...types, Query, Mutation],
+    uploads: false,
     validationRules: [depthLimit(config.gqlDepthLimit)],
   });
+  app.use(
+    mount(config.gqlPath, graphqlUploadKoa({ maxFileSize: config.gqlMaxFileSize, maxFiles: config.gqlMaxFiles })),
+  );
   server.applyMiddleware({ app, path: config.gqlPath, disableHealthCheck: true });
 };

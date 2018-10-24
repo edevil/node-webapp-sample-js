@@ -4,7 +4,6 @@ Experimental starter pack for Node.JS webapps
 
 ## TODO
 
-1. GraphQL uploads
 1. GraphQL subscriptions
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
 1. GraphQL shield (https://github.com/maticzav/graphql-shield)

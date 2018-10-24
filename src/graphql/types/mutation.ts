@@ -6,5 +6,6 @@ export const Mutation = gql`
     toggleCard(id: String!): Card
     updateCard(id: String!, patch: CardPatch!): Card
     createCard(card: NewCardPatch!): Card
+    uploadFile(image: Upload!): Boolean
   }
 `;

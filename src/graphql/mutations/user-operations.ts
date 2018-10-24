@@ -2,7 +2,7 @@ import { AuthenticationError } from "apollo-server-koa";
 import { logger } from "../../logger";
 import { generateUserToken } from "../../utils";
 
-export const UserOperationMutations = {
+export const userOperationMutations = {
   async generateToken(obj, args, { ctx }, info) {
     if (!ctx.isAuthenticated()) {
       throw new AuthenticationError("Must authenticate");

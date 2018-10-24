@@ -1,7 +1,8 @@
 import { createCardMutation } from "./mutations/create-card";
+import { exampleMutations } from "./mutations/examples";
 import { toggleCardMutation } from "./mutations/toggle-card";
 import { updateCardMutation } from "./mutations/update-card";
-import { UserOperationMutations } from "./mutations/user-operations";
+import { userOperationMutations } from "./mutations/user-operations";
 import { cardResolver } from "./resolvers/card";
 import { cardsResolver } from "./resolvers/cards";
 import { customScalarsResolver } from "./resolvers/custom-scalars";
@@ -15,7 +16,8 @@ export const resolvers = {
     ...toggleCardMutation,
     ...updateCardMutation,
     ...createCardMutation,
-    ...UserOperationMutations,
+    ...userOperationMutations,
+    ...exampleMutations,
   },
   Query: {
     ...cardsResolver,

@@ -1,4 +1,5 @@
 import { GraphQLInputInt } from "graphql-input-number";
+import { GraphQLUpload } from "graphql-upload";
 import { config } from "../../config";
 
 const PaginationAmount = GraphQLInputInt({
@@ -7,6 +8,9 @@ const PaginationAmount = GraphQLInputInt({
   name: "PaginationAmount",
 });
 
+const Upload = GraphQLUpload;
+
 export const customScalarsResolver = {
   PaginationAmount,
+  Upload,
 };
