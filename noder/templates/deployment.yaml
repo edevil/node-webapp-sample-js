@@ -44,6 +44,10 @@ spec:
               value: "10.0.0.4"
             - name: TRUST_X_HEADERS
               value: "true"
+{{- if .Values.showPlayground }}
+            - name: SHOW_PLAYGROUND
+              value: "true"
+{{- end }}
             - name: RAVEN_DSN
               valueFrom:
                 secretKeyRef:

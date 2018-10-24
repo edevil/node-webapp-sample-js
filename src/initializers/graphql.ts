@@ -16,7 +16,7 @@ const schemaDefinition = gql`
 export const graphqlInitializer = app => {
   const server = new ApolloServer({
     context: ({ ctx }) => ({ ctx }),
-    playground: process.env.NODE_ENV !== "production",
+    playground: config.showPlayground,
     resolvers,
     typeDefs: [schemaDefinition, ...types, Query, Mutation],
     validationRules: [depthLimit(config.gqlDepthLimit)],

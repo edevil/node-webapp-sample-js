@@ -4,6 +4,8 @@
 
 replicaCount: 1
 
+showPlayground: true
+
 image:
   repository: eu.gcr.io/labs-198515/github-edevil-node-webapp-sample
   tag: master_latest
