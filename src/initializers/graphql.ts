@@ -65,4 +65,6 @@ export const pubsub = new RedisPubSub({
   subscriber: getNewRedis(),
 });
 
+export const shutdownSubscriptions = () => pubsub.close();
+
 export const CARD_ADDED = "CARD_ADDED";

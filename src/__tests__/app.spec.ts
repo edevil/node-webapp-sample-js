@@ -9,6 +9,7 @@ import { Card } from "../entities/card";
 import { User } from "../entities/user";
 import { cardsResolver } from "../graphql/resolvers/cards";
 import { userProfileResolver } from "../graphql/resolvers/user-profile";
+import { shutdownSubscriptions } from "../initializers/graphql";
 import { closeRedis, initRedis } from "../initializers/redis";
 import { logger } from "../logger";
 import { router } from "../routes";
@@ -32,6 +33,7 @@ beforeAll(async () => {
 afterAll(async () => {
   await conn.close();
   closeRedis();
+  shutdownSubscriptions();
 });
 
 beforeEach(async () => {
