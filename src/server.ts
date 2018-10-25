@@ -4,7 +4,7 @@ import { getConnection } from "typeorm";
 import { app } from "./app";
 import { config } from "./config";
 import { databaseInitializer } from "./initializers/database";
-import { graphqlInstall } from "./initializers/graphql";
+import { graphqlInstall, shutdownSubscriptions } from "./initializers/graphql";
 import { closeRedis, initRedis } from "./initializers/redis";
 import { closeWebsocket, initWebsocket } from "./initializers/websocket";
 import { logger } from "./logger";
@@ -12,7 +12,12 @@ import { logger } from "./logger";
 function onSignal() {
   logger.info("server is starting cleanup");
 
-  return Promise.all([getConnection().close(), Promise.resolve(closeRedis()), Promise.resolve(closeWebsocket())]);
+  return Promise.all([
+    getConnection().close(),
+    Promise.resolve(closeRedis()),
+    Promise.resolve(closeWebsocket()),
+    Promise.resolve(shutdownSubscriptions()),
+  ]);
 }
 
 async function onShutdown() {
