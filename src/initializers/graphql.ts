@@ -2,6 +2,7 @@ import { ApolloServer, gql } from "apollo-server-koa";
 import * as depthLimit from "graphql-depth-limit";
 import { RedisPubSub } from "graphql-redis-subscriptions";
 import { graphqlUploadKoa } from "graphql-upload";
+import * as jwt from "jsonwebtoken";
 import * as mount from "koa-mount";
 import { config } from "../config";
 import { resolvers } from "../graphql/resolvers";
@@ -9,6 +10,7 @@ import { types } from "../graphql/types";
 import { Mutation } from "../graphql/types/mutation";
 import { Query } from "../graphql/types/query";
 import { Subscription } from "../graphql/types/subscription";
+import { logger } from "../logger";
 import { getNewRedis } from "./redis";
 
 const schemaDefinition = gql`
@@ -22,13 +24,28 @@ const schemaDefinition = gql`
 export const apolloServer: ApolloServer = new ApolloServer({
   context: ({ ctx, connection }) => {
     if (connection) {
-      return { ctx: connection.context }
+      return { ctx: connection.context };
     }
     return { ctx };
   },
   introspection: config.showPlayground,
   playground: config.showPlayground,
   resolvers,
+  subscriptions: {
+    onConnect: (connectionParams: any, websocket, context) => {
+      const token = connectionParams.authToken;
+      if (token) {
+        let data;
+        try {
+          data = jwt.verify(token, config.appKeys[0]);
+          return { userId: data.userId };
+        } catch (err) {
+          logger.debug("Could not validate token", { token });
+        }
+      }
+      return {};
+    },
+  },
   typeDefs: [schemaDefinition, ...types, Query, Mutation, Subscription],
   uploads: false,
   validationRules: [depthLimit(config.gqlDepthLimit)],
