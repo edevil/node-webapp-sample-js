@@ -8,6 +8,7 @@ import { cardsResolver } from "./resolvers/cards";
 import { customScalarsResolver } from "./resolvers/custom-scalars";
 import { examplesResolver } from "./resolvers/examples";
 import { extraUserProfileResolver, userProfileResolver } from "./resolvers/user-profile";
+import { cardsSubscription } from "./subscriptions/cards";
 
 export const resolvers = {
   ...customScalarsResolver,
@@ -24,5 +25,8 @@ export const resolvers = {
     ...cardResolver,
     ...userProfileResolver,
     ...examplesResolver,
+  },
+  Subscription: {
+    ...cardsSubscription,
   },
 };

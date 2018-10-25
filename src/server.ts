@@ -4,6 +4,7 @@ import { getConnection } from "typeorm";
 import { app } from "./app";
 import { config } from "./config";
 import { databaseInitializer } from "./initializers/database";
+import { graphqlInstall } from "./initializers/graphql";
 import { closeRedis, initRedis } from "./initializers/redis";
 import { closeWebsocket, initWebsocket } from "./initializers/websocket";
 import { logger } from "./logger";
@@ -51,6 +52,7 @@ const bootstrap = async () => {
   const server = http.createServer(app.callback());
   createTerminus(server, options);
   initWebsocket(server, app);
+  graphqlInstall(server);
   server.listen(config.port);
 };
 

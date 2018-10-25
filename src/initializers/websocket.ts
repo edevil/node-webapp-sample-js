@@ -8,11 +8,15 @@ import { getNewRedis } from "./redis";
 let io: socketio.Server;
 
 export const initWebsocket = (server, app) => {
+  const adapter = redisAdapter({
+    pubClient: getNewRedis(),
+    subClient: getNewRedis(),
+  });
+  adapter.pubClient.on("error", err => logger.error(`Socket.io pub redis adapter encountered a problem`, { err }));
+  adapter.subClient.on("error", err => logger.error(`Socket.io sub redis adapter encountered a problem`, { err }));
+
   io = socketio(server, {
-    adapter: redisAdapter({
-      pubClient: getNewRedis(),
-      subClient: getNewRedis(),
-    }),
+    adapter,
   });
 
   io.on("connection", socket => {
