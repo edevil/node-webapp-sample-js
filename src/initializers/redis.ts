@@ -5,7 +5,7 @@ import { logger } from "../logger";
 let conn: Redis.Redis;
 
 export function initRedis(): void {
-  conn = getNewRedis();
+  conn = getNewRedis(false);
 }
 
 export function closeRedis(): void {
@@ -17,11 +17,11 @@ export function getRedis(): Redis.Redis {
   return conn;
 }
 
-export function getNewRedis(): Redis.Redis {
+export function getNewRedis(retries: boolean = true): Redis.Redis {
   const newConn = new Redis({
     host: config.redisHost,
     keyPrefix: config.redisPrefix,
-    maxRetriesPerRequest: 3,
+    maxRetriesPerRequest: retries ? null : 3,
   });
   newConn.on("error", err => logger.error("Problems using redis", { err }));
   return newConn;

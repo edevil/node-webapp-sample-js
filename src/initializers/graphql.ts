@@ -9,7 +9,6 @@ import { types } from "../graphql/types";
 import { Mutation } from "../graphql/types/mutation";
 import { Query } from "../graphql/types/query";
 import { Subscription } from "../graphql/types/subscription";
-import { logger } from "../logger";
 import { getNewRedis } from "./redis";
 
 const schemaDefinition = gql`
