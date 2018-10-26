@@ -64,7 +64,11 @@ const bootstrap = async () => {
 
   app.on("error", (err, ctx) => {
     Sentry.withScope(scope => {
-      scope.addEventProcessor(async event => Sentry.Handlers.parseRequest(event, ctx.request));
+      scope.addEventProcessor(async event => {
+        Sentry.Handlers.parseRequest(event, ctx.request);
+        event.extra.request_id = ctx.state.requestId;
+        return event;
+      });
       Sentry.captureException(err);
     });
   });

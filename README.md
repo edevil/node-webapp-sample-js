@@ -6,7 +6,6 @@ Experimental starter pack for Node.JS webapps
 
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
 1. GraphQL shield (https://github.com/maticzav/graphql-shield)
-1. Include more information on error reports (pod name, etc)
 
 # Migrations
 
