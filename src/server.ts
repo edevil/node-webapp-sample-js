@@ -1,4 +1,5 @@
 import { createTerminus } from "@godaddy/terminus";
+import * as Sentry from "@sentry/node";
 import * as http from "http";
 import { getConnection } from "typeorm";
 import { app } from "./app";
@@ -8,6 +9,8 @@ import { graphqlInstall, shutdownSubscriptions } from "./initializers/graphql";
 import { closeRedis, initRedis } from "./initializers/redis";
 import { closeWebsocket, initWebsocket } from "./initializers/websocket";
 import { logger } from "./logger";
+
+Sentry.init({ dsn: config.ravenDSN });
 
 function onSignal() {
   logger.info("server is starting cleanup");
@@ -58,6 +61,14 @@ const bootstrap = async () => {
   createTerminus(server, options);
   initWebsocket(server, app);
   graphqlInstall(server);
+
+  app.on("error", (err, ctx) => {
+    Sentry.withScope(scope => {
+      scope.addEventProcessor(async event => Sentry.Handlers.parseRequest(event, ctx.request));
+      Sentry.captureException(err);
+    });
+  });
+
   server.listen(config.port);
 };
 
