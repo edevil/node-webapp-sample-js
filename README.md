@@ -7,8 +7,6 @@ Experimental starter pack for Node.JS webapps
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
 1. GraphQL shield (https://github.com/maticzav/graphql-shield)
 1. Include more information on error reports (pod name, etc)
-1. Redis problems cause socket.io-redis to crash process (https://github.com/socketio/socket.io-redis/issues/21)
-1. Jest tests sometimes do not terminate (time related perhaps) (Jest did not exit one second after the test run has completed.)
 
 # Migrations
 

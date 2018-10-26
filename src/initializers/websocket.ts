@@ -12,8 +12,8 @@ export const initWebsocket = (server, app) => {
     pubClient: getNewRedis(),
     subClient: getNewRedis(),
   });
-  adapter.pubClient.on("error", err => logger.error(`Socket.io pub redis adapter encountered a problem`, { err }));
-  adapter.subClient.on("error", err => logger.error(`Socket.io sub redis adapter encountered a problem`, { err }));
+  // @ts-ignore
+  adapter.prototype.on("error", err => logger.error("Socket redis adapter encountered an error", { err }));
 
   io = socketio(server, {
     adapter,
