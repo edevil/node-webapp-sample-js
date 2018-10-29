@@ -1,4 +1,5 @@
 import { getContextStorage } from "@emartech/cls-adapter";
+import chalk from "chalk";
 import * as winston from "winston";
 
 const addContextFormat = winston.format((info, opts) => {
@@ -7,11 +8,28 @@ const addContextFormat = winston.format((info, opts) => {
   return allInfo;
 });
 
+function getLevelFunc(level: string) {
+  switch (level) {
+    case "info":
+      return chalk.blue;
+    case "error":
+      return chalk.redBright;
+    case "debug":
+      return chalk.gray;
+    case "warning":
+      return chalk.yellowBright;
+    default:
+      return chalk.greenBright;
+  }
+}
+
 const myFormat = winston.format.printf(info => {
-  const message = `${info.timestamp} ${info.level}: ${info.message.trim()}`;
+  const message = `${chalk.blueBright(info.timestamp)} ${getLevelFunc(info.level)(info.level)}: ${chalk.whiteBright(
+    info.message.trim(),
+  )}`;
   const extra = Object.keys(info)
     .filter(kname => !["message", "level", "timestamp", "httpRequest"].includes(kname))
-    .map(kname => `[${kname}: ${info[kname]}]`)
+    .map(kname => `[${chalk.magentaBright(kname)}: ${chalk.cyanBright(info[kname])}]`)
     .join(" ");
   return `${message} ${extra}`;
 });
