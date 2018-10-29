@@ -4,6 +4,7 @@ import * as request from "supertest";
 import { Connection, createConnection, getConnectionOptions, getRepository } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { app } from "../app";
+import { config } from "../config";
 import { CreateUser } from "../dtos/create-user";
 import { Card } from "../entities/card";
 import { User } from "../entities/user";
@@ -19,7 +20,7 @@ import { getGQLContext } from "../utils";
 let conn: Connection;
 beforeAll(async () => {
   const connectionOptions = Object.assign(await getConnectionOptions(), {
-    database: "sample_db_test",
+    database: `${config.dbName}_test`,
   });
   try {
     conn = await createConnection(connectionOptions);

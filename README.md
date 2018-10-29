@@ -56,5 +56,94 @@ Experimental starter pack for Node.JS webapps
 
 # Dependencies
 
-- [Postgres](https://www.postgresql.org/)
+- [PostgreSQL](https://www.postgresql.org/)
 - [Redis](https://redis.io/)
+- [Node.js](https://nodejs.org/) >= 10
+
+# Quickstart
+
+### PostgreSQL
+
+```bash
+docker run -d --name=database -p 5432:5432 -e POSTGRES_DB=sample_db postgres
+```
+
+### Redis
+
+```bash
+docker run -d -p 6379:6379 --name shared_redis redis
+```
+
+### NPM dependencies
+
+```bash
+npm install
+```
+
+### Config variables
+
+- `APP_KEYS`: JSON array of strings that is used as secrets for various functions. Make sure this is initialized with random secret data.
+- `BASE_URL`: Base URL that is used to build absolute URLs pointing to this application. Default: "http://example.com:3000"
+- `DB_HOST`: Hostname of the database. Default: "localhost"
+- `DB_NAME`: Name of the database (needs to exist). Default: "sample_db"
+- `DB_PASSWORD`: Password to connect to database: Default: ""
+- `DB_USER`: Username to connect to database: Default: "postgres"
+- `GOOGLE_CLIENT_ID`: Google client ID for Google authentication.
+- `GOOGLE_CLIENT_SECRET`: Google client secret for Google authentication.
+- `GQL_DEPTH_LIMIT`: Depth limit for GraphQL queries. Default: "5"
+- `GQL_MAX_PER_PAGE`: Max items per page on GraphQL queries. Default: "100"
+- `GQL_PATH`: Path on where to mount GraphQL handler. Default: "/graphql"
+- `LOG_SQL`: Log all SQL queries. Default: "true"
+- `ORIGINS`: JSON array of allowed request origins. Default: "http://localhost:3000", "http://example.com:3000"
+- `PORT`: Post to listen on. Default: "3000"
+- `RAVEN_DSN`: DSN to use for reporting exceptions.
+- `REDIS_HOST`: Hostname of the Redis server. Default: "localhost"
+- `REDIS_PREFIX`: Redis prefix to use. Default: "sample-node"
+- `SHOW_PLAYGROUND`: Show GraphQL playground. Default: "true"
+- `TRUST_X_HEADERS`: Trust proxy headers. Default: "false"
+
+The dotenv module is used so a `.env` file can be placed on the root of the project with values for these enviroment variables.
+
+### Run application
+
+```bash
+npm start
+```
+
+## Available commands
+
+- `npm start`: Start application in development mode.
+- `npm test`: Run tests.
+- `npm run build`: Compile Typescript code and generate production build in `dist/`.
+- `npm run lint`: Run TSLint on all the code.
+- `npm run pretty`: Check all the code against `prettier`'s standards.
+
+# GraphQL examples
+
+## Subscribe for new cards
+```GraphQL
+subscription {
+  cardAdded {
+    title
+  }
+}
+```
+
+## Add new card
+```GraphQL
+mutation {
+  createCard(card:{title:"Title", description:"Description"}) {
+    id
+  }
+}
+```
+
+## List cards
+```GraphQL
+{
+  cards {
+    id
+    title
+  }
+}
+```
