@@ -62,6 +62,10 @@ export = [
     },
     database: config.dbName,
     entities: ["src/entities/*{.ts,.js}"],
+    extra: {
+      connectionTimeoutMillis: 2000,
+      statement_timeout: 10000,
+    },
     host: config.dbHost,
     logger: new MyCustomLogger(),
     maxQueryExecutionTime: 1000,
