@@ -121,6 +121,7 @@ npm start
 # GraphQL examples
 
 ## Subscribe for new cards
+
 ```GraphQL
 subscription {
   cardAdded {
@@ -130,6 +131,7 @@ subscription {
 ```
 
 ## Add new card
+
 ```GraphQL
 mutation {
   createCard(card:{title:"Title", description:"Description"}) {
@@ -139,6 +141,7 @@ mutation {
 ```
 
 ## List cards
+
 ```GraphQL
 {
   cards {
@@ -147,3 +150,13 @@ mutation {
   }
 }
 ```
+
+# Known issues
+
+- Unresponsive Postgresql server can cause requests to stall
+  - https://github.com/brianc/node-postgres/issues/518
+  - https://github.com/brianc/node-postgres/issues/1713
+- Connection timeout to Postgresql overwrites callback queue
+  - https://github.com/brianc/node-pg-pool/issues/85
+- Unresponsive Redis server can cause requests to stall
+  - https://github.com/luin/ioredis/issues/61

@@ -3,7 +3,6 @@ import { config } from "./src/config";
 import { logger } from "./src/logger";
 
 class MyCustomLogger implements Logger {
-
   protected static stringifyParams(parameters: any[]) {
     try {
       return JSON.stringify(parameters);

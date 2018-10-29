@@ -2,5 +2,6 @@
 	"test key": "translated english key",
 	"hello index": "Welcome to the site",
 	"oauth_error_no_client": "oauth_error_no_client",
-	"oauth_error_no_client_authorization": "oauth_error_no_client_authorization"
+	"oauth_error_no_client_authorization": "oauth_error_no_client_authorization",
+	"error-create-user": "error-create-user"
 }

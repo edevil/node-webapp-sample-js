@@ -28,6 +28,15 @@ export const apolloServer: ApolloServer = new ApolloServer({
     }
     return { ctx };
   },
+  formatError: error => {
+    logger.error("Problems executing graphql query", {
+      exception_message: error.originalError.message,
+      exception_stack: error.originalError.stack,
+      gqlmessage: error.message,
+      query: error.source.body,
+    });
+    return error;
+  },
   introspection: config.showPlayground,
   playground: config.showPlayground,
   resolvers,
