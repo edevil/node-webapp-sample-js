@@ -10,7 +10,7 @@ import { closeRedis, initRedis } from "./initializers/redis";
 import { closeWebsocket, initWebsocket } from "./initializers/websocket";
 import { logger } from "./logger";
 
-logger.info("Startup up server");
+logger.info("Startup server");
 
 Sentry.init({ dsn: config.ravenDSN });
 
