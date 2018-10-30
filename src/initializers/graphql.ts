@@ -1,4 +1,4 @@
-import { ApolloServer, gql } from "apollo-server-koa";
+import { ApolloError, ApolloServer, gql } from "apollo-server-koa";
 import * as depthLimit from "graphql-depth-limit";
 import { RedisPubSub } from "graphql-redis-subscriptions";
 import { graphqlUploadKoa } from "graphql-upload";
@@ -29,6 +29,10 @@ export const apolloServer: ApolloServer = new ApolloServer({
     return { ctx };
   },
   formatError: error => {
+    if (error instanceof ApolloError || error.originalError instanceof ApolloError) {
+      return error;
+    }
+
     let context: any = {
       gqlmessage: error.message,
     };
