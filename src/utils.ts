@@ -18,12 +18,17 @@ export async function afterLogin(ctx, user, router) {
   ctx.redirect(nextUrl);
 }
 
-export function getGQLContext(user: User): { ctx: any } {
+export function getGQLContext(user: User = null): { ctx: any } {
   if (user) {
     return {
       ctx: {
         isAuthenticated() {
           return true;
+        },
+        i18n: {
+          __(...args) {
+            return args.join(" ");
+          },
         },
         state: {
           user,
@@ -35,6 +40,11 @@ export function getGQLContext(user: User): { ctx: any } {
       ctx: {
         isAuthenticated() {
           return false;
+        },
+        i18n: {
+          __(...args) {
+            return args.join(" ");
+          },
         },
       },
     };
