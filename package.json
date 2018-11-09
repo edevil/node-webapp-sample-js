@@ -30,7 +30,7 @@
     "bcryptjs": "^2.4.3",
     "bytes": "^3.0.0",
     "chalk": "^2.4.1",
-    "class-transformer": "^0.1.10",
+    "class-transformer": "^0.2.0",
     "class-transformer-validator": "^0.6.0",
     "class-validator": "^0.9.1",
     "csrf": "^3.0.6",
