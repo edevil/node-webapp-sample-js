@@ -1,6 +1,7 @@
 {
   "extends": [
     ":separateMajorReleases",
-    ":preserveSemverRanges"
+    ":preserveSemverRanges",
+    "schedule:weekdays"
   ]
 }
