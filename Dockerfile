@@ -1,4 +1,4 @@
-FROM node:10.12 AS base
+FROM node:10.13 AS base
 
 WORKDIR /app
 COPY package*.json ./
@@ -14,7 +14,7 @@ WORKDIR /app
 RUN npm run build
 
 
-FROM node:10.12-alpine AS release
+FROM node:10.13-alpine AS release
 
 WORKDIR /app
 COPY package*.json ./
