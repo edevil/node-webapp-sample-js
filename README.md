@@ -7,27 +7,27 @@ Experimental starter pack for Node.JS webapps
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
 1. GraphQL shield (https://github.com/maticzav/graphql-shield)
 
-# Migrations
+## Migrations
 
-## Create migrations
+### Create migrations
 
     npm run typeorm -- migration:generate -n Initial
 
-## Run migrations
+### Run migrations
 
     npm run typeorm -- migration:run
 
-### Postgres extensions needed
+#### Postgres extensions needed
 
 1. uuid-ossp
 1. unaccent
 1. pg_trgm
 
-# Helm package
+## Helm package
 
     noder/
 
-# Features
+## Features
 
 - Dialect: Typescript [Link](https://www.typescriptlang.org/)
 - Server: Koa [Link](https://koajs.com/)
@@ -54,13 +54,13 @@ Experimental starter pack for Node.JS webapps
 - Dockerfile
 - Helm package (noder)
 
-# Dependencies
+## Dependencies
 
 - [PostgreSQL](https://www.postgresql.org/)
 - [Redis](https://redis.io/)
 - [Node.js](https://nodejs.org/) >= 10
 
-# Quickstart
+## Quickstart
 
 ### PostgreSQL
 
@@ -118,9 +118,9 @@ npm start
 - `npm run lint`: Run TSLint on all the code.
 - `npm run pretty`: Check all the code against `prettier`'s standards.
 
-# GraphQL examples
+## GraphQL examples
 
-## Subscribe for new cards
+### Subscribe for new cards
 
 ```GraphQL
 subscription {
@@ -130,7 +130,7 @@ subscription {
 }
 ```
 
-## Add new card
+### Add new card
 
 ```GraphQL
 mutation {
@@ -140,7 +140,7 @@ mutation {
 }
 ```
 
-## List cards
+### List cards
 
 ```GraphQL
 {
@@ -151,12 +151,10 @@ mutation {
 }
 ```
 
-# Known issues
+## Known issues
 
 - Unresponsive Postgresql server can cause requests to stall
   - https://github.com/brianc/node-postgres/pull/1760
-- Connection timeout to Postgresql overwrites callback queue
-  - https://github.com/brianc/node-pg-pool/issues/85
 - Unresponsive Redis server can cause requests to stall
   - https://github.com/luin/ioredis/pull/658
   - https://github.com/luin/ioredis/pull/241
