@@ -1,0 +1,11 @@
+sudo: required
+language: node_js
+node_js:
+  - "10"
+cache: npm
+services:
+  - docker
+  - postgresql
+  - redis
+script:
+  - npm run pretty && npm run lint && npm test
