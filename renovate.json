@@ -3,5 +3,6 @@
     ":separateMajorReleases",
     ":preserveSemverRanges",
     "schedule:weekdays"
-  ]
+  ],
+  "rangeStrategy": "bump"
 }
