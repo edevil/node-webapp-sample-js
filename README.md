@@ -4,6 +4,7 @@ Experimental starter pack for Node.JS webapps
 
 ## TODO
 
+1. Experiment moving from TypeORM to [Objection.js](http://vincit.github.io/objection.js/)
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
 1. GraphQL shield (https://github.com/maticzav/graphql-shield)
 
