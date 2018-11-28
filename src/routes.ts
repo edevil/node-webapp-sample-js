@@ -1,5 +1,6 @@
 import * as asyncBusboy from "async-busboy";
-import { transformAndValidate } from "class-transformer-validator";
+import { plainToClass } from "class-transformer";
+import { validateOrReject } from "class-validator";
 import * as fs from "fs";
 import * as bodyParser from "koa-bodyparser";
 import * as CSRF from "koa-csrf";
@@ -216,7 +217,8 @@ router.get("auth-register", "/auth/register", CSRFMW, redLoggedMW, async (ctx, n
 router.post("auth-register-post", "/auth/register", CSRFMW, redLoggedMW, async (ctx, next) => {
   let createReq: CreateUser;
   try {
-    createReq = (await transformAndValidate(CreateUser, ctx.request.body)) as CreateUser;
+    createReq = plainToClass(CreateUser, ctx.request.body as CreateUser);
+    await validateOrReject(createReq);
   } catch (error) {
     logger.error(JSON.stringify(error));
     addError(ctx, ctx.i18n.__("error-create-user"));
