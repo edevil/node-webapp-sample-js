@@ -4,13 +4,24 @@ import { createConnection } from "typeorm";
 import { config } from "../config";
 import { logger } from "../logger";
 
+let pool;
+
 export const databaseInitializer = async () => {
   await createConnection();
+  pool = initORM(config.dbName);
+  logger.info("Database connection established");
+};
 
+export async function closeORM() {
+  await pool.destroy();
+  pool = null;
+}
+
+export function initORM(dbName) {
   const knex = Knex({
     client: "pg",
     connection: {
-      database: config.dbName,
+      database: dbName,
       host: config.dbHost,
       password: config.dbPassword,
       user: config.dbUser,
@@ -18,13 +29,13 @@ export const databaseInitializer = async () => {
     debug: true,
     log: {
       warn(message) {
-        logger.warn(message);
+        logger.warn("SQL", message);
       },
       error(message) {
-        logger.error(message);
+        logger.error("SQL", message);
       },
       deprecate(message) {
-        logger.warn(message);
+        logger.warn("SQL", message);
       },
       debug(message) {
         logger.debug("SQL", message);
@@ -35,6 +46,5 @@ export const databaseInitializer = async () => {
     },
   });
   Model.knex(knex);
-
-  logger.info("Database connection established");
-};
+  return knex;
+}

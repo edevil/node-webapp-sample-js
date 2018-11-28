@@ -4,7 +4,7 @@ import * as http from "http";
 import { getConnection } from "typeorm";
 import { app } from "./app";
 import { config } from "./config";
-import { databaseInitializer } from "./initializers/database";
+import { closeORM, databaseInitializer } from "./initializers/database";
 import { graphqlInstall, shutdownSubscriptions } from "./initializers/graphql";
 import { closeRedis, initRedis } from "./initializers/redis";
 import { closeWebsocket, initWebsocket } from "./initializers/websocket";
@@ -19,6 +19,7 @@ function onSignal() {
 
   return Promise.all([
     getConnection().close(),
+    closeORM(),
     Promise.resolve(closeRedis()),
     Promise.resolve(closeWebsocket()),
     Promise.resolve(shutdownSubscriptions()),

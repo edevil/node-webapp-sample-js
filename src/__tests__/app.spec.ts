@@ -10,6 +10,7 @@ import { Card } from "../entities/card";
 import { User } from "../entities/user";
 import { cardsResolver } from "../graphql/resolvers/cards";
 import { userProfileResolver } from "../graphql/resolvers/user-profile";
+import { initORM } from "../initializers/database";
 import { shutdownSubscriptions } from "../initializers/graphql";
 import { closeRedis, initRedis } from "../initializers/redis";
 import { logger } from "../logger";
@@ -18,6 +19,7 @@ import { createUser } from "../service";
 import { getGQLContext } from "../utils";
 
 let conn: Connection;
+let pool;
 beforeAll(async () => {
   const connectionOptions = Object.assign(await getConnectionOptions(), {
     database: `${config.dbName}_test`,
@@ -28,10 +30,12 @@ beforeAll(async () => {
     logger.error("Could not create connection", { error: err });
     throw err;
   }
+  pool = initORM(`${config.dbName}_test`);
   initRedis();
 });
 
 afterAll(async () => {
+  await pool.destroy();
   await conn.close();
   closeRedis();
   shutdownSubscriptions();
