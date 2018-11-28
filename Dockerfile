@@ -1,4 +1,4 @@
-FROM node:10.13 AS base
+FROM node:10.14 AS base
 
 WORKDIR /app
 COPY package*.json ./
