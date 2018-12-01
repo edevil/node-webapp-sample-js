@@ -1,15 +1,17 @@
-import { getRepository } from "typeorm";
-import { Card } from "../../entities/card";
+import { UserInputError } from "apollo-server-koa";
+import { Card } from "../../models/card";
 
 export const toggleCardMutation = {
   async toggleCard(obj, { id }, context, info) {
-    const repository = getRepository(Card);
-    const card = await repository.findOneOrFail({ id });
+    const card = await Card.query().findOne("id", id);
+    if (!card) {
+      throw new UserInputError("Card not found");
+    }
+
     const done = !card.done;
-    const result = await repository.update(id, { done });
-    return {
-      ...card,
-      done,
-    };
+    return Card.query()
+      .update({ done })
+      .returning("*")
+      .first();
   },
 };
