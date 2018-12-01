@@ -1,9 +1,7 @@
-import { getRepository } from "typeorm";
-import { Card } from "../../entities/card";
+import { Card } from "../../models/card";
 
 export const cardResolver = {
   async card(obj, { id }, context, info) {
-    const repository = getRepository(Card);
-    return repository.findOne({ id });
+    return Card.query().findOne("id", id);
   },
 };
