@@ -8,17 +8,16 @@ module.exports = {
     password: config.dbPassword,
     user: config.dbUser,
   },
-  pool: {
-    min: 2,
-    max: 10,
-  },
-  
+  extension: "ts",
   migrations: {
     directory: "./src/migrations-new",
     tableName: "knex_migrations",
   },
+  pool: {
+    max: 10,
+    min: 2,
+  },
   seeds: {
     directory: "./seeds",
   },
-  extension: "ts",
 };

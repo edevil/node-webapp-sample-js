@@ -4,6 +4,10 @@ exports.up = (knex: Knex): Promise<any> => {
   return Promise.all([
     knex.raw('create extension if not exists "uuid-ossp"'),
     knex.raw('create extension if not exists "unaccent"'),
+    knex.raw("CREATE TEXT SEARCH CONFIGURATION pt ( COPY = portuguese )"),
+    knex.raw(
+      "ALTER TEXT SEARCH CONFIGURATION pt ALTER MAPPING FOR hword, hword_part, word WITH unaccent, portuguese_stem",
+    ),
     knex.schema.createTable("card", table => {
       table
         .uuid("id")
@@ -17,7 +21,8 @@ exports.up = (knex: Knex): Promise<any> => {
         .defaultTo(false);
       table.specificType("searchVector", "tsvector");
       table.index("searchVector", null, "gin");
-      table.timestamps(true, true);
+      table.timestamp("createdAt").defaultTo(knex.fn.now());
+      table.timestamp("updatedAt").defaultTo(knex.fn.now());
     }),
   ]);
 };
@@ -25,6 +30,7 @@ exports.up = (knex: Knex): Promise<any> => {
 exports.down = (knex: Knex): Promise<any> => {
   return Promise.all([
     knex.schema.dropTable("card"),
+    knex.raw("DROP TEXT SEARCH CONFIGURATION pt"),
     knex.raw('drop extension if exists "uuid-ossp"'),
     knex.raw('drop extension if exists "unaccent"'),
   ]);
