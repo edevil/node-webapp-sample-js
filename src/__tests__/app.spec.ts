@@ -1,5 +1,6 @@
 import { AuthenticationError } from "apollo-server-koa";
 import * as CSRF from "csrf";
+import * as knex from "knex";
 import * as request from "supertest";
 import { Connection, createConnection, getConnectionOptions, getRepository } from "typeorm";
 import { v4 as uuid } from "uuid";
@@ -43,6 +44,7 @@ afterAll(async () => {
 
 beforeEach(async () => {
   await conn.dropDatabase();
+  // await pool.migrate.latest();
   await conn.runMigrations({ transaction: true });
 });
 
