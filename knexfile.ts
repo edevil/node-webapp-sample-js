@@ -1,4 +1,5 @@
 import { config } from "./src/config";
+import { logger } from "./src/logger";
 
 module.exports = {
   client: "postgresql",
@@ -8,7 +9,22 @@ module.exports = {
     password: config.dbPassword,
     user: config.dbUser,
   },
+  debug: true,
   extension: "ts",
+  log: {
+    warn(message) {
+      logger.warn("SQL", message);
+    },
+    error(message) {
+      logger.error("SQL", message);
+    },
+    deprecate(message) {
+      logger.warn("SQL", message);
+    },
+    debug(message) {
+      logger.debug("SQL", message);
+    },
+  },
   migrations: {
     directory: "./src/migrations-new",
     tableName: "knex_migrations",
