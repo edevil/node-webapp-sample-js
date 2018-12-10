@@ -15,7 +15,7 @@ export class SocialLogin extends Model {
         from: "social_login.userId",
         to: "user.id",
       },
-      modelClass: "User",
+      modelClass: "user",
       relation: Model.BelongsToOneRelation,
     },
   };

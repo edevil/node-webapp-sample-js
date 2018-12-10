@@ -10,7 +10,7 @@ export class User extends Model {
         from: "user.id",
         to: "social_login.userId",
       },
-      modelClass: "SocialLogin",
+      modelClass: "social-login",
       relation: Model.HasManyRelation,
     },
   };

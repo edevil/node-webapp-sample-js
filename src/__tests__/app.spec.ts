@@ -1,19 +1,19 @@
 import { AuthenticationError } from "apollo-server-koa";
 import * as CSRF from "csrf";
 import * as request from "supertest";
-import { Connection, createConnection, getConnectionOptions, getRepository } from "typeorm";
+import { Connection, createConnection, getConnectionOptions } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { app } from "../app";
 import { config } from "../config";
 import { CreateUser } from "../dtos/create-user";
-import { Card } from "../entities/card";
-import { User } from "../entities/user";
 import { cardsResolver } from "../graphql/resolvers/cards";
 import { userProfileResolver } from "../graphql/resolvers/user-profile";
 import { initORM } from "../initializers/database";
 import { shutdownSubscriptions } from "../initializers/graphql";
 import { closeRedis, initRedis } from "../initializers/redis";
 import { logger } from "../logger";
+import { Card } from "../models/card";
+import { User } from "../models/user";
 import { router } from "../routes";
 import { createUser } from "../service";
 import { getGQLContext } from "../utils";
@@ -83,8 +83,7 @@ describe("User registration tests", () => {
     expect(result.status).toEqual(302);
     expect(result.header.location).toEqual(router.url("index"));
 
-    const repository = getRepository(User);
-    const user = await repository.findOne({ email });
+    const user = await User.query().findOne("email", email);
     expect(user).toBeDefined();
   });
 });
@@ -111,7 +110,7 @@ describe("User login/logout tests", () => {
     const createReq: CreateUser = new CreateUser();
     createReq.email = email;
     createReq.password = password;
-    const user = await createUser(createReq, getRepository(User));
+    const user = await createUser(createReq, User);
 
     // POST login
     const rLogin = await agent
@@ -148,13 +147,12 @@ describe("GraphQL resolvers tests", () => {
     expect(noCards).toBeInstanceOf(Array);
     expect(noCards.length).toBe(0);
 
-    const repository = getRepository(Card);
     const card = {
       description: "description",
       id: uuid(),
       title: "title",
     };
-    await repository.insert(card);
+    await Card.query().insert(card);
 
     const oneCard = await cardsResolver.cards(null, null, context, null);
     expect(oneCard).toBeInstanceOf(Array);
@@ -173,7 +171,7 @@ describe("GraphQL resolvers tests", () => {
     const createReq: CreateUser = new CreateUser();
     createReq.email = email;
     createReq.password = password;
-    const user = await createUser(createReq, getRepository(User));
+    const user = await createUser(createReq, User);
     const authContext = getGQLContext(user);
     const profile = await userProfileResolver.userProfile(null, null, authContext, null);
     expect(profile).toBe(user);

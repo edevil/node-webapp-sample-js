@@ -10,11 +10,11 @@ import { AccessDeniedError, Request, Response, UnauthorizedRequestError } from "
 import { getRepository, QueryFailedError } from "typeorm";
 import { CreateUser } from "./dtos/create-user";
 import { OAuthClient } from "./entities/oauth-client";
-import { User } from "./entities/user";
 import { logger } from "./logger";
 import { addError, addWarning } from "./messages";
 import { getMessagesMW } from "./middleware/fetch-messages";
 import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
+import { User } from "./models/user";
 import { oauth } from "./oauth2-model";
 import { loginRLMW } from "./rate-limits";
 import { createUser } from "./service";
@@ -232,7 +232,7 @@ router.post("auth-register-post", "/auth/register", CSRFMW, redLoggedMW, async (
 
   let user;
   try {
-    user = await createUser(createReq, getRepository(User));
+    user = await createUser(createReq, User);
   } catch (error) {
     if (error instanceof QueryFailedError) {
       logger.debug("User already registered", { email: createReq.email });
