@@ -41,7 +41,6 @@ beforeAll(async () => {
   }
   pool = initORM(`${config.dbName}_test`);
   initRedis();
-  await conn.dropDatabase();
 });
 
 afterAll(async () => {
@@ -52,11 +51,8 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  await pool.migrate.latest();
-});
-
-afterEach(async () => {
   await doRollback(pool.migrate);
+  await pool.migrate.latest();
 });
 
 describe("GET / - simple test", () => {
