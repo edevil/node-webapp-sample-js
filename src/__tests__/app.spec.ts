@@ -18,6 +18,15 @@ import { router } from "../routes";
 import { createUser } from "../service";
 import { getGQLContext } from "../utils";
 
+function doRollback(migrate) {
+  const rollbackAllMigrations = () =>
+    migrate
+      .forceFreeMigrationsLock()
+      .then(() => migrate.currentVersion())
+      .then(migration => (migration !== "none" ? migrate.rollback().then(rollbackAllMigrations) : Promise.resolve()));
+  return new Promise(resolve => resolve(rollbackAllMigrations()));
+}
+
 let conn: Connection;
 let pool;
 beforeAll(async () => {
@@ -32,6 +41,7 @@ beforeAll(async () => {
   }
   pool = initORM(`${config.dbName}_test`);
   initRedis();
+  await conn.dropDatabase();
 });
 
 afterAll(async () => {
@@ -42,8 +52,11 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  await conn.dropDatabase();
   await pool.migrate.latest();
+});
+
+afterEach(async () => {
+  await doRollback(pool.migrate);
 });
 
 describe("GET / - simple test", () => {
