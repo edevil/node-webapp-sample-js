@@ -25,6 +25,7 @@ interface IConfig {
   showPlayground: boolean;
   trustXHeaders: boolean;
   ravenDSN: string;
+  staticMaxAge: number;
 }
 
 const config: IConfig = {
@@ -48,6 +49,7 @@ const config: IConfig = {
   redisHost: process.env.REDIS_HOST || "localhost",
   redisPrefix: process.env.REDIS_PREFIX || "sample-node",
   showPlayground: process.env.SHOW_PLAYGROUND ? process.env.SHOW_PLAYGROUND.toLowerCase() === "true" : true,
+  staticMaxAge: 31536000000,
   tokenLifetime: 60,
   trustXHeaders: process.env.TRUST_X_HEADERS ? process.env.TRUST_X_HEADERS.toLowerCase() === "true" : false,
 };

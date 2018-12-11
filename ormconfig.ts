@@ -63,6 +63,7 @@ export = [
     entities: ["src/entities/*{.ts,.js}"],
     extra: {
       connectionTimeoutMillis: 2000,
+      query_timeout: 5000,
       statement_timeout: 10000,
     },
     host: config.dbHost,

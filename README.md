@@ -153,8 +153,6 @@ mutation {
 
 ## Known issues
 
-- Unresponsive Postgresql server can cause requests to stall
-  - https://github.com/brianc/node-postgres/pull/1760
 - Unresponsive Redis server can cause requests to stall
   - https://github.com/luin/ioredis/pull/658
   - https://github.com/luin/ioredis/pull/241
