@@ -58,12 +58,13 @@ passport.use(
         createReq.name = profile.displayName;
         createReq.photoUrl = profile.photos[0].value;
         createReq.email = profile.emails.filter(e => e.type === "account")[0].value;
-        logger.debug("google strategy", { createReq });
+        logger.debug("google strategy", { g_user: createReq.username });
 
         let user;
         try {
-          user = await createUserFromGoogle(createReq, SocialLogin.knex);
+          user = await createUserFromGoogle(createReq, SocialLogin.knex());
         } catch (error) {
+          logger.error("Problems creating user", { error });
           done(error, null);
           return;
         }

@@ -8,6 +8,7 @@ export enum SocialType {
 
 export class SocialLogin extends Model {
   public static tableName = "social_login";
+  public static idColumn = ["type", "userId"];
   public static modelPaths = [__dirname];
   public static relationMappings: RelationMappings = {
     user: {

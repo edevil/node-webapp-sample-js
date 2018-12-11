@@ -16,7 +16,8 @@ export async function createUserFromGoogle(createReq: CreateGoogleUser, knex): P
     const user = await User.query(trx).insert({ email: createReq.email });
     await user
       .$relatedQuery<SocialLogin>("socialLogins", trx)
-      .insert({ clientId: createReq.username, type: SocialType.Google });
+      .insert({ clientId: createReq.username, type: SocialType.Google })
+      .returning("*");
     return user;
   });
 }
