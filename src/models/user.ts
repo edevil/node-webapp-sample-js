@@ -1,5 +1,5 @@
 import { Model, RelationMappings } from "objection";
-import { SocialLogin } from "../entities/social-login";
+import { SocialLogin } from "../models/social-login";
 
 export class User extends Model {
   public static tableName = "user";

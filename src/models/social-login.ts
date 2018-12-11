@@ -1,5 +1,5 @@
 import { Model, RelationMappings } from "objection";
-import { User } from "../entities/user";
+import { User } from "../models/user";
 
 export enum SocialType {
   Google,

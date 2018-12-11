@@ -1,7 +1,6 @@
 import { AuthenticationError } from "apollo-server-koa";
 import * as CSRF from "csrf";
 import * as request from "supertest";
-import { Connection, createConnection, getConnectionOptions } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { app } from "../app";
 import { config } from "../config";
@@ -27,25 +26,14 @@ function doRollback(migrate) {
   return new Promise(resolve => resolve(rollbackAllMigrations()));
 }
 
-let conn: Connection;
 let pool;
 beforeAll(async () => {
-  const connectionOptions = Object.assign(await getConnectionOptions(), {
-    database: `${config.dbName}_test`,
-  });
-  try {
-    conn = await createConnection(connectionOptions);
-  } catch (err) {
-    logger.error("Could not create connection", { error: err });
-    throw err;
-  }
   pool = initORM(`${config.dbName}_test`);
   initRedis();
 });
 
 afterAll(async () => {
   await pool.destroy();
-  await conn.close();
   closeRedis();
   shutdownSubscriptions();
 });

@@ -1,9 +1,9 @@
 import { genSaltSync, hashSync } from "bcryptjs";
-import { EntityManager } from "typeorm";
+import { transaction } from "objection";
 import { CreateGoogleUser } from "./dtos/create-google-user";
 import { CreateUser } from "./dtos/create-user";
-import { SocialLogin, SocialType } from "./entities/social-login";
-import { User } from "./entities/user";
+import { SocialLogin, SocialType } from "./models/social-login";
+import { User } from "./models/user";
 
 export function createUser(createReq: CreateUser, repository): Promise<any> {
   const salt = genSaltSync();
@@ -11,16 +11,12 @@ export function createUser(createReq: CreateUser, repository): Promise<any> {
   return repository.query().insert({ email: createReq.email, password: hash });
 }
 
-export async function createUserFromGoogle(createReq: CreateGoogleUser, manager: EntityManager): Promise<User> {
-  const user = new User();
-  user.email = createReq.email;
-  const socialLogin = new SocialLogin();
-  socialLogin.clientId = createReq.username;
-  socialLogin.type = SocialType.Google;
-  socialLogin.user = user;
-  await manager.transaction(async transactionalEntityManager => {
-    await transactionalEntityManager.insert(User, user);
-    await transactionalEntityManager.insert(SocialLogin, socialLogin);
+export async function createUserFromGoogle(createReq: CreateGoogleUser, knex): Promise<any> {
+  return transaction(knex, async trx => {
+    const user = await User.query(trx).insert({ email: createReq.email });
+    await user
+      .$relatedQuery<SocialLogin>("socialLogins", trx)
+      .insert({ clientId: createReq.username, type: SocialType.Google });
+    return user;
   });
-  return user;
 }

@@ -4,12 +4,11 @@ import * as compose from "koa-compose";
 import * as passport from "koa-passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as LocalStrategy } from "passport-local";
-import { getConnection, getRepository } from "typeorm";
 import { config } from "../config";
 import { CreateGoogleUser } from "../dtos/create-google-user";
-import { SocialLogin, SocialType } from "../entities/social-login";
-import { User } from "../entities/user";
 import { logger } from "../logger";
+import { SocialLogin, SocialType } from "../models/social-login";
+import { User } from "../models/user";
 import { createUserFromGoogle } from "../service";
 
 function comparePass(userPassword, databasePassword) {
@@ -19,9 +18,8 @@ function comparePass(userPassword, databasePassword) {
 passport.serializeUser((user: User, done) => done(null, user.id));
 
 passport.deserializeUser((id: number, done) => {
-  const repository = getRepository(User);
-  repository
-    .findOne({ id })
+  User.query()
+    .findOne("id", id)
     .then(user => {
       if (!user) {
         logger.warn("User not found", { user_id: id });
@@ -43,10 +41,11 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       const googleID = profile.id;
 
-      const repository = getRepository(SocialLogin);
       let login;
       try {
-        login = await repository.findOne({ clientId: googleID, type: SocialType.Google }, { relations: ["user"] });
+        login = await SocialLogin.query()
+          .findOne({ clientId: googleID, type: SocialType.Google })
+          .eager("user");
       } catch (error) {
         done(error, null);
         return;
@@ -63,7 +62,7 @@ passport.use(
 
         let user;
         try {
-          user = await createUserFromGoogle(createReq, getConnection().manager);
+          user = await createUserFromGoogle(createReq, SocialLogin.knex);
         } catch (error) {
           done(error, null);
           return;
@@ -79,10 +78,9 @@ passport.use(
 
 passport.use(
   new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
-    const repository = getRepository(User);
     let user;
     try {
-      user = await repository.findOne({ email });
+      user = await User.query().findOne("email", email);
     } catch (error) {
       done(error, null);
       return;
