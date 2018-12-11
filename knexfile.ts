@@ -26,7 +26,7 @@ module.exports = {
     },
   },
   migrations: {
-    directory: "./src/migrations-new",
+    directory: "./src/migrations",
     tableName: "knex_migrations",
   },
   pool: {

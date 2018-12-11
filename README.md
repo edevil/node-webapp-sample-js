@@ -4,7 +4,6 @@ Experimental starter pack for Node.JS webapps
 
 ## TODO
 
-1. Experiment moving from TypeORM to [Objection.js](http://vincit.github.io/objection.js/)
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
 1. GraphQL shield (https://github.com/maticzav/graphql-shield)
 
@@ -12,11 +11,11 @@ Experimental starter pack for Node.JS webapps
 
 ### Create migrations
 
-    npm run typeorm -- migration:generate -n Initial
+    npm run knex -- migrate:make Initial
 
 ### Run migrations
 
-    npm run typeorm -- migration:run
+    npm run knex -- migrate:latest
 
 #### Postgres extensions needed
 
@@ -32,7 +31,7 @@ Experimental starter pack for Node.JS webapps
 
 - Dialect: Typescript [Link](https://www.typescriptlang.org/)
 - Server: Koa [Link](https://koajs.com/)
-- ORM: TypeORM [Link](http://typeorm.io/)
+- ORM: Objection.js [Link](http://vincit.github.io/objection.js/)
 - GraphQL: Apollo [Link](https://www.apollographql.com/)
 - GraphQL: Uploads [Link](https://github.com/jaydenseric/graphql-upload)
 - OAuth provider [Link](https://github.com/oauthjs/node-oauth2-server)

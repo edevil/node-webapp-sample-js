@@ -25,7 +25,7 @@ spec:
       - name: migrator
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        command: ["node", "-r", "reflect-metadata", "./node_modules/.bin/typeorm", "migration:run"]
+        command: ["node", "-r", "reflect-metadata", "./node_modules/.bin/knex", "migrate:latest"]
         env:
         - name: BASE_URL
           value: "https://noder.labs.brpx.com"
