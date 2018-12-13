@@ -1,9 +1,7 @@
 import { ApolloError, ApolloServer, gql } from "apollo-server-koa";
 import * as depthLimit from "graphql-depth-limit";
 import { RedisPubSub } from "graphql-redis-subscriptions";
-import { graphqlUploadKoa } from "graphql-upload";
 import * as jwt from "jsonwebtoken";
-import * as mount from "koa-mount";
 import { config } from "../config";
 import { resolvers } from "../graphql/resolvers";
 import { types } from "../graphql/types";
@@ -73,14 +71,14 @@ export const apolloServer: ApolloServer = new ApolloServer({
     },
   },
   typeDefs: [schemaDefinition, ...types, Query, Mutation, Subscription],
-  uploads: false,
+  uploads: {
+    maxFileSize: config.gqlMaxFileSize,
+    maxFiles: config.gqlMaxFiles,
+  },
   validationRules: [depthLimit(config.gqlDepthLimit)],
 });
 
 export const graphqlInitializer = app => {
-  app.use(
-    mount(config.gqlPath, graphqlUploadKoa({ maxFileSize: config.gqlMaxFileSize, maxFiles: config.gqlMaxFiles })),
-  );
   apolloServer.applyMiddleware({ app, path: config.gqlPath, disableHealthCheck: true });
 };
 
