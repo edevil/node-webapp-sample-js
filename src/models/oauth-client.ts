@@ -1,19 +1,13 @@
 import { Model, RelationMappings } from "objection";
 import { User } from "./user";
 
-export enum SocialType {
-  Google,
-  Twitter,
-}
-
-export class SocialLogin extends Model {
-  public static tableName = "social_login";
-  public static idColumn = ["type", "userId"];
+export class OAuthClient extends Model {
+  public static tableName = "o_auth_client";
   public static modelPaths = [__dirname];
   public static relationMappings: RelationMappings = {
     user: {
       join: {
-        from: "social_login.userId",
+        from: "o_auth_client.userId",
         to: "user.id",
       },
       modelClass: "user",
@@ -22,9 +16,11 @@ export class SocialLogin extends Model {
   };
 
   public id: number;
-  public type: SocialType;
   public user: User;
-  public clientId: string;
+  public secret: string;
+  public grants: string[];
+  public scopes: string[];
+  public redirectUris: string[];
   public createdAt: Date;
   public updatedAt: Date;
 

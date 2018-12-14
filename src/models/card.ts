@@ -4,8 +4,8 @@ import { v4 as uuid } from "uuid";
 export class Card extends Model {
   public static tableName = "card";
   public id: string;
-  public createdAt: string;
-  public updatedAt: string;
+  public createdAt: Date;
+  public updatedAt: Date;
 
   public title: string;
   public description: string;
@@ -14,10 +14,10 @@ export class Card extends Model {
 
   public $beforeInsert() {
     this.id = uuid();
-    this.createdAt = new Date().toISOString();
+    this.createdAt = new Date();
   }
 
   public $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
+    this.updatedAt = new Date();
   }
 }

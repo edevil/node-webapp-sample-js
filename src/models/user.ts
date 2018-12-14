@@ -1,10 +1,26 @@
 import { Model, RelationMappings } from "objection";
-import { SocialLogin } from "../models/social-login";
+import { SocialLogin } from "./social-login";
 
 export class User extends Model {
   public static tableName = "user";
   public static modelPaths = [__dirname];
   public static relationMappings: RelationMappings = {
+    oauthAuthorizationCodes: {
+      join: {
+        from: "user.id",
+        to: "o_auth_authorization_code.userId",
+      },
+      modelClass: "oauth-auth-code",
+      relation: Model.HasManyRelation,
+    },
+    oauthClients: {
+      join: {
+        from: "user.id",
+        to: "o_auth_client.userId",
+      },
+      modelClass: "oauth-client",
+      relation: Model.HasManyRelation,
+    },
     socialLogins: {
       join: {
         from: "user.id",
@@ -16,8 +32,8 @@ export class User extends Model {
   };
 
   public id: number;
-  public createdAt: string;
-  public updatedAt: string;
+  public createdAt: Date;
+  public updatedAt: Date;
 
   public username: string;
   public password: string;
@@ -25,6 +41,6 @@ export class User extends Model {
   public socialLogins: SocialLogin[];
 
   public $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
+    this.updatedAt = new Date();
   }
 }
