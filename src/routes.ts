@@ -242,6 +242,8 @@ router.post("auth-register-post", "/auth/register", CSRFMW, redLoggedMW, async (
         registerUrl: router.url("auth-register-post"),
       });
       return;
+    } else {
+      throw error;
     }
   }
   logger.info("New user created", { userId: user.id });
