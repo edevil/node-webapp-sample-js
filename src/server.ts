@@ -1,10 +1,9 @@
 import { createTerminus } from "@godaddy/terminus";
 import * as Sentry from "@sentry/node";
 import * as http from "http";
-import { getConnection } from "typeorm";
 import { app } from "./app";
 import { config } from "./config";
-import { closeORM, databaseInitializer } from "./initializers/database";
+import { closeORM, databaseInitializer, dbHealth } from "./initializers/database";
 import { graphqlInstall, shutdownSubscriptions } from "./initializers/graphql";
 import { closeRedis, initRedis } from "./initializers/redis";
 import { closeWebsocket, initWebsocket } from "./initializers/websocket";
@@ -18,7 +17,6 @@ function onSignal() {
   logger.info("server is starting cleanup");
 
   return Promise.all([
-    getConnection().close(),
     closeORM(),
     Promise.resolve(closeRedis()),
     Promise.resolve(closeWebsocket()),
@@ -31,7 +29,7 @@ async function onShutdown() {
 }
 
 function healthCheck() {
-  return Promise.resolve(getConnection().manager.query("SELECT 1 AS OK"));
+  return Promise.resolve(dbHealth());
 }
 
 function beforeShutdown() {
