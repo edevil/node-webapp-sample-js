@@ -2,14 +2,14 @@ import { Model, RelationMappings } from "objection";
 import { OAuthClient } from "./oauth-client";
 import { User } from "./user";
 
-export class OAuthAuthorizationCode extends Model {
-  public static tableName = "o_auth_authorization_code";
-  public static idColumn = "authorizationCode";
+export class OauthAccessToken extends Model {
+  public static tableName = "o_auth_access_token";
+  public static idColumn = "accessToken";
   public static modelPaths = [__dirname];
   public static relationMappings: RelationMappings = {
     client: {
       join: {
-        from: "o_auth_authorization_code.clientId",
+        from: "o_auth_access_token.clientId",
         to: "o_auth_client.id",
       },
       modelClass: "user",
@@ -17,7 +17,7 @@ export class OAuthAuthorizationCode extends Model {
     },
     user: {
       join: {
-        from: "o_auth_authorization_code.userId",
+        from: "o_auth_access_token.userId",
         to: "user.id",
       },
       modelClass: "user",
@@ -28,11 +28,10 @@ export class OAuthAuthorizationCode extends Model {
   public user: User;
   public client: OAuthClient;
 
-  public authorizationCode: string;
+  public accessToken: string;
   public scope: string;
-  public redirectUri: string;
 
-  public expiresAt: Date;
+  public accessTokenExpiresAt: Date;
   public createdAt: Date;
   public updatedAt: Date;
 

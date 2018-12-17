@@ -5,6 +5,22 @@ export class OAuthClient extends Model {
   public static tableName = "o_auth_client";
   public static modelPaths = [__dirname];
   public static relationMappings: RelationMappings = {
+    oauthAccessTokens: {
+      join: {
+        from: "o_auth_client.id",
+        to: "o_auth_access_token.clientId",
+      },
+      modelClass: "oauth-access-token",
+      relation: Model.HasManyRelation,
+    },
+    oauthAuthorizationCodes: {
+      join: {
+        from: "o_auth_client.id",
+        to: "o_auth_authorization_code.clientId",
+      },
+      modelClass: "oauth-auth-code",
+      relation: Model.HasManyRelation,
+    },
     user: {
       join: {
         from: "o_auth_client.userId",
@@ -15,7 +31,7 @@ export class OAuthClient extends Model {
     },
   };
 
-  public id: number;
+  public id: string;
   public user: User;
   public secret: string;
   public grants: string[];

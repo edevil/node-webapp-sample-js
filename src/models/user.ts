@@ -5,6 +5,14 @@ export class User extends Model {
   public static tableName = "user";
   public static modelPaths = [__dirname];
   public static relationMappings: RelationMappings = {
+    oauthAccessTokens: {
+      join: {
+        from: "user.id",
+        to: "o_auth_access_token.userId",
+      },
+      modelClass: "oauth-access-token",
+      relation: Model.HasManyRelation,
+    },
     oauthAuthorizationCodes: {
       join: {
         from: "user.id",
