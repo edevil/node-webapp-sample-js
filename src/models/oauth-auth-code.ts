@@ -12,7 +12,7 @@ export class OAuthAuthorizationCode extends Model {
         from: "o_auth_authorization_code.clientId",
         to: "o_auth_client.id",
       },
-      modelClass: "user",
+      modelClass: "oauth-client",
       relation: Model.BelongsToOneRelation,
     },
     user: {

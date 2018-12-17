@@ -1,10 +1,10 @@
 import * as OAuth2Server from "oauth2-server";
-import { getConnection, getRepository } from "typeorm";
-import { OAuthAccessToken } from "./entities/oauth-access-token";
-import { OAuthAuthorizationCode } from "./entities/oauth-auth-code";
-import { OAuthClient } from "./entities/oauth-client";
-import { OAuthRefreshToken } from "./entities/oauth-refresh-token";
-import { User } from "./entities/user";
+import { transaction } from "objection";
+import { OAuthAccessToken } from "./models/oauth-access-token";
+import { OAuthAuthorizationCode } from "./models/oauth-auth-code";
+import { OAuthClient } from "./models/oauth-client";
+import { OAuthRefreshToken } from "./models/oauth-refresh-token";
+import { User } from "./models/user";
 
 const ALLOWED_GRANTS = ["authorization_code", "refresh_token"];
 
@@ -24,8 +24,7 @@ const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenMode
     return scope;
   },
   async getClient(clientId, clientSecret) {
-    const repository = getRepository(OAuthClient);
-    const client = await repository.findOne(clientId);
+    const client = await OAuthClient.query().findOne("id", clientId);
 
     if (!client) {
       return false;
@@ -50,9 +49,9 @@ const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenMode
     refreshToken.client = client as OAuthClient;
     refreshToken.user = user as User;
 
-    await getConnection().manager.transaction(async transactionalEntityManager => {
-      await transactionalEntityManager.save(accessToken);
-      await transactionalEntityManager.save(refreshToken);
+    await transaction(OAuthAccessToken.knex, async trx => {
+      await OAuthAccessToken.query(trx).insert(accessToken);
+      await OAuthRefreshToken.query(trx).insert(refreshToken);
     });
 
     return {
@@ -74,42 +73,37 @@ const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenMode
     authCode.client = client as OAuthClient;
     authCode.user = user as User;
 
-    const repository = getRepository(OAuthAuthorizationCode);
-    await repository.save(authCode);
-
-    return authCode;
+    return OAuthAuthorizationCode.query().insert(authCode);
   },
   async getAuthorizationCode(authorizationCode) {
-    const repository = getRepository(OAuthAuthorizationCode);
-    return repository.findOne(authorizationCode, { relations: ["user", "client"] });
+    return OAuthAuthorizationCode.query()
+      .eagerAlgorithm(OAuthAuthorizationCode.JoinEagerAlgorithm)
+      .eager(["user", "client"])
+      .findOne("authorizationCode", authorizationCode);
   },
   async revokeToken(token) {
-    const repository = getRepository(OAuthRefreshToken);
-    const result = await repository
-      .createQueryBuilder()
+    const deleted = await OAuthRefreshToken.query()
       .delete()
-      .where("id = :id", { id: token.id })
-      .returning("*")
-      .execute();
-    return !!result.raw;
+      .where("refreshToken", token);
+    return deleted === 1;
   },
   async revokeAuthorizationCode(code) {
-    const repository = getRepository(OAuthAuthorizationCode);
-    const result = await repository
-      .createQueryBuilder()
+    const deleted = await OAuthAuthorizationCode.query()
       .delete()
-      .where("authorizationCode = :authorizationCode", { authorizationCode: code.authorizationCode })
-      .returning("*")
-      .execute();
-    return !!result.raw;
+      .where("authorizationCode", code);
+    return deleted === 1;
   },
   async getAccessToken(accessToken) {
-    const repository = getRepository(OAuthAccessToken);
-    return repository.findOne(accessToken, { relations: ["user", "client"] });
+    return OAuthAccessToken.query()
+      .eagerAlgorithm(OAuthAccessToken.JoinEagerAlgorithm)
+      .eager(["user", "client"])
+      .findOne("accessToken", accessToken);
   },
   async getRefreshToken(refreshToken) {
-    const repository = getRepository(OAuthRefreshToken);
-    return repository.findOne(refreshToken, { relations: ["user", "client"] });
+    return OAuthRefreshToken.query()
+      .eagerAlgorithm(OAuthRefreshToken.JoinEagerAlgorithm)
+      .eager(["user", "client"])
+      .findOne("refreshToken", refreshToken);
   },
 };
 

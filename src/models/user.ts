@@ -29,6 +29,14 @@ export class User extends Model {
       modelClass: "oauth-client",
       relation: Model.HasManyRelation,
     },
+    oauthRefreshTokens: {
+      join: {
+        from: "user.id",
+        to: "o_auth_refresh_token.userId",
+      },
+      modelClass: "oauth-refresh-token",
+      relation: Model.HasManyRelation,
+    },
     socialLogins: {
       join: {
         from: "user.id",

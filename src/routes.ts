@@ -7,13 +7,12 @@ import * as CSRF from "koa-csrf";
 import * as passport from "koa-passport";
 import * as Router from "koa-router";
 import { AccessDeniedError, Request, Response, UnauthorizedRequestError } from "oauth2-server";
-import { getRepository, QueryFailedError } from "typeorm";
 import { CreateUser } from "./dtos/create-user";
-import { OAuthClient } from "./entities/oauth-client";
 import { logger } from "./logger";
 import { addError, addWarning } from "./messages";
 import { getMessagesMW } from "./middleware/fetch-messages";
 import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
+import { OAuthClient } from "./models/oauth-client";
 import { User } from "./models/user";
 import { oauth } from "./oauth2-model";
 import { loginRLMW } from "./rate-limits";
@@ -57,9 +56,8 @@ router.get("chat", "/chat", async (ctx, next) => {
 });
 
 router.get("oauth-authorize", "/oauth/authorize", CSRFMW, redLoginReqMW, async (ctx, next) => {
-  const repository = getRepository(OAuthClient);
   const clientId = ctx.request.query.client_id;
-  const client: OAuthClient = clientId ? await repository.findOne({ id: clientId }) : null;
+  const client: OAuthClient = clientId ? await OAuthClient.query().findOne("id", clientId) : null;
   if (!client) {
     addWarning(ctx, ctx.i18n.__("oauth_error_no_client"));
     ctx.redirect(router.url("index"));
@@ -234,7 +232,7 @@ router.post("auth-register-post", "/auth/register", CSRFMW, redLoggedMW, async (
   try {
     user = await createUser(createReq, User);
   } catch (error) {
-    if (error instanceof QueryFailedError) {
+    if (error instanceof Error) {
       logger.debug("User already registered", { email: createReq.email });
       await ctx.render("register", {
         csrf: ctx.csrf,
