@@ -1,8 +1,8 @@
 import * as jwt from "jsonwebtoken";
 import { config } from "./config";
-import { User } from "./entities/user";
 import { logger } from "./logger";
 import { addSuccess } from "./messages";
+import { User } from "./models/user";
 
 export async function afterLogin(ctx, user, router) {
   await ctx.login(user);
