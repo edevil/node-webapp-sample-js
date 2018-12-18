@@ -1,6 +1,4 @@
-import * as Knex from "knex";
-
-exports.up = (knex: Knex): Promise<any> => {
+exports.up = (knex) => {
   return Promise.all([
     knex.schema.createTable("o_auth_client", table => {
       table
@@ -120,7 +118,7 @@ exports.up = (knex: Knex): Promise<any> => {
   ]);
 };
 
-exports.down = (knex: Knex): Promise<any> => {
+exports.down = (knex) => {
   return Promise.all([
     knex.schema.dropTable("o_auth_access_token"),
     knex.schema.dropTable("o_auth_authorization_code"),

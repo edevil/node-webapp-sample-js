@@ -1,6 +1,4 @@
-import * as Knex from "knex";
-
-exports.up = (knex: Knex): Promise<any> => {
+exports.up = (knex) => {
   return Promise.all([
     knex.schema.createTable("user", table => {
       table.increments("id");
@@ -36,7 +34,7 @@ exports.up = (knex: Knex): Promise<any> => {
   ]);
 };
 
-exports.down = (knex: Knex): Promise<any> => {
+exports.down = (knex) => {
   return Promise.all([
     knex.schema.dropTable("social_login"),
     knex.raw('DROP TYPE "social_login_type_enum"'),

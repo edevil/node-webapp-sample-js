@@ -1,6 +1,4 @@
-import * as Knex from "knex";
-
-exports.up = (knex: Knex): Promise<any> => {
+exports.up = (knex) => {
   return Promise.all([
     knex.raw('create extension if not exists "uuid-ossp"'),
     knex.raw('create extension if not exists "unaccent"'),
@@ -28,7 +26,7 @@ exports.up = (knex: Knex): Promise<any> => {
   ]);
 };
 
-exports.down = (knex: Knex): Promise<any> => {
+exports.down = (knex) => {
   return Promise.all([
     knex.schema.dropTable("card"),
     knex.raw("DROP TEXT SEARCH CONFIGURATION pt"),

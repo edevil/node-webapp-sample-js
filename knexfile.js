@@ -1,5 +1,5 @@
-import { config } from "./src/config";
-import { logger } from "./src/logger";
+const { config } = require("./src/config");
+const { logger } = require("./src/logger");
 
 module.exports = {
   client: "postgresql",
