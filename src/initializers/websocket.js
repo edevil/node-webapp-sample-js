@@ -1,11 +1,11 @@
-import * as jwt from "jsonwebtoken";
-import * as socketio from "socket.io";
-import * as redisAdapter from "socket.io-redis";
-import { config } from "../config";
-import { logger } from "../logger";
-import { getNewRedis } from "./redis";
+const jwt = require("jsonwebtoken");
+const socketio = require("socket.io");
+const redisAdapter = require("socket.io-redis");
+const { config } = require("../config");
+const { logger } = require("../logger");
+const { getNewRedis } = require("./redis");
 
-let io: socketio.Server;
+let io;
 
 export const initWebsocket = (server, app) => {
   const adapter = redisAdapter({
@@ -47,4 +47,9 @@ export const initWebsocket = (server, app) => {
 export const closeWebsocket = () => {
   io.close();
   io = null;
+};
+
+module.exports = {
+  initWebsocket,
+  closeWebsocket,
 };
