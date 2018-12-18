@@ -5,7 +5,6 @@ const passport = require("koa-passport");
 const { Strategy: GoogleStrategy } = require("passport-google-oauth20");
 const { Strategy: LocalStrategy } = require("passport-local");
 const { config } = require("../config");
-const { CreateGoogleUser } = require("../dtos/create-google-user");
 const { logger } = require("../logger");
 const { SocialLogin, SocialType } = require("../models/social-login");
 const { User } = require("../models/user");
@@ -53,11 +52,12 @@ passport.use(
 
       if (!login) {
         logger.debug("User google not found", { username: googleID });
-        const createReq = new CreateGoogleUser();
-        createReq.username = googleID;
-        createReq.name = profile.displayName;
-        createReq.photoUrl = profile.photos[0].value;
-        createReq.email = profile.emails.filter(e => e.type === "account")[0].value;
+        const createReq = {
+          username: googleID,
+          name: profile.displayName,
+          photoUrl: profile.photos[0].value,
+          email: profile.emails.filter(e => e.type === "account")[0].value,
+        };
         logger.debug("google strategy", { g_user: createReq.username });
 
         let user;
