@@ -1,23 +1,23 @@
-import { setOnContext } from "@emartech/cls-adapter";
-import { compareSync } from "bcryptjs";
-import * as compose from "koa-compose";
-import * as passport from "koa-passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Strategy as LocalStrategy } from "passport-local";
-import { config } from "../config";
-import { CreateGoogleUser } from "../dtos/create-google-user";
-import { logger } from "../logger";
-import { SocialLogin, SocialType } from "../models/social-login";
-import { User } from "../models/user";
-import { createUserFromGoogle } from "../service";
+const clsFactory = require("@emartech/cls-adapter");
+const { compareSync } = require("bcryptjs");
+const compose = require("koa-compose");
+const passport = require("koa-passport");
+const { Strategy: GoogleStrategy } = require("passport-google-oauth20");
+const { Strategy: LocalStrategy } = require("passport-local");
+const { config } = require("../config");
+const { CreateGoogleUser } = require("../dtos/create-google-user");
+const { logger } = require("../logger");
+const { SocialLogin, SocialType } = require("../models/social-login");
+const { User } = require("../models/user");
+const { createUserFromGoogle } = require("../service");
 
 function comparePass(userPassword, databasePassword) {
   return compareSync(userPassword, databasePassword);
 }
 
-passport.serializeUser((user: User, done) => done(null, user.id));
+passport.serializeUser((user, done) => done(null, user.id));
 
-passport.deserializeUser((id: number, done) => {
+passport.deserializeUser((id, done) => {
   User.query()
     .findOne("id", id)
     .then(user => {
@@ -105,9 +105,13 @@ passport.use(
 
 async function setUseridCTX(ctx, next) {
   if (ctx.isAuthenticated()) {
-    setOnContext("user_id", ctx.state.user.id);
+    clsFactory.setOnContext("user_id", ctx.state.user.id);
   }
   await next();
 }
 
-export const getAuthMW = () => compose([passport.initialize(), passport.session(), setUseridCTX]);
+const getAuthMW = () => compose([passport.initialize(), passport.session(), setUseridCTX]);
+
+module.exports = {
+  getAuthMW,
+};
