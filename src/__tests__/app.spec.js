@@ -1,20 +1,20 @@
-import { AuthenticationError } from "apollo-server-koa";
-import * as CSRF from "csrf";
-import * as request from "supertest";
-import { v4 as uuid } from "uuid";
-import { app } from "../app";
-import { config } from "../config";
-import { CreateUser } from "../dtos/create-user";
-import { cardsResolver } from "../graphql/resolvers/cards";
-import { userProfileResolver } from "../graphql/resolvers/user-profile";
-import { initORM } from "../initializers/database";
-import { shutdownSubscriptions } from "../initializers/graphql";
-import { closeRedis, initRedis } from "../initializers/redis";
-import { Card } from "../models/card";
-import { User } from "../models/user";
-import { router } from "../routes";
-import { createUser } from "../service";
-import { getGQLContext } from "../utils";
+const { AuthenticationError } = require("apollo-server-koa");
+const CSRF = require("csrf");
+const request = require("supertest");
+const { v4: uuid } = require("uuid");
+const { app } = require("../app");
+const { config } = require("../config");
+const { CreateUser } = require("../dtos/create-user");
+const { cardsResolver } = require("../graphql/resolvers/cards");
+const { userProfileResolver } = require("../graphql/resolvers/user-profile");
+const { initORM } = require("../initializers/database");
+const { shutdownSubscriptions } = require("../initializers/graphql");
+const { closeRedis, initRedis } = require("../initializers/redis");
+const { Card } = require("../models/card");
+const { User } = require("../models/user");
+const { router } = require("../routes");
+const { createUser } = require("../service");
+const { getGQLContext } = require("../utils");
 
 function doRollback(migrate) {
   const rollbackAllMigrations = () =>
@@ -94,7 +94,7 @@ describe("User login/logout tests", () => {
     // manually create user
     const email = "teste1@example.com";
     const password = "teste12345";
-    const createReq: CreateUser = new CreateUser();
+    const createReq = new CreateUser();
     createReq.email = email;
     createReq.password = password;
     const user = await createUser(createReq, User);
@@ -155,7 +155,7 @@ describe("GraphQL resolvers tests", () => {
 
     const email = "teste1@example.com";
     const password = "teste12345";
-    const createReq: CreateUser = new CreateUser();
+    const createReq = new CreateUser();
     createReq.email = email;
     createReq.password = password;
     const user = await createUser(createReq, User);
