@@ -1,10 +1,9 @@
-import * as jwt from "jsonwebtoken";
-import { config } from "./config";
-import { logger } from "./logger";
-import { addSuccess } from "./messages";
-import { User } from "./models/user";
+const jwt = require("jsonwebtoken");
+const { config } = require("./config");
+const { logger } = require("./logger");
+const { addSuccess } = require("./messages");
 
-export async function afterLogin(ctx, user, router) {
+async function afterLogin(ctx, user, router) {
   await ctx.login(user);
   let nextUrl;
   if (ctx.session.nextUrl) {
@@ -18,7 +17,7 @@ export async function afterLogin(ctx, user, router) {
   ctx.redirect(nextUrl);
 }
 
-export function getGQLContext(user: User = null): { ctx: any } {
+function getGQLContext(user = null) {
   if (user) {
     return {
       ctx: {
@@ -51,8 +50,8 @@ export function getGQLContext(user: User = null): { ctx: any } {
   }
 }
 
-export function addParamsToURL(url: string, params: Map<string, string | string[]>): string {
-  const isRelative: boolean = url.startsWith("/");
+function addParamsToURL(url, params) {
+  const isRelative = url.startsWith("/");
   const base = isRelative ? config.baseURL : null;
 
   const reducer = (tempUrl, [key, value]) => {
@@ -68,6 +67,13 @@ export function addParamsToURL(url: string, params: Map<string, string | string[
   return isRelative ? newUrl.pathname + newUrl.search : newUrl.href;
 }
 
-export function generateUserToken(user: User): string {
+function generateUserToken(user) {
   return jwt.sign({ userId: user.id }, config.appKeys[0], { expiresIn: config.tokenLifetime });
 }
+
+module.exports = {
+  afterLogin,
+  getGQLContext,
+  addParamsToURL,
+  generateUserToken,
+};
