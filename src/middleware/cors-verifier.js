@@ -1,5 +1,5 @@
-import * as cors from "@koa/cors";
-import { config } from "../config";
+const cors = require("@koa/cors");
+const { config } = require("../config");
 
 function whitelistOrigin(ctx) {
   const requestOrigin = ctx.accept.headers.origin;
@@ -9,4 +9,8 @@ function whitelistOrigin(ctx) {
   return requestOrigin;
 }
 
-export const getCORSMW = () => cors({ origin: whitelistOrigin, credentials: true });
+const getCORSMW = () => cors({ origin: whitelistOrigin, credentials: true });
+
+module.exports = {
+  getCORSMW,
+};

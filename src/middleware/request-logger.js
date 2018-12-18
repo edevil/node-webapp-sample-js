@@ -1,8 +1,8 @@
-import * as bytes from "bytes";
-import * as Counter from "passthrough-counter";
-import { logger } from "../logger";
+const bytes = require("bytes");
+const Counter = require("passthrough-counter");
+const { logger } = require("../logger");
 
-export const requestLoggerMW = async (ctx, next) => {
+const requestLoggerMW = async (ctx, next) => {
   const start = Date.now();
 
   try {
@@ -77,3 +77,7 @@ function log(ctx, start, len, err, event) {
     url: ctx.originalUrl,
   });
 }
+
+module.exports = {
+  requestLoggerMW,
+};

@@ -1,10 +1,10 @@
-import * as appPath from "app-root-path";
-import * as views from "koa-views";
-import * as path from "path";
+const appPath = require("app-root-path");
+const views = require("koa-views");
+const path = require("path");
 
 const viewsPath = path.join(appPath.toString(), "/views");
 
-export const getTemplateEngine = () =>
+const getTemplateEngine = () =>
   views(viewsPath, {
     map: {
       html: "nunjucks",
@@ -15,3 +15,7 @@ export const getTemplateEngine = () =>
       },
     },
   });
+
+module.exports = {
+  getTemplateEngine,
+};

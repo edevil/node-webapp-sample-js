@@ -1,6 +1,6 @@
-import { logger } from "../logger";
+const { logger } = require("../logger");
 
-export const getLoggedInMW = (router, loggedRoute) => async (ctx, next) => {
+const getLoggedInMW = (router, loggedRoute) => async (ctx, next) => {
   if (ctx.isAuthenticated()) {
     logger.info("User already logged in");
     ctx.redirect(router.url(loggedRoute));
@@ -10,7 +10,7 @@ export const getLoggedInMW = (router, loggedRoute) => async (ctx, next) => {
   await next();
 };
 
-export const getLoginReqMW = (router, loginRoute) => async (ctx, next) => {
+const getLoginReqMW = (router, loginRoute) => async (ctx, next) => {
   if (!ctx.isAuthenticated()) {
     logger.info("User not logged in", { url: ctx.originalUrl });
     ctx.session.nextUrl = ctx.originalUrl;
@@ -19,4 +19,9 @@ export const getLoginReqMW = (router, loginRoute) => async (ctx, next) => {
   }
 
   await next();
+};
+
+module.exports = {
+  getLoggedInMW,
+  getLoginReqMW,
 };
