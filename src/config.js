@@ -1,34 +1,8 @@
-import * as dotenv from "dotenv";
+const dotenv = require("dotenv");
 
 dotenv.config({ path: ".env" });
 
-interface IConfig {
-  port: number;
-  logSQL: boolean;
-  dbHost: string;
-  dbName: string;
-  dbUser: string;
-  dbPassword: string;
-  appKeys: string[];
-  googleClientId: string;
-  googleClientSecret: string;
-  baseURL: string;
-  origins: string[];
-  redisHost: string;
-  redisPrefix: string;
-  tokenLifetime: number;
-  gqlDepthLimit: number;
-  gqlMaxFileSize: number;
-  gqlMaxFiles: number;
-  gqlMaxPerPage: number;
-  gqlPath: string;
-  showPlayground: boolean;
-  trustXHeaders: boolean;
-  ravenDSN: string;
-  staticMaxAge: number;
-}
-
-const config: IConfig = {
+const config = {
   appKeys: process.env.APP_KEYS ? JSON.parse(process.env.APP_KEYS) : ["shhh, don't tell anyone"],
   baseURL: process.env.BASE_URL || "http://example.com:3000",
   dbHost: process.env.DB_HOST || "localhost",
@@ -54,4 +28,6 @@ const config: IConfig = {
   trustXHeaders: process.env.TRUST_X_HEADERS ? process.env.TRUST_X_HEADERS.toLowerCase() === "true" : false,
 };
 
-export { config };
+module.exports = {
+  config,
+};

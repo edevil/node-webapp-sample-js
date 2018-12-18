@@ -1,7 +1,7 @@
-import { registerDecorator, ValidationArguments, ValidationOptions } from "class-validator";
+const { registerDecorator, ValidationArguments, ValidationOptions } = require("class-validator");
 
-export function IsEqualTo(property: string, validationOptions?: ValidationOptions) {
-  return (object: object, propertyName: string) => {
+function IsEqualTo(property, validationOptions) {
+  return (object, propertyName) => {
     registerDecorator({
       constraints: [property],
       name: "isEqualTo",
@@ -9,12 +9,16 @@ export function IsEqualTo(property: string, validationOptions?: ValidationOption
       propertyName,
       target: object.constructor,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value, args) {
           const [relatedPropertyName] = args.constraints;
-          const relatedValue = (args.object as any)[relatedPropertyName];
+          const relatedValue = args.object[relatedPropertyName];
           return typeof value === "string" && typeof relatedValue === "string" && value === relatedValue;
         },
       },
     });
   };
 }
+
+module.exports = {
+  IsEqualTo,
+};
