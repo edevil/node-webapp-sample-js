@@ -1,8 +1,8 @@
-import { AuthenticationError } from "apollo-server-koa";
-import { logger } from "../../logger";
-import { generateUserToken } from "../../utils";
+const { AuthenticationError } = require("apollo-server-koa");
+const { logger } = require("../../logger");
+const { generateUserToken } = require("../../utils");
 
-export const userOperationMutations = {
+const userOperationMutations = {
   async generateToken(obj, args, { ctx }, info) {
     if (!ctx.isAuthenticated()) {
       throw new AuthenticationError("Must authenticate");
@@ -11,4 +11,8 @@ export const userOperationMutations = {
     logger.debug("Will generate token for user");
     return generateUserToken(ctx.state.user);
   },
+};
+
+module.exports = {
+  userOperationMutations,
 };

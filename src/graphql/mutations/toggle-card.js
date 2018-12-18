@@ -1,7 +1,7 @@
-import { UserInputError } from "apollo-server-koa";
-import { Card } from "../../models/card";
+const { UserInputError } = require("apollo-server-koa");
+const { Card } = require("../../models/card");
 
-export const toggleCardMutation = {
+const toggleCardMutation = {
   async toggleCard(obj, { id }, context, info) {
     const card = await Card.query().findOne("id", id);
     if (!card) {
@@ -14,4 +14,8 @@ export const toggleCardMutation = {
       .returning("*")
       .first();
   },
+};
+
+module.exports = {
+  toggleCardMutation,
 };

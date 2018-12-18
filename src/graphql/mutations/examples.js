@@ -1,7 +1,7 @@
-import * as fs from "fs";
-import { logger } from "../../logger";
+const fs = require("fs");
+const { logger } = require("../../logger");
 
-export const exampleMutations = {
+const exampleMutations = {
   async uploadFile(obj, { image }, { ctx }, info) {
     const { filename, mimetype, createReadStream } = await image;
     const stream = createReadStream();
@@ -26,4 +26,8 @@ export const exampleMutations = {
     stream.close();
     return true;
   },
+};
+
+module.exports = {
+  exampleMutations,
 };
