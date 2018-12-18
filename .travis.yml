@@ -10,6 +10,6 @@ services:
   - postgresql
   - redis
 before_script:
-  - psql -c 'create database sample_db_test;' -U postgres
+  - psql -c 'create database sample_db_citest;' -U postgres
 script:
   - npm run pretty && npm run lint && npm test
