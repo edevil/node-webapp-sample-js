@@ -1,24 +1,23 @@
-import * as OAuth2Server from "oauth2-server";
-import { transaction } from "objection";
-import { OAuthAccessToken } from "./models/oauth-access-token";
-import { OAuthAuthorizationCode } from "./models/oauth-auth-code";
-import { OAuthClient } from "./models/oauth-client";
-import { OAuthRefreshToken } from "./models/oauth-refresh-token";
-import { User } from "./models/user";
+const OAuth2Server = require("oauth2-server");
+const { transaction } = require("objection");
+const { OAuthAccessToken } = require("./models/oauth-access-token");
+const { OAuthAuthorizationCode } = require("./models/oauth-auth-code");
+const { OAuthClient } = require("./models/oauth-client");
+const { OAuthRefreshToken } = require("./models/oauth-refresh-token");
 
 const ALLOWED_GRANTS = ["authorization_code", "refresh_token"];
 
-const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenModel = {
+const model = {
   async verifyScope(token, scope) {
     if (!token.scope) {
       return false;
     }
-    const requestedScopes = (scope as string).split(" ");
-    const authorizedScopes = (token.scope as string).split(" ");
+    const requestedScopes = scope.split(" ");
+    const authorizedScopes = token.scope.split(" ");
     return requestedScopes.every(s => authorizedScopes.includes(s));
   },
   async validateScope(user, client, scope) {
-    if (!(scope as string).split(" ").every(s => client.scopes.includes(s))) {
+    if (!scope.split(" ").every(s => client.scopes.includes(s))) {
       return false;
     }
     return scope;
@@ -38,14 +37,14 @@ const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenMode
     const accessToken = new OAuthAccessToken();
     accessToken.accessToken = token.accessToken;
     accessToken.accessTokenExpiresAt = token.accessTokenExpiresAt;
-    accessToken.scope = token.scope as string;
+    accessToken.scope = token.scope;
     accessToken.clientId = client.id;
     accessToken.userId = user.id;
 
     const refreshToken = new OAuthRefreshToken();
     refreshToken.refreshToken = token.refreshToken;
     refreshToken.refreshTokenExpiresAt = token.refreshTokenExpiresAt;
-    refreshToken.scope = token.scope as string;
+    refreshToken.scope = token.scope;
     refreshToken.clientId = client.id;
     refreshToken.userId = user.id;
 
@@ -69,7 +68,7 @@ const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenMode
     authCode.authorizationCode = code.authorizationCode;
     authCode.expiresAt = code.expiresAt;
     authCode.redirectUri = code.redirectUri;
-    authCode.scope = code.scope as string;
+    authCode.scope = code.scope;
     authCode.clientId = client.id;
     authCode.userId = user.id;
 
@@ -107,8 +106,10 @@ const model: OAuth2Server.AuthorizationCodeModel & OAuth2Server.RefreshTokenMode
   },
 };
 
-const options: OAuth2Server.ServerOptions = {
+const oauth = new OAuth2Server({
   model,
-};
+});
 
-export const oauth = new OAuth2Server(options);
+module.exports = {
+  oauth,
+};

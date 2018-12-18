@@ -1,14 +1,14 @@
-import { getContextStorage } from "@emartech/cls-adapter";
-import chalk from "chalk";
-import * as winston from "winston";
+const clsFactory = require("@emartech/cls-adapter");
+const chalk = require("chalk");
+const winston = require("winston");
 
 const addContextFormat = winston.format((info, opts) => {
-  const allInfo = { ...info, ...getContextStorage() };
+  const allInfo = { ...info, ...clsFactory.getContextStorage() };
   allInfo.severity = allInfo.level.toUpperCase();
   return allInfo;
 });
 
-function getLevelFunc(level: string) {
+function getLevelFunc(level) {
   switch (level) {
     case "info":
       return chalk.blue;
@@ -34,7 +34,7 @@ const myFormat = winston.format.printf(info => {
   return `${message} ${extra}`;
 });
 
-export const logger = winston.createLogger({
+const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     addContextFormat(),
@@ -43,3 +43,7 @@ export const logger = winston.createLogger({
   level: "debug",
   transports: [new winston.transports.Console({ silent: process.env.NODE_ENV === "test" })],
 });
+
+module.exports = {
+  logger,
+};
