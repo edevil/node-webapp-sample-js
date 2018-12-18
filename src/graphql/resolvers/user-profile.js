@@ -1,8 +1,8 @@
-import { AuthenticationError } from "apollo-server-koa";
-import { logger } from "../../logger";
-import { SocialLogin, SocialType } from "../../models/social-login";
+const { AuthenticationError } = require("apollo-server-koa");
+const { logger } = require("../../logger");
+const { SocialLogin, SocialType } = require("../../models/social-login");
 
-export const userProfileResolver = {
+const userProfileResolver = {
   async userProfile(obj, args, { ctx }, info) {
     if (!ctx.isAuthenticated()) {
       throw new AuthenticationError("Must authenticate");
@@ -11,10 +11,10 @@ export const userProfileResolver = {
   },
 };
 
-export const extraUserProfileResolver = {
+const extraUserProfileResolver = {
   SocialLogin: {
     type(obj, args, { ctx }, info) {
-      const sType: SocialType = obj.type;
+      const sType = obj.type;
       switch (+sType) {
         case SocialType.Google:
           return "GOOGLE";
@@ -32,4 +32,9 @@ export const extraUserProfileResolver = {
         .where("userId", obj.id);
     },
   },
+};
+
+module.exports = {
+  userProfileResolver,
+  extraUserProfileResolver,
 };

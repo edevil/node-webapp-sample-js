@@ -1,8 +1,12 @@
-import { logger } from "../../logger";
+const { logger } = require("../../logger");
 
-export const examplesResolver = {
+const examplesResolver = {
   async validAmount(obj, { num }, context, info) {
     logger.debug("Got valid num", { num });
     return num;
   },
+};
+
+module.exports = {
+  examplesResolver,
 };

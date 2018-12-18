@@ -1,7 +1,7 @@
-import { logger } from "../../logger";
-import { Card } from "../../models/card";
+const { logger } = require("../../logger");
+const { Card } = require("../../models/card");
 
-export const cardsResolver = {
+const cardsResolver = {
   async cards(obj, args, context, info) {
     logger.debug("Got request for card list");
     const cardList = await Card.query();
@@ -18,4 +18,8 @@ export const cardsResolver = {
     const cardList = await Card.query().whereRaw("\"searchVector\" @@ plainto_tsquery('public.pt', ?)", [searchTerm]);
     return cardList;
   },
+};
+
+module.exports = {
+  cardsResolver,
 };
