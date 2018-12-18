@@ -1,15 +1,15 @@
-import { ApolloError, ApolloServer, gql } from "apollo-server-koa";
-import * as depthLimit from "graphql-depth-limit";
-import { RedisPubSub } from "graphql-redis-subscriptions";
-import * as jwt from "jsonwebtoken";
-import { config } from "../config";
-import { resolvers } from "../graphql/resolvers";
-import { types } from "../graphql/types";
-import { Mutation } from "../graphql/types/mutation";
-import { Query } from "../graphql/types/query";
-import { Subscription } from "../graphql/types/subscription";
-import { logger } from "../logger";
-import { getNewRedis } from "./redis";
+const { ApolloError, ApolloServer, gql } = require("apollo-server-koa");
+const depthLimit = require("graphql-depth-limit");
+const { RedisPubSub } = require("graphql-redis-subscriptions");
+const jwt = require("jsonwebtoken");
+const { config } = require("../config");
+const { resolvers } = require("../graphql/resolvers");
+const { types } = require("../graphql/types");
+const { Mutation } = require("../graphql/types/mutation");
+const { Query } = require("../graphql/types/query");
+const { Subscription } = require("../graphql/types/subscription");
+const { logger } = require("../logger");
+const { getNewRedis } = require("./redis");
 
 const schemaDefinition = gql`
   schema {
@@ -19,7 +19,7 @@ const schemaDefinition = gql`
   }
 `;
 
-export const apolloServer: ApolloServer = new ApolloServer({
+const apolloServer = new ApolloServer({
   context: ({ ctx, connection }) => {
     if (connection) {
       return { ctx: connection.context };
@@ -31,7 +31,7 @@ export const apolloServer: ApolloServer = new ApolloServer({
       return error;
     }
 
-    let context: any = {
+    let context = {
       gqlmessage: error.message,
     };
 
@@ -56,7 +56,7 @@ export const apolloServer: ApolloServer = new ApolloServer({
   playground: config.showPlayground,
   resolvers,
   subscriptions: {
-    onConnect: (connectionParams: any, websocket, context) => {
+    onConnect: (connectionParams, websocket, context) => {
       const token = connectionParams.authToken;
       if (token) {
         let data;
@@ -78,17 +78,26 @@ export const apolloServer: ApolloServer = new ApolloServer({
   validationRules: [depthLimit(config.gqlDepthLimit)],
 });
 
-export const graphqlInitializer = app => {
+const graphqlInitializer = app => {
   apolloServer.applyMiddleware({ app, path: config.gqlPath, disableHealthCheck: true });
 };
 
-export const graphqlInstall = server => apolloServer.installSubscriptionHandlers(server);
+const graphqlInstall = server => apolloServer.installSubscriptionHandlers(server);
 
-export const pubsub = new RedisPubSub({
+const pubsub = new RedisPubSub({
   publisher: getNewRedis(),
   subscriber: getNewRedis(),
 });
 
-export const shutdownSubscriptions = () => pubsub.close();
+const shutdownSubscriptions = () => pubsub.close();
 
-export const CARD_ADDED = "CARD_ADDED";
+const CARD_ADDED = "CARD_ADDED";
+
+module.exports = {
+  apolloServer,
+  graphqlInitializer,
+  graphqlInstall,
+  pubsub,
+  shutdownSubscriptions,
+  CARD_ADDED,
+};
