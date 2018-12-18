@@ -4,7 +4,6 @@ const request = require("supertest");
 const { v4: uuid } = require("uuid");
 const { app } = require("../app");
 const { config } = require("../config");
-const { CreateUser } = require("../dtos/create-user");
 const { cardsResolver } = require("../graphql/resolvers/cards");
 const { userProfileResolver } = require("../graphql/resolvers/user-profile");
 const { initORM } = require("../initializers/database");
@@ -94,9 +93,10 @@ describe("User login/logout tests", () => {
     // manually create user
     const email = "teste1@example.com";
     const password = "teste12345";
-    const createReq = new CreateUser();
-    createReq.email = email;
-    createReq.password = password;
+    const createReq = {
+      email,
+      password,
+    };
     const user = await createUser(createReq, User);
 
     // POST login
@@ -155,9 +155,10 @@ describe("GraphQL resolvers tests", () => {
 
     const email = "teste1@example.com";
     const password = "teste12345";
-    const createReq = new CreateUser();
-    createReq.email = email;
-    createReq.password = password;
+    const createReq = {
+      email,
+      password,
+    };
     const user = await createUser(createReq, User);
     const authContext = getGQLContext(user);
     const profile = await userProfileResolver.userProfile(null, null, authContext, null);

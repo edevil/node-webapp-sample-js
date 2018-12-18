@@ -1,6 +1,6 @@
 # node-webapp-sample
 
-Experimental starter pack for Node.JS webapps
+Experimental starter pack for Node.JS webapps, in Javascript. [TypeScript version](https://github.com/edevil/node-webapp-sample)
 
 ## TODO
 
@@ -29,7 +29,6 @@ Experimental starter pack for Node.JS webapps
 
 ## Features
 
-- Dialect: Typescript [Link](https://www.typescriptlang.org/)
 - Server: Koa [Link](https://koajs.com/)
 - ORM: Objection.js [Link](http://vincit.github.io/objection.js/)
 - GraphQL: Apollo [Link](https://www.apollographql.com/)
@@ -43,6 +42,7 @@ Experimental starter pack for Node.JS webapps
 - Tracing: AsyncHooks [Link](https://nodejs.org/api/async_hooks.html)
 - Exception reporting: Sentry [Link](https://sentry.io/)
 - i18n [Link](https://github.com/koa-modules/i18n)
+- Object validation: Joi [Link](https://github.com/hapijs/joi)
 - Rate limiting [Link](https://github.com/koajs/ratelimit)
 - Security: [CSRF](https://github.com/koajs/csrf), [CORS](https://github.com/koajs/cors), etc
 - Linting: [TSLint](https://palantir.github.io/tslint/), [prettier](https://prettier.io/)

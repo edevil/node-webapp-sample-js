@@ -7,7 +7,7 @@ const { getNewRedis } = require("./redis");
 
 let io;
 
-export const initWebsocket = (server, app) => {
+const initWebsocket = (server, app) => {
   const adapter = redisAdapter({
     pubClient: getNewRedis(),
     subClient: getNewRedis(),
@@ -44,7 +44,7 @@ export const initWebsocket = (server, app) => {
   });
 };
 
-export const closeWebsocket = () => {
+const closeWebsocket = () => {
   io.close();
   io = null;
 };

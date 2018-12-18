@@ -1,13 +1,12 @@
+const Joi = require("joi");
+const { registerSchema } = require("./validation_schemas");
 const asyncBusboy = require("async-busboy");
-const { plainToClass } = require("class-transformer");
-const { validateOrReject } = require("class-validator");
 const fs = require("fs");
 const bodyParser = require("koa-bodyparser");
 const CSRF = require("koa-csrf");
 const passport = require("koa-passport");
 const Router = require("koa-router");
 const { AccessDeniedError, Request, Response, UnauthorizedRequestError } = require("oauth2-server");
-const { CreateUser } = require("./dtos/create-user");
 const { logger } = require("./logger");
 const { addError, addWarning } = require("./messages");
 const { getMessagesMW } = require("./middleware/fetch-messages");
@@ -213,16 +212,13 @@ router.get("auth-register", "/auth/register", CSRFMW, redLoggedMW, async (ctx, n
 });
 
 router.post("auth-register-post", "/auth/register", CSRFMW, redLoggedMW, async (ctx, next) => {
-  let createReq;
-  try {
-    createReq = plainToClass(CreateUser, ctx.request.body);
-    await validateOrReject(createReq);
-  } catch (error) {
-    logger.error(JSON.stringify(error));
+  let createReq = Joi.validate(ctx.request.body, registerSchema, { stripUnknown: true });
+  if (createReq.error) {
+    logger.error(JSON.stringify(createReq.error));
     addError(ctx, ctx.i18n.__("error-create-user"));
     await ctx.render("register", {
       csrf: ctx.csrf,
-      error,
+      error: createReq.error,
       registerUrl: router.url("auth-register-post"),
     });
     return;
@@ -230,10 +226,10 @@ router.post("auth-register-post", "/auth/register", CSRFMW, redLoggedMW, async (
 
   let user;
   try {
-    user = await createUser(createReq, User);
+    user = await createUser(createReq.value, User);
   } catch (error) {
-    if (error instanceof Error) {
-      logger.debug("User already registered", { email: createReq.email });
+    if (error.message.includes("duplicate key value violates unique constraint")) {
+      logger.debug("User already registered", { email: createReq.value.email });
       await ctx.render("register", {
         csrf: ctx.csrf,
         error,
