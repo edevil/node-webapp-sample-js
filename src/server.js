@@ -1,13 +1,13 @@
-import { createTerminus } from "@godaddy/terminus";
-import * as Sentry from "@sentry/node";
-import * as http from "http";
-import { app } from "./app";
-import { config } from "./config";
-import { closeORM, databaseInitializer, dbHealth } from "./initializers/database";
-import { graphqlInstall, shutdownSubscriptions } from "./initializers/graphql";
-import { closeRedis, initRedis } from "./initializers/redis";
-import { closeWebsocket, initWebsocket } from "./initializers/websocket";
-import { logger } from "./logger";
+const { createTerminus } = require("@godaddy/terminus");
+const Sentry = require("@sentry/node");
+const http = require("http");
+const { app } = require("./app");
+const { config } = require("./config");
+const { closeORM, databaseInitializer, dbHealth } = require("./initializers/database");
+const { graphqlInstall, shutdownSubscriptions } = require("./initializers/graphql");
+const { closeRedis, initRedis } = require("./initializers/redis");
+const { closeWebsocket, initWebsocket } = require("./initializers/websocket");
+const { logger } = require("./logger");
 
 logger.info("Startup server");
 
@@ -39,7 +39,7 @@ function beforeShutdown() {
   });
 }
 
-function doLog(msg: string, err: Error): void {
+function doLog(msg, err) {
   logger.error(msg, { err });
 }
 

@@ -2,7 +2,7 @@
   "name": "node-webapp-sample-js",
   "version": "1.0.0",
   "description": "Sample node.js webapp with the recommended modules for basic functionality.",
-  "main": "src/server.ts",
+  "main": "src/server.js",
   "repository": "github:edevil/node-webapp-sample-js",
   "scripts": {
     "knex": "node -r ts-node/register -r reflect-metadata ./node_modules/.bin/knex",
