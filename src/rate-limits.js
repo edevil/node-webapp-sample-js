@@ -1,5 +1,5 @@
-import * as ratelimit from "koa-ratelimit";
-import { getRedis } from "./initializers/redis";
+const ratelimit = require("koa-ratelimit");
+const { getRedis } = require("./initializers/redis");
 
 const redisProxy = new Proxy(
   {},
@@ -10,7 +10,7 @@ const redisProxy = new Proxy(
   },
 );
 
-export const loginRLMW = ratelimit({
+const loginRLMW = ratelimit({
   db: redisProxy,
   disableHeader: false,
   duration: 10000,
@@ -23,3 +23,7 @@ export const loginRLMW = ratelimit({
   id: ctx => ctx.ip,
   max: 10,
 });
+
+module.exports = {
+  loginRLMW,
+};

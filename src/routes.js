@@ -1,25 +1,25 @@
-import * as asyncBusboy from "async-busboy";
-import { plainToClass } from "class-transformer";
-import { validateOrReject } from "class-validator";
-import * as fs from "fs";
-import * as bodyParser from "koa-bodyparser";
-import * as CSRF from "koa-csrf";
-import * as passport from "koa-passport";
-import * as Router from "koa-router";
-import { AccessDeniedError, Request, Response, UnauthorizedRequestError } from "oauth2-server";
-import { CreateUser } from "./dtos/create-user";
-import { logger } from "./logger";
-import { addError, addWarning } from "./messages";
-import { getMessagesMW } from "./middleware/fetch-messages";
-import { getLoggedInMW, getLoginReqMW } from "./middleware/redirect-logged";
-import { OAuthClient } from "./models/oauth-client";
-import { User } from "./models/user";
-import { oauth } from "./oauth2-model";
-import { loginRLMW } from "./rate-limits";
-import { createUser } from "./service";
-import { addParamsToURL, afterLogin } from "./utils";
+const asyncBusboy = require("async-busboy");
+const { plainToClass } = require("class-transformer");
+const { validateOrReject } = require("class-validator");
+const fs = require("fs");
+const bodyParser = require("koa-bodyparser");
+const CSRF = require("koa-csrf");
+const passport = require("koa-passport");
+const Router = require("koa-router");
+const { AccessDeniedError, Request, Response, UnauthorizedRequestError } = require("oauth2-server");
+const { CreateUser } = require("./dtos/create-user");
+const { logger } = require("./logger");
+const { addError, addWarning } = require("./messages");
+const { getMessagesMW } = require("./middleware/fetch-messages");
+const { getLoggedInMW, getLoginReqMW } = require("./middleware/redirect-logged");
+const { OAuthClient } = require("./models/oauth-client");
+const { User } = require("./models/user");
+const { oauth } = require("./oauth2-model");
+const { loginRLMW } = require("./rate-limits");
+const { createUser } = require("./service");
+const { addParamsToURL, afterLogin } = require("./utils");
 
-export const router = new Router();
+const router = new Router();
 
 const redLoggedMW = getLoggedInMW(router, "index");
 const redLoginReqMW = getLoginReqMW(router, "auth-login");
@@ -57,7 +57,7 @@ router.get("chat", "/chat", async (ctx, next) => {
 
 router.get("oauth-authorize", "/oauth/authorize", CSRFMW, redLoginReqMW, async (ctx, next) => {
   const clientId = ctx.request.query.client_id;
-  const client: OAuthClient = clientId ? await OAuthClient.query().findOne("id", clientId) : null;
+  const client = clientId ? await OAuthClient.query().findOne("id", clientId) : null;
   if (!client) {
     addWarning(ctx, ctx.i18n.__("oauth_error_no_client"));
     ctx.redirect(router.url("index"));
@@ -66,7 +66,7 @@ router.get("oauth-authorize", "/oauth/authorize", CSRFMW, redLoginReqMW, async (
 
   const allowedQParams = new Set(["scope", "redirect_uri", "response_type", "client_id", "access_type"]);
   const filteredEntries = Object.entries(ctx.request.query).filter(([key, val]) => allowedQParams.has(key));
-  const paramMap = new Map(filteredEntries as Array<[string, string | string[]]>);
+  const paramMap = new Map(filteredEntries);
   const authorizeUrl = addParamsToURL(router.url("oauth-authorize-post"), paramMap);
 
   await ctx.render("oauth-authorize", {
@@ -99,7 +99,7 @@ router.post("oauth-authorize-post", "/oauth/authorize", CSRFMW, redLoginReqMW, a
 
     ctx.set(oauthResponse.headers);
     ctx.status = err.code;
-    if (err! instanceof UnauthorizedRequestError) {
+    if (err instanceof UnauthorizedRequestError) {
       ctx.body = { error: err.name, error_description: err.message };
     }
     return;
@@ -120,7 +120,7 @@ router.post("oauth-token-post", "/oauth/token", async (ctx, next) => {
     logger.warn(`Could not validate token`, { err });
     ctx.set(oauthResponse.headers);
     ctx.status = err.code;
-    if (err! instanceof UnauthorizedRequestError) {
+    if (err instanceof UnauthorizedRequestError) {
       ctx.body = { error: err.name, error_description: err.message };
     }
     return;
@@ -213,9 +213,9 @@ router.get("auth-register", "/auth/register", CSRFMW, redLoggedMW, async (ctx, n
 });
 
 router.post("auth-register-post", "/auth/register", CSRFMW, redLoggedMW, async (ctx, next) => {
-  let createReq: CreateUser;
+  let createReq;
   try {
-    createReq = plainToClass(CreateUser, ctx.request.body as CreateUser);
+    createReq = plainToClass(CreateUser, ctx.request.body);
     await validateOrReject(createReq);
   } catch (error) {
     logger.error(JSON.stringify(error));
@@ -274,3 +274,7 @@ router.post("upload-test", "/upload", async (ctx, next) => {
 
   ctx.body = "all done";
 });
+
+module.exports = {
+  router,
+};
