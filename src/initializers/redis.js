@@ -1,23 +1,23 @@
-import * as Redis from "ioredis";
-import { config } from "../config";
-import { logger } from "../logger";
+const Redis = require("ioredis");
+const { config } = require("../config");
+const { logger } = require("../logger");
 
-let conn: Redis.Redis;
+let conn;
 
-export function initRedis(): void {
+function initRedis() {
   conn = getNewRedis(false);
 }
 
-export function closeRedis(): void {
+function closeRedis() {
   conn.disconnect();
   conn = null;
 }
 
-export function getRedis(): Redis.Redis {
+function getRedis() {
   return conn;
 }
 
-export function getNewRedis(retries: boolean = true): Redis.Redis {
+function getNewRedis(retries = true) {
   const newConn = new Redis({
     host: config.redisHost,
     keyPrefix: config.redisPrefix,
@@ -26,3 +26,10 @@ export function getNewRedis(retries: boolean = true): Redis.Redis {
   newConn.on("error", err => logger.error("Problems using redis", { err }));
   return newConn;
 }
+
+module.exports = {
+  initRedis,
+  closeRedis,
+  getRedis,
+  getNewRedis,
+};

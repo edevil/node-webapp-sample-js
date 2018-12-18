@@ -1,6 +1,6 @@
-import * as i18n from "koa-i18n";
+const i18n = require("koa-i18n");
 
-export const i18nInitializer = app => {
+const i18nInitializer = app => {
   app.use(
     i18n(app, {
       directory: "./locales",
@@ -9,4 +9,8 @@ export const i18nInitializer = app => {
       modes: ["cookie", "header"],
     }),
   );
+};
+
+module.exports = {
+  i18nInitializer,
 };
