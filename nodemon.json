@@ -1,5 +1,5 @@
 {
     "watch": ["./src"],
     "ext": "ts,js",
-    "exec": "node --inspect -r ts-node/register -r reflect-metadata ./src/server.js"
+    "exec": "node --inspect ./src/server.js"
    }

@@ -45,7 +45,7 @@ Experimental starter pack for Node.JS webapps, in Javascript. [TypeScript versio
 - Object validation: Joi [Link](https://github.com/hapijs/joi)
 - Rate limiting [Link](https://github.com/koajs/ratelimit)
 - Security: [CSRF](https://github.com/koajs/csrf), [CORS](https://github.com/koajs/cors), etc
-- Linting: [TSLint](https://palantir.github.io/tslint/), [prettier](https://prettier.io/)
+- Linting: [ESLint](https://eslint.org/), [prettier](https://prettier.io/)
 - Websockets: socket.io [Link](https://socket.io/)
 - Multipart uploads: async-busboy [Link](https://github.com/m4nuC/async-busboy)
 - Full text search

@@ -22,7 +22,7 @@ services:
       - ./views:/app/views
       - ./static:/app/static
       - ./locales:/app/locales
-    command: sh -c "node_modules/.bin/nodemon --signal SIGKILL --exec 'node -r ts-node/register -r reflect-metadata ./src/server.js'"
+    command: sh -c "node_modules/.bin/nodemon --signal SIGKILL --exec 'node ./src/server.js'"
     ports:
       - "3000:3000"
     depends_on:
