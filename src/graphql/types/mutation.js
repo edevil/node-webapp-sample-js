@@ -1,6 +1,6 @@
-import { gql } from "apollo-server-koa";
+const { gql } = require("apollo-server-koa");
 
-export const Mutation = gql`
+const Mutation = gql`
   type Mutation {
     generateToken: String
     toggleCard(id: String!): Card
@@ -9,3 +9,7 @@ export const Mutation = gql`
     uploadFile(image: Upload!): Boolean
   }
 `;
+
+module.exports = {
+  Mutation,
+};

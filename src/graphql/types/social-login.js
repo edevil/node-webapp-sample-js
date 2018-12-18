@@ -1,6 +1,6 @@
-import { gql } from "apollo-server-koa";
+const { gql } = require("apollo-server-koa");
 
-export const SocialLogin = gql`
+const SocialLogin = gql`
   enum SocialNetwork {
     GOOGLE
     TWITTER
@@ -14,3 +14,7 @@ export const SocialLogin = gql`
     user: UserProfile
   }
 `;
+
+module.exports = {
+  SocialLogin,
+};

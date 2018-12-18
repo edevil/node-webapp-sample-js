@@ -1,6 +1,6 @@
-import { gql } from "apollo-server-koa";
+const { gql } = require("apollo-server-koa");
 
-export const Card = gql`
+const Card = gql`
   type Card {
     id: String
     title: String
@@ -10,3 +10,7 @@ export const Card = gql`
     updatedAt: String
   }
 `;
+
+module.exports = {
+  Card,
+};

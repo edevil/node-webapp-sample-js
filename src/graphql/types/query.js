@@ -1,6 +1,6 @@
-import { gql } from "apollo-server-koa";
+const { gql } = require("apollo-server-koa");
 
-export const Query = gql`
+const Query = gql`
   type Query {
     cards: [Card]
     searchCards(searchTerm: String!): [Card]
@@ -9,3 +9,7 @@ export const Query = gql`
     validAmount(num: PaginationAmount!): Int
   }
 `;
+
+module.exports = {
+  Query,
+};

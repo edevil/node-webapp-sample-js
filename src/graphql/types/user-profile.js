@@ -1,6 +1,6 @@
-import { gql } from "apollo-server-koa";
+const { gql } = require("apollo-server-koa");
 
-export const UserProfile = gql`
+const UserProfile = gql`
   type UserProfile {
     email: String
     createdAt: String
@@ -8,3 +8,7 @@ export const UserProfile = gql`
     socialLogins: [SocialLogin]
   }
 `;
+
+module.exports = {
+  UserProfile,
+};
