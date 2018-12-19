@@ -71,8 +71,8 @@
   "devDependencies": {
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.0",
     "babel-loader": "^8.0.4",
-    "babel-preset-env": "^1.7.0",
     "eslint": "^5.6.1",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-prettier": "^3.0.0",
@@ -115,6 +115,7 @@
     "collectCoverage": true,
     "coverageReporters": [
       "text-summary"
-    ]
+    ],
+    "transform": {}
   }
 }
