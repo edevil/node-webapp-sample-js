@@ -4,5 +4,6 @@
   "automerge": true,
   "major": {
     "automerge": false
-  }
+  },
+  "prCreation": "not-pending"
 }
