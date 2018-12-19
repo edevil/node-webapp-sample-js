@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block extrahead %}
+<script src="https://unpkg.com/lodash@4.16.6"></script>
+{% endblock %}
+
 {% block content %}
 <p>
     Authenticated: {{ authenticated }}
@@ -8,4 +12,5 @@
 <p>
     {{ i18n.__("hello index") }}
 </p>
+<script src="./static/js/index.js"></script>
 {% endblock %}

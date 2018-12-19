@@ -69,6 +69,10 @@
     "winston": "^3.1.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.2",
+    "babel-loader": "^8.0.4",
+    "babel-preset-env": "^1.7.0",
     "eslint": "^5.6.1",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-prettier": "^3.0.0",
@@ -76,7 +80,9 @@
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
     "prettier": "^1.15.3",
-    "supertest": "^3.3.0"
+    "supertest": "^3.3.0",
+    "webpack": "^4.28.0",
+    "webpack-cli": "^3.1.2"
   },
   "husky": {
     "hooks": {
@@ -96,7 +102,9 @@
       "ecmaVersion": 2018
     },
     "env": {
-      "es6": true
+      "es6": true,
+      "browser": true,
+      "node": true
     }
   },
   "jest": {
