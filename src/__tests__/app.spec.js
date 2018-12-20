@@ -15,13 +15,11 @@ const { router } = require("../routes");
 const { createUser } = require("../service");
 const { getGQLContext } = require("../utils");
 
-function doRollback(migrate) {
-  const rollbackAllMigrations = () =>
-    migrate
-      .forceFreeMigrationsLock()
-      .then(() => migrate.currentVersion())
-      .then(migration => (migration !== "none" ? migrate.rollback().then(rollbackAllMigrations) : Promise.resolve()));
-  return new Promise(resolve => resolve(rollbackAllMigrations()));
+async function doRollback(migrate) {
+  await migrate.forceFreeMigrationsLock();
+  while ((await migrate.currentVersion()) !== "none") {
+    await migrate.rollback();
+  }
 }
 
 let pool;

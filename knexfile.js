@@ -10,7 +10,7 @@ module.exports = {
     user: config.dbUser,
   },
   debug: true,
-  extension: "ts",
+  extension: "js",
   log: {
     warn(message) {
       logger.warn("SQL", message);
