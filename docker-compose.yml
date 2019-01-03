@@ -43,7 +43,7 @@ services:
       - ./views:/app/views
       - ./static:/app/static
       - ./locales:/app/locales
-    command: sh -c "npm run typeorm -- migration:run"
+    command: sh -c "npm run knex -- migrate:latest"
     depends_on:
       - db
       - redis
