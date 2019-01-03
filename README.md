@@ -6,6 +6,10 @@ Experimental starter pack for Node.JS webapps, in Javascript. [TypeScript versio
 
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
 1. GraphQL shield (https://github.com/maticzav/graphql-shield)
+1. **Asset pipeline**: Template tag to reference static files that takes manifest into account
+1. **Asset pipeline**: Production and development config
+1. **Asset pipeline**: Process ALL static files (images, css, etc)
+1. **Asset pipeline**: Client JS hot reload
 
 ## Migrations
 
