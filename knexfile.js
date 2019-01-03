@@ -9,11 +9,11 @@ module.exports = {
     password: config.dbPassword,
     user: config.dbUser,
   },
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
   extension: "js",
   log: {
     warn(message) {
-      logger.warn("SQL", message);
+      logger.warn(message);
     },
     error(message) {
       logger.error("SQL", message);
