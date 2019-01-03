@@ -1,11 +1,12 @@
 const path = require("path");
+const ManifestPlugin = require("webpack-manifest-plugin");
 
 module.exports = {
   mode: process.env.NODE_ENV === "production" ? "production" : "development",
   entry: ["@babel/polyfill", "./static/js/index.js"],
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "app.js",
+    filename: '[name].[contenthash].js',
     publicPath: "/",
   },
   module: {
@@ -23,4 +24,5 @@ module.exports = {
       },
     ],
   },
+  plugins: [new ManifestPlugin()],
 };

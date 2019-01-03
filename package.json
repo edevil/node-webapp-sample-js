@@ -86,7 +86,8 @@
     "regenerator-runtime": "^0.13.1",
     "supertest": "^3.3.0",
     "webpack": "^4.28.0",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "webpack-manifest-plugin": "^2.0.4"
   },
   "husky": {
     "hooks": {
