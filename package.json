@@ -11,7 +11,8 @@
     "build": "mkdir dist; cp -r src knexfile.js dist/",
     "lint": "eslint 'src/**/*.js'",
     "pretty": "prettier --list-different 'src/**/*.js'",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "dev": "concurrently \"npm:start\" \"npm:watch\""
   },
   "engines": {
     "node": ">=10.13.0",
@@ -78,6 +79,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
+    "concurrently": "^4.1.0",
     "css-loader": "^2.1.0",
     "eslint": "^5.11.1",
     "eslint-config-prettier": "^3.3.0",
