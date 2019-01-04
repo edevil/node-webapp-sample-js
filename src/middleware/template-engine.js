@@ -15,10 +15,11 @@ const getTemplateEngine = () => {
     manifest = {};
   }
 
-  const env = new nunjucks.Environment(new nunjucks.FileSystemLoader(viewsPath));
-  env.addFilter("shorten", function(str, count) {
-    return str.slice(0, count || 5);
-  });
+  const env = new nunjucks.Environment(
+    new nunjucks.FileSystemLoader(viewsPath, { noCache: process.env.NODE_ENV !== "production" }),
+  );
+  env.addFilter("shorten", (str, count) => str.slice(0, count || 5));
+  env.addFilter("static", filename => manifest[filename] || filename);
 
   return views(viewsPath, {
     map: {
