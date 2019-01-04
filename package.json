@@ -8,7 +8,7 @@
     "knex": "node ./node_modules/.bin/knex",
     "start": "nodemon",
     "test": "jest",
-    "build": "mkdir dist; cp -r src knexfile.js dist/",
+    "build": "webpack",
     "lint": "eslint 'src/**/*.js'",
     "pretty": "prettier --list-different 'src/**/*.js'",
     "watch": "webpack --watch",
