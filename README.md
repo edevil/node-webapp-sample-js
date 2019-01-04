@@ -31,25 +31,24 @@ Experimental starter pack for Node.JS webapps, in Javascript. [TypeScript versio
 
 ## Features
 
-- Server: Koa [Link](https://koajs.com/)
-- ORM: Objection.js [Link](http://vincit.github.io/objection.js/)
-- GraphQL: Apollo [Link](https://www.apollographql.com/)
-- GraphQL: Uploads [Link](https://github.com/jaydenseric/graphql-upload)
-- OAuth provider [Link](https://github.com/oauthjs/node-oauth2-server)
-- HTML templating: Nunjucks [Link](https://mozilla.github.io/nunjucks/)
-- HTTP Sessions [Link](https://github.com/koajs/session)
-- Tests: Jest [Link](https://jestjs.io/)
-- Authentication: Passport [Link](http://www.passportjs.org/)
-- Structured logging: Winston [Link](https://github.com/winstonjs/winston)
-- Tracing: AsyncHooks [Link](https://nodejs.org/api/async_hooks.html)
-- Exception reporting: Sentry [Link](https://sentry.io/)
-- i18n [Link](https://github.com/koa-modules/i18n)
-- Object validation: Joi [Link](https://github.com/hapijs/joi)
-- Rate limiting [Link](https://github.com/koajs/ratelimit)
+- Server: [Koa](https://koajs.com/)
+- ORM: [Objection.js](http://vincit.github.io/objection.js/)
+- GraphQL: [Apollo](https://www.apollographql.com/)
+- OAuth provider: [node-oauth2-server](https://github.com/oauthjs/node-oauth2-server)
+- HTML templating: [Nunjucks](https://mozilla.github.io/nunjucks/)
+- HTTP Sessions: [koa-session](https://github.com/koajs/session)
+- Tests: [Jest](https://jestjs.io/)
+- Authentication: [Passport](http://www.passportjs.org/)
+- Structured logging: [Winston](https://github.com/winstonjs/winston)
+- Tracing: [AsyncHooks](https://nodejs.org/api/async_hooks.html)
+- Exception reporting: [Sentry](https://sentry.io/)
+- i18n: [koa-i18n](https://github.com/koa-modules/i18n)
+- Object validation: [Joi](https://github.com/hapijs/joi)
+- Rate limiting: [koa-ratelimit](https://github.com/koajs/ratelimit)
 - Security: [CSRF](https://github.com/koajs/csrf), [CORS](https://github.com/koajs/cors), etc
 - Linting: [ESLint](https://eslint.org/), [prettier](https://prettier.io/)
-- Websockets: socket.io [Link](https://socket.io/)
-- Multipart uploads: async-busboy [Link](https://github.com/m4nuC/async-busboy)
+- Websockets: [socket.io](https://socket.io/)
+- Multipart uploads: [async-busboy](https://github.com/m4nuC/async-busboy)
 - Full text search
 - Flash messages
 - Production deployment config suited for Kubernetes
@@ -114,10 +113,11 @@ npm start
 
 ## Available commands
 
-- `npm start`: Start application in development mode.
+- `npm start`: Start backend application in development mode.
 - `npm test`: Run tests.
-- `npm run build`: Compile Typescript code and generate production build in `dist/`.
-- `npm run lint`: Run TSLint on all the code.
+- `npm start`: Start backend application in development mode.
+- `npm run dev`: Start backend and webpack in development mode.
+- `npm run lint`: Run linter on all the code.
 - `npm run pretty`: Check all the code against `prettier`'s standards.
 
 ## GraphQL examples
