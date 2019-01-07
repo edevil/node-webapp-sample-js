@@ -6,8 +6,6 @@ Experimental starter pack for Node.JS webapps, in Javascript. [TypeScript versio
 
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
 1. GraphQL shield (https://github.com/maticzav/graphql-shield)
-1. **Asset pipeline**: Production and development config (hash only in production)
-1. **Asset pipeline**: Process ALL static files (images, css, etc)
 
 ## Migrations
 
@@ -113,10 +111,9 @@ npm start
 
 ## Available commands
 
-- `npm start`: Start backend application in development mode.
+- `npm run dev`: Start backend and webpack in development mode.
 - `npm test`: Run tests.
 - `npm start`: Start backend application in development mode.
-- `npm run dev`: Start backend and webpack in development mode.
 - `npm run lint`: Run linter on all the code.
 - `npm run pretty`: Check all the code against `prettier`'s standards.
 

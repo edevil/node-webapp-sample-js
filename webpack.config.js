@@ -3,10 +3,11 @@ const ManifestPlugin = require("webpack-manifest-plugin");
 
 module.exports = {
   mode: process.env.NODE_ENV === "production" ? "production" : "development",
+  devtool: process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map",
   entry: ["@babel/polyfill", "./static/js/index.js", "./static/sass/app.scss"],
   output: {
     path: path.resolve(__dirname, "static/build"),
-    filename: "js/[name].[contenthash].js",
+    filename: process.env.NODE_ENV === "production" ? "js/[name].[contenthash].js" : "js/[name].js",
     publicPath: "/static/build/",
   },
   module: {
@@ -28,7 +29,7 @@ module.exports = {
           {
             loader: "file-loader",
             options: {
-              name: "css/[name].[hash].css",
+              name: process.env.NODE_ENV === "production" ? "css/[name].[hash].css" : "css/[name].css",
             },
           },
           {
