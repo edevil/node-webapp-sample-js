@@ -96,7 +96,7 @@
     "sass-loader": "^7.1.0",
     "supertest": "^3.4.2",
     "webpack": "^4.29.1",
-    "webpack-cli": "^3.2.1",
+    "webpack-cli": "^3.2.3",
     "webpack-manifest-plugin": "^2.0.4"
   },
   "husky": {
