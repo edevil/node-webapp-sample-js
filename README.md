@@ -2,6 +2,9 @@
 
 Experimental starter pack for Node.JS webapps, in Javascript. [TypeScript version](https://github.com/edevil/node-webapp-sample)
 
+[![CircleCI](https://circleci.com/gh/edevil/node-webapp-sample-js.svg?style=svg)](https://circleci.com/gh/edevil/node-webapp-sample-js)
+[![Build Status](https://travis-ci.org/edevil/node-webapp-sample-js.svg?branch=master)](https://travis-ci.org/edevil/node-webapp-sample-js)
+
 ## TODO
 
 1. GraphQL resolver middleware rate limit (https://github.com/microlinkhq/async-ratelimiter) (https://github.com/prisma/graphql-middleware)
