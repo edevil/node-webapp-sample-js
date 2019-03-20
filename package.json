@@ -92,7 +92,7 @@
     "nodemon": "^1.18.10",
     "postcss-loader": "^3.0.0",
     "prettier": "^1.16.4",
-    "regenerator-runtime": "^0.13.1",
+    "regenerator-runtime": "^0.13.2",
     "sass-loader": "^7.1.0",
     "supertest": "^3.4.2",
     "webpack": "^4.29.6",
