@@ -94,7 +94,7 @@
     "prettier": "^1.16.4",
     "regenerator-runtime": "^0.13.2",
     "sass-loader": "^7.1.0",
-    "supertest": "^3.4.2",
+    "supertest": "^4.0.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-manifest-plugin": "^2.0.4"
