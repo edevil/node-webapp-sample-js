@@ -9,5 +9,5 @@ action "GitHub Action for Docker" {
   env = {
     PROJECT_ID = "terraform-test-208609"
   }
-  runs = "/bin/bash"
+  runs = "/bin/sh"
 }
