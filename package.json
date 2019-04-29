@@ -75,7 +75,7 @@
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "acorn": "^6.1.1",
-    "autoprefixer": "^9.5.0",
+    "autoprefixer": "^9.5.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.6.0",
     "babel-loader": "^8.0.5",
