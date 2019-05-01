@@ -89,7 +89,7 @@
     "husky": "^2.1.0",
     "jest": "^24.7.1",
     "node-sass": "^4.12.0",
-    "nodemon": "^1.18.11",
+    "nodemon": "^1.19.0",
     "postcss-loader": "^3.0.0",
     "prettier": "^1.17.0",
     "regenerator-runtime": "^0.13.2",
