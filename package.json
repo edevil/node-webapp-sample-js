@@ -91,7 +91,7 @@
     "node-sass": "^4.12.0",
     "nodemon": "^1.19.1",
     "postcss-loader": "^3.0.0",
-    "prettier": "^1.17.1",
+    "prettier": "^1.18.0",
     "regenerator-runtime": "^0.13.2",
     "sass-loader": "^7.1.0",
     "supertest": "^4.0.2",
