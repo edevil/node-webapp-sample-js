@@ -73,7 +73,7 @@
   "devDependencies": {
     "@babel/cli": "^7.5.0",
     "@babel/core": "^7.5.0",
-    "@babel/preset-env": "^7.5.0",
+    "@babel/preset-env": "^7.5.2",
     "acorn": "^6.2.0",
     "autoprefixer": "^9.6.1",
     "babel-core": "^7.0.0-bridge.0",
