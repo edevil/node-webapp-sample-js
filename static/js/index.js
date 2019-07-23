@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 function component() {
   let element = document.createElement('div');
