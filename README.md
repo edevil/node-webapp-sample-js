@@ -122,6 +122,8 @@ npm start
 
 ## GraphQL examples
 
+Default API location: `http://localhost:3000/graphql`
+
 ### Subscribe for new cards
 
 ```GraphQL
