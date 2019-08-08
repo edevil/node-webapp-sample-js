@@ -86,7 +86,7 @@
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "extract-loader": "^3.1.0",
-    "file-loader": "^4.1.0",
+    "file-loader": "^4.2.0",
     "husky": "^3.0.2",
     "jest": "^24.8.0",
     "node-sass": "^4.12.0",
