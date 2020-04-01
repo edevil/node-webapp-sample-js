@@ -67,7 +67,7 @@
     "reflect-metadata": "^0.1.13",
     "socket.io": "^2.3.0",
     "socket.io-redis": "^5.2.0",
-    "uuid": "^7.0.2",
+    "uuid": "^7.0.3",
     "winston": "^3.2.1"
   },
   "devDependencies": {
