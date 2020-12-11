@@ -26,10 +26,7 @@ const extraUserProfileResolver = {
   UserProfile: {
     async socialLogins(obj, args, { ctx }, info) {
       logger.debug("Will fetch social logins");
-      return SocialLogin.query()
-        .eagerAlgorithm(SocialLogin.JoinEagerAlgorithm)
-        .eager("user")
-        .where("userId", obj.id);
+      return SocialLogin.query().eagerAlgorithm(SocialLogin.JoinEagerAlgorithm).eager("user").where("userId", obj.id);
     },
   },
 };

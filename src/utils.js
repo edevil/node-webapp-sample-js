@@ -56,7 +56,7 @@ function addParamsToURL(url, params) {
 
   const reducer = (tempUrl, [key, value]) => {
     if (Array.isArray(value)) {
-      value.forEach(val => tempUrl.searchParams.append(key, val));
+      value.forEach((val) => tempUrl.searchParams.append(key, val));
     } else {
       tempUrl.searchParams.append(key, value);
     }

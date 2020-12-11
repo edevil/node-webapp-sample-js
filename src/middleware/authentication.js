@@ -19,7 +19,7 @@ passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser((id, done) => {
   User.query()
     .findOne("id", id)
-    .then(user => {
+    .then((user) => {
       if (!user) {
         logger.warn("User not found", { user_id: id });
         done(null, false);
@@ -27,7 +27,7 @@ passport.deserializeUser((id, done) => {
         done(null, user);
       }
     })
-    .catch(err => done(err, null));
+    .catch((err) => done(err, null));
 });
 
 passport.use(
@@ -42,9 +42,7 @@ passport.use(
 
       let login;
       try {
-        login = await SocialLogin.query()
-          .findOne({ clientId: googleID, type: SocialType.Google })
-          .eager("user");
+        login = await SocialLogin.query().findOne({ clientId: googleID, type: SocialType.Google }).eager("user");
       } catch (error) {
         done(error, null);
         return;
@@ -56,7 +54,7 @@ passport.use(
           username: googleID,
           name: profile.displayName,
           photoUrl: profile.photos[0].value,
-          email: profile.emails.filter(e => e.type === "account")[0].value,
+          email: profile.emails.filter((e) => e.type === "account")[0].value,
         };
         logger.debug("google strategy", { g_user: createReq.username });
 

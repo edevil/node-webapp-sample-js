@@ -1,6 +1,6 @@
 const i18n = require("koa-i18n");
 
-const i18nInitializer = app => {
+const i18nInitializer = (app) => {
   app.use(
     i18n(app, {
       directory: "./locales",

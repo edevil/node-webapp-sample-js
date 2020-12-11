@@ -7,7 +7,7 @@ const createCardMutation = {
     const card = await Card.query().insert(attrs);
     pubsub
       .publish(CARD_ADDED, { cardAdded: card })
-      .catch(err => logger.error("Could not publish new card message", { err }));
+      .catch((err) => logger.error("Could not publish new card message", { err }));
     return card;
   },
 };

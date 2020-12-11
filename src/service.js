@@ -10,7 +10,7 @@ function createUser(createReq, repository) {
 }
 
 async function createUserFromGoogle(createReq, knex) {
-  return transaction(knex, async trx => {
+  return transaction(knex, async (trx) => {
     const user = await User.query(trx).insert({ email: createReq.email });
     await user
       .$relatedQuery("socialLogins", trx)
