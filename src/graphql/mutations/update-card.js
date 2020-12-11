@@ -9,10 +9,7 @@ const updateCardMutation = {
     }
 
     const done = !card.done;
-    return Card.query()
-      .update(patch)
-      .returning("*")
-      .first();
+    return Card.query().update(patch).returning("*").first();
   },
 };
 

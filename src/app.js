@@ -30,11 +30,7 @@ app
 locale(app);
 i18nInitializer(app);
 
-app
-  .use(getAuthMW())
-  .use(getTemplateEngine())
-  .use(router.routes())
-  .use(router.allowedMethods());
+app.use(getAuthMW()).use(getTemplateEngine()).use(router.routes()).use(router.allowedMethods());
 
 graphqlInitializer(app);
 

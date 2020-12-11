@@ -19,7 +19,7 @@ const getTemplateEngine = () => {
     new nunjucks.FileSystemLoader(viewsPath, { noCache: process.env.NODE_ENV !== "production" }),
   );
   env.addFilter("shorten", (str, count) => str.slice(0, count || 5));
-  env.addFilter("static", filename => manifest[filename] || filename);
+  env.addFilter("static", (filename) => manifest[filename] || filename);
 
   return views(viewsPath, {
     map: {

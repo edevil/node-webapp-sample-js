@@ -14,10 +14,10 @@ const model = {
     }
     const requestedScopes = scope.split(" ");
     const authorizedScopes = token.scope.split(" ");
-    return requestedScopes.every(s => authorizedScopes.includes(s));
+    return requestedScopes.every((s) => authorizedScopes.includes(s));
   },
   async validateScope(user, client, scope) {
-    if (!scope.split(" ").every(s => client.scopes.includes(s))) {
+    if (!scope.split(" ").every((s) => client.scopes.includes(s))) {
       return false;
     }
     return scope;
@@ -48,7 +48,7 @@ const model = {
     refreshToken.clientId = client.id;
     refreshToken.userId = user.id;
 
-    await transaction(OAuthAccessToken.knex(), async trx => {
+    await transaction(OAuthAccessToken.knex(), async (trx) => {
       await OAuthAccessToken.query(trx).insert(accessToken);
       await OAuthRefreshToken.query(trx).insert(refreshToken);
     });
@@ -81,15 +81,11 @@ const model = {
       .findOne("authorizationCode", authorizationCode);
   },
   async revokeToken(token) {
-    const deleted = await OAuthRefreshToken.query()
-      .delete()
-      .where("refreshToken", token.refreshToken);
+    const deleted = await OAuthRefreshToken.query().delete().where("refreshToken", token.refreshToken);
     return deleted === 1;
   },
   async revokeAuthorizationCode(code) {
-    const deleted = await OAuthAuthorizationCode.query()
-      .delete()
-      .where("authorizationCode", code.authorizationCode);
+    const deleted = await OAuthAuthorizationCode.query().delete().where("authorizationCode", code.authorizationCode);
     return deleted === 1;
   },
   async getAccessToken(accessToken) {

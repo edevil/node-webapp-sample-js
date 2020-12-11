@@ -9,10 +9,7 @@ const toggleCardMutation = {
     }
 
     const done = !card.done;
-    return Card.query()
-      .update({ done })
-      .returning("*")
-      .first();
+    return Card.query().update({ done }).returning("*").first();
   },
 };
 

@@ -26,7 +26,7 @@ const apolloServer = new ApolloServer({
     }
     return { ctx };
   },
-  formatError: error => {
+  formatError: (error) => {
     if (error instanceof ApolloError || error.originalError instanceof ApolloError) {
       return error;
     }
@@ -78,11 +78,11 @@ const apolloServer = new ApolloServer({
   validationRules: [depthLimit(config.gqlDepthLimit)],
 });
 
-const graphqlInitializer = app => {
+const graphqlInitializer = (app) => {
   apolloServer.applyMiddleware({ app, path: config.gqlPath, disableHealthCheck: true });
 };
 
-const graphqlInstall = server => apolloServer.installSubscriptionHandlers(server);
+const graphqlInstall = (server) => apolloServer.installSubscriptionHandlers(server);
 
 const pubsub = new RedisPubSub({
   publisher: getNewRedis(),
