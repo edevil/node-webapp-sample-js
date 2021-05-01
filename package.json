@@ -42,7 +42,7 @@
     "ioredis": "^4.23.0",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.21.12",
+    "knex": "^0.95.4",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",
