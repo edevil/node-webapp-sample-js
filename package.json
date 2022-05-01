@@ -79,7 +79,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^26.6.1",
     "babel-loader": "^8.2.2",
-    "concurrently": "^5.3.0",
+    "concurrently": "^7.1.0",
     "core-js": "^3.6.5",
     "css-loader": "^5.0.1",
     "eslint": "^7.6.0",
